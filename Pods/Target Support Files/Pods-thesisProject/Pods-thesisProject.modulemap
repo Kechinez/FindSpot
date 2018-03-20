@@ -1,0 +1,6 @@
+framework module Pods_thesisProject {
+  umbrella header "Pods-thesisProject-umbrella.h"
+
+  export *
+  module * { export * }
+}
