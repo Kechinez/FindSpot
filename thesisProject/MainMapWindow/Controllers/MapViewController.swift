@@ -17,12 +17,12 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
         super.viewDidLoad()
         
         let url = URL(string: "https://maps.googleapis.com/maps/api/distancematrix/json?origins=61.686151,27.298954&destinations=61.681658,27.264764&mode=walking&language=en&key=AIzaSyAmV1T_J6_noWuMYBJukYv3-eDBvhr3zmY")
-        //let url = URL(fileURLWithPath: "https://maps.googleapis.com/maps/api/distancematrix/json?origins=61.686151,27.298954&destinations=61.681658,27.264764&mode=walking&language=en&key=AIzaSyAmV1T_J6_noWuMYBJukYv3-eDBvhr3zmY")
+        
         TempNetManager.shared.getData(url: url!) { (data) in
            
             let result = DataConverter(data: data)
             if let totalResult = result {
-                print("1@@@@@@@@@ total time is \(totalResult.time) @@@@@@")
+                print("1@@@@@@@@@ total time is \(totalResult.time!) @@@@@@")
             } else {
                 print("2@@@@@@@@@@ ERROR @@@@@@@@@@@")
             }
@@ -46,15 +46,25 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
     }
     
 
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    override func viewWillAppear(_ animated: Bool) {
+        let url = URL(string: "https://maps.googleapis.com/maps/api/directions/json?origin=61.686151,27.298954&destination=61.681658,27.264764&key=AIzaSyAmV1T_J6_noWuMYBJukYv3-eDBvhr3zmY")
+        TempNetManager.shared.getRoutes(url: url!) { (route) in
+            let result = DataConverter(jsonArray: route)
+            if let result = result {
+                self.showPath(polyline: result.polyline!)
+            }
+        }
     }
-    */
+    
+    func showPath(polyline: String) {
+        let path = GMSPath(fromEncodedPath: polyline)
+        DispatchQueue.main.async { 
+            let polylineDraw = GMSPolyline(path: path)
+            polylineDraw.strokeWidth = 3.0
+            polylineDraw.strokeColor = UIColor.red
+            polylineDraw.map = self.mapView
+        }
+        
+    }
 
 }

@@ -37,4 +37,53 @@ class TempNetManager {
         }
         task.resume()
     }
+
+
+    public func getRoutes(url: URL, completionHandler: @escaping (NSArray) -> ()) {
+        let session = URLSession.shared
+        let task = session.dataTask(with: url) { (data, response, error) in
+            if data == nil {
+                print("ERROR!!!! Data is nil!!!")
+                return
+            }
+            
+            do {
+                let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String: AnyObject]
+                guard let route = json["routes"] as? NSArray else {
+                    print("ERROR!!!! Can't get routes from JSON")
+                    return
+                }
+                return completionHandler(route)
+                
+            } catch {
+                print("")
+            }
+        }
+        task.resume()
+    }
+
+        
+        
+        
+        
 }
+
+/*
+ if let json : [String:Any] = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [String: Any]{
+ 
+ guard let routes = json["routes"] as? NSArray else {
+ DispatchQueue.main.async {
+ self.activityIndicator.stopAnimating()
+ }
+ return
+ }
+ 
+ */
+
+
+
+
+
+
+
+

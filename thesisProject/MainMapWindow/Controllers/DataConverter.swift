@@ -9,8 +9,9 @@
 import Foundation
 
 struct DataConverter {
-    var distance: String
-    var time: String
+    var distance: String?
+    var time: String?
+    var polyline: String?
     
     init?(data: [String: AnyObject]) {
         
@@ -29,4 +30,17 @@ struct DataConverter {
         
     }
 
+    init?(jsonArray: NSArray) {
+        if let tempPolyline = jsonArray[0] as? [String: AnyObject] {
+            if let dictPolyline = tempPolyline["overview_polyline"] as? [String: AnyObject] {
+                if let stringPolyline = dictPolyline["points"] as? String{
+                    polyline = stringPolyline
+                }
+            }
+        } else {
+            return nil
+        }
+    }
+    
+    
 }
