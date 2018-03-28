@@ -21,13 +21,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         GMSServices.provideAPIKey(googleApiKey)
-        
+        FirebaseApp.configure()
         window = UIWindow(frame: UIScreen.main.bounds)
-       // window?.rootViewController = CustomTabBarController()
-        window?.rootViewController = CustomNavViewController(rootViewController: CustomTabBarController())//) UINavigationController(rootViewController: CustomTabBarController())
+        window?.rootViewController = LoginViewController()//CustomNavViewController(rootViewController: CustomTabBarController())
         window?.makeKeyAndVisible()
         
-        FirebaseApp.configure()
+        
         
         
         return true

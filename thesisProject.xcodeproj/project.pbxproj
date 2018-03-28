@@ -10,6 +10,9 @@
 		3D60E1FE2062784B00FA4079 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D60E1FD2062784B00FA4079 /* MapView.swift */; };
 		3D60E2002062AEA500FA4079 /* TempNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D60E1FF2062AEA500FA4079 /* TempNetworkManager.swift */; };
 		3D60E2022062B55B00FA4079 /* DataConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D60E2012062B55B00FA4079 /* DataConverter.swift */; };
+		3DDD9B1620651CAF0040777E /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDD9B1520651CAF0040777E /* LoginViewController.swift */; };
+		3DDD9B1920651FC40040777E /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDD9B1820651FC40040777E /* LoginView.swift */; };
+		3DDD9B1B206951F90040777E /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDD9B1A206951F90040777E /* RegisterView.swift */; };
 		3DDF5ADE206162B1001BD7BE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDF5ADD206162B1001BD7BE /* AppDelegate.swift */; };
 		3DDF5AE0206162B1001BD7BE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDF5ADF206162B1001BD7BE /* ViewController.swift */; };
 		3DDF5AE5206162B1001BD7BE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3DDF5AE4206162B1001BD7BE /* Assets.xcassets */; };
@@ -28,6 +31,9 @@
 		3D60E1FD2062784B00FA4079 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		3D60E1FF2062AEA500FA4079 /* TempNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempNetworkManager.swift; sourceTree = "<group>"; };
 		3D60E2012062B55B00FA4079 /* DataConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataConverter.swift; sourceTree = "<group>"; };
+		3DDD9B1520651CAF0040777E /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		3DDD9B1820651FC40040777E /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		3DDD9B1A206951F90040777E /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
 		3DDF5ADA206162B1001BD7BE /* thesisProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = thesisProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3DDF5ADD206162B1001BD7BE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3DDF5ADF206162B1001BD7BE /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -66,6 +72,32 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		3D60E20320651B0900FA4079 /* LoginWindow */ = {
+			isa = PBXGroup;
+			children = (
+				3DDD9B1720651FA20040777E /* LoginView */,
+				3DDD9B1420651C440040777E /* LoginViewController */,
+			);
+			path = LoginWindow;
+			sourceTree = "<group>";
+		};
+		3DDD9B1420651C440040777E /* LoginViewController */ = {
+			isa = PBXGroup;
+			children = (
+				3DDD9B1520651CAF0040777E /* LoginViewController.swift */,
+			);
+			path = LoginViewController;
+			sourceTree = "<group>";
+		};
+		3DDD9B1720651FA20040777E /* LoginView */ = {
+			isa = PBXGroup;
+			children = (
+				3DDD9B1820651FC40040777E /* LoginView.swift */,
+				3DDD9B1A206951F90040777E /* RegisterView.swift */,
+			);
+			path = LoginView;
+			sourceTree = "<group>";
+		};
 		3DDF5AD1206162B1001BD7BE = {
 			isa = PBXGroup;
 			children = (
@@ -87,6 +119,7 @@
 		3DDF5ADC206162B1001BD7BE /* thesisProject */ = {
 			isa = PBXGroup;
 			children = (
+				3D60E20320651B0900FA4079 /* LoginWindow */,
 				3DDF5AF720617887001BD7BE /* MainMapWindow */,
 				3DDF5AFA20617922001BD7BE /* FavoritesWindow */,
 				3DDF5AF920617902001BD7BE /* PlacesWindow */,
@@ -317,8 +350,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3DDD9B1620651CAF0040777E /* LoginViewController.swift in Sources */,
 				3DDF5AF6206176D2001BD7BE /* CustomNavViewController.swift in Sources */,
 				3DDF5B0120617AEA001BD7BE /* PlacesViewController.swift in Sources */,
+				3DDD9B1B206951F90040777E /* RegisterView.swift in Sources */,
 				3DDF5B0320617BF9001BD7BE /* FavoritesViewController.swift in Sources */,
 				3DDF5AFC2061798F001BD7BE /* MapViewController.swift in Sources */,
 				3D60E2002062AEA500FA4079 /* TempNetworkManager.swift in Sources */,
@@ -326,6 +361,7 @@
 				3DDF5AF420617486001BD7BE /* ViewController2.swift in Sources */,
 				3D60E2022062B55B00FA4079 /* DataConverter.swift in Sources */,
 				3DDF5ADE206162B1001BD7BE /* AppDelegate.swift in Sources */,
+				3DDD9B1920651FC40040777E /* LoginView.swift in Sources */,
 				3D60E1FE2062784B00FA4079 /* MapView.swift in Sources */,
 				3DDF5AF220616B34001BD7BE /* CustomTabBarController.swift in Sources */,
 			);
@@ -460,6 +496,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9QD9Y49583;
 				INFOPLIST_FILE = "$(SRCROOT)/thesisProject/SupportingFiles/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.kechin.thesisProject;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -476,6 +513,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9QD9Y49583;
 				INFOPLIST_FILE = "$(SRCROOT)/thesisProject/SupportingFiles/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.kechin.thesisProject;
 				PRODUCT_NAME = "$(TARGET_NAME)";
