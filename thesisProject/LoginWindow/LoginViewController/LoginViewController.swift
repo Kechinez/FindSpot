@@ -65,7 +65,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     
     @objc func registerActionMethod() {
-        let registerRect = CGRect(x: (self.view.frame.width / 6 - 15), y: (self.view.frame.height / 2 - 15), width: self.view.frame.width * 2/3 + 30, height: 255)
+        let registerRect = CGRect(x: (self.view.bounds.width / 7 - 15), y: (self.view.frame.height / 3 - 15), width: self.view.frame.width * 5/7 + 30, height: 355)
         let registerView = RegisterView(frame: registerRect, loginViewController: self)
         registerView.tag = 10
         

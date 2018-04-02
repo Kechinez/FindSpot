@@ -10,11 +10,17 @@ import UIKit
 
 class CustomNavViewController: UINavigationController {
 
+    override init(navigationBarClass: AnyClass?, toolbarClass: AnyClass?) {
+        super.init(navigationBarClass: navigationBarClass, toolbarClass: toolbarClass)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "HELLO!!!!!!!!!"
-        self.navigationBar.barStyle = .blackTranslucent
-        // Do any additional setup after loading the view.
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -23,14 +29,10 @@ class CustomNavViewController: UINavigationController {
     }
     
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
     }
-    */
 
+    
+    
 }

@@ -18,10 +18,10 @@ class RegisterView: UIView {
         self.viewController = loginViewController
         super.init(frame: frame)
         
-        self.backgroundColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
+        self.backgroundColor = #colorLiteral(red: 0.2549019608, green: 0.4588235294, blue: 0.01960784314, alpha: 1)
         self.layer.cornerRadius = 10
         
-        let nameField = UITextField(frame: CGRect(x: 15, y: 15, width: self.bounds.width - 30, height: 35))
+        let nameField = UITextField(frame: CGRect(x: 15, y: 15, width: self.bounds.width - 30, height: 45))
         nameField.placeholder = "write your nickname"
         nameField.font = UIFont.systemFont(ofSize: 18)
         nameField.borderStyle = .roundedRect
@@ -31,7 +31,7 @@ class RegisterView: UIView {
         self.addSubview(nameField)
         self.nameField = nameField
         
-        let emailField = UITextField(frame: CGRect(x: 15, y: 65, width: self.bounds.width - 30, height: 35))
+        let emailField = UITextField(frame: CGRect(x: 15, y: 90, width: self.bounds.width - 30, height: 45))
         emailField.placeholder = "write your email address"
         emailField.font = UIFont.systemFont(ofSize: 18)
         emailField.borderStyle = .roundedRect
@@ -41,7 +41,7 @@ class RegisterView: UIView {
         self.addSubview(emailField)
         self.emailField = emailField
         
-        let passField = UITextField(frame: CGRect(x: 15, y: 110, width: self.bounds.width - 30, height: 35))
+        let passField = UITextField(frame: CGRect(x: 15, y: 165, width: self.bounds.width - 30, height: 45))
         passField.placeholder = "write your password"
         passField.font = UIFont.systemFont(ofSize: 18)
         passField.borderStyle = .roundedRect
@@ -51,18 +51,19 @@ class RegisterView: UIView {
         self.addSubview(passField)
         self.passField = passField
         
-        let registerButton = UIButton(frame: CGRect(x: ((self.bounds.width) / 5) - 7, y: 175, width: self.bounds.width * 2 / 3, height: 30))
+        let registerButton = UIButton(frame: CGRect(x: 42, y: 245, width: (self.bounds.width - 30) * 0.8, height: 55))
         registerButton.setTitle("Register", for: .normal)
-        registerButton.setTitleColor(.black, for: .normal)
+        registerButton.setTitleColor(.white, for: .normal)
+        registerButton.titleLabel?.font = UIFont(name: "Helvetica", size: 22)
         registerButton.layer.cornerRadius = 8.0
-        registerButton.backgroundColor = .yellow
+        registerButton.backgroundColor = #colorLiteral(red: 0.4431372549, green: 0.5647058824, blue: 0.8784313725, alpha: 1)
         registerButton.addTarget(viewController, action: #selector(LoginViewController.registerNewUser), for: .touchUpInside)
         self.addSubview(registerButton)
         
-        let haveAccountButton = UIButton(frame: CGRect(x: 15, y: 220, width: self.bounds.width - 30, height: 20))
+        let haveAccountButton = UIButton(frame: CGRect(x: 15, y: 310, width: self.bounds.width - 30, height: 30))
         haveAccountButton.setTitle("I already have account", for: .normal)
-        haveAccountButton.setTitleColor(.black, for: .normal)
-        haveAccountButton.backgroundColor = UIColor.clear
+        haveAccountButton.setTitleColor(.white, for: .normal)
+        haveAccountButton.titleLabel?.font = UIFont(name: "Helvetica", size: 22)
         haveAccountButton.addTarget(viewController, action: #selector(LoginViewController.removeRegisterView), for: .touchUpInside)
         self.addSubview(haveAccountButton)
         

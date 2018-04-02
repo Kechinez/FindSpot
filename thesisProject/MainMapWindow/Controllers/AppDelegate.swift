@@ -23,7 +23,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         GMSServices.provideAPIKey(googleApiKey)
         FirebaseApp.configure()
         window = UIWindow(frame: UIScreen.main.bounds)
-        window?.rootViewController = LoginViewController()//CustomNavViewController(rootViewController: CustomTabBarController())
+        
+        let tabBarVC = CustomTabBarController()
+        window?.rootViewController = tabBarVC
+        
+        
+        
+        //window?.rootViewController = LoginViewController()
         window?.makeKeyAndVisible()
         
         

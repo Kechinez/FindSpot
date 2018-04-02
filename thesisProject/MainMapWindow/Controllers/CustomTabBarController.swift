@@ -13,16 +13,19 @@ class CustomTabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let mapVC = MapViewController()
-        mapVC.tabBarItem = UITabBarItem(tabBarSystemItem: .history, tag: 0)
+        let mainMapWindowNavVC = UINavigationController(rootViewController: MapViewController())
+        mainMapWindowNavVC.tabBarItem = UITabBarItem(tabBarSystemItem: .history, tag: 0)
+        //mapVC.tabBarItem = UITabBarItem(tabBarSystemItem: .history, tag: 0)
         
-        let placesVC = PlacesViewController()
-        placesVC.tabBarItem = UITabBarItem(tabBarSystemItem: .favorites, tag: 1)
+        let placesWindowNavVC = UINavigationController(rootViewController: AddNewPlaceViewController())
+        //let placesVC = PlacesViewController()
+        placesWindowNavVC.tabBarItem = UITabBarItem(tabBarSystemItem: .favorites, tag: 1)
 
-        let favoritesVC = FavoritesViewController()
-        favoritesVC.tabBarItem = UITabBarItem(tabBarSystemItem: .topRated, tag: 2)
+        let favouriteNavVC = UINavigationController(rootViewController: FavoritesViewController())
+        //let favoritesVC = FavoritesViewController()
+        favouriteNavVC.tabBarItem = UITabBarItem(tabBarSystemItem: .topRated, tag: 2)
         
-        let tabBarArray = [mapVC, placesVC, favoritesVC]
+        let tabBarArray = [mainMapWindowNavVC, placesWindowNavVC, favouriteNavVC]
         
         self.viewControllers = tabBarArray
     
@@ -34,14 +37,8 @@ class CustomTabBarController: UITabBarController {
     }
     
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
     }
-    */
 
 }
