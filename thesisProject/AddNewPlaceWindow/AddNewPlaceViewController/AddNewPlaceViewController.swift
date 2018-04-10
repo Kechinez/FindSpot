@@ -59,46 +59,61 @@ class AddNewPlaceViewController: UIViewController, UICollectionViewDelegateFlowL
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         self.selectedRow = indexPath
-        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
-            let imagePicker = UIImagePickerController()
-            imagePicker.delegate = self
-            imagePicker.allowsEditing = true
-            imagePicker.sourceType = .photoLibrary
-            self.present(imagePicker, animated: true, completion: nil)
+        let photos = PHPhotoLibrary.authorizationStatus()
+        if photos == .notDetermined {
+            PHPhotoLibrary.requestAuthorization({status in
+                if status == .authorized {
+                    
+                }
+            })
+        } else if photos == .authorized {
+            if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
+                let imagePicker = UIImagePickerController()
+                imagePicker.delegate = self
+                imagePicker.allowsEditing = true
+                imagePicker.sourceType = .photoLibrary
+                self.present(imagePicker, animated: true, completion: nil)
+            }
         }
     
     }
     
-    
-    
-    
     // MARK: - UIImagePickerControllerDelegate methods
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        let index = self.selectedRow!.row
-        let selectedImageView = self.uploadedPhotos[index].imageView
         
-        selectedImageView!.image = info[UIImagePickerControllerEditedImage] as? UIImage
-        selectedImageView!.contentMode = .scaleAspectFill
-        selectedImageView!.clipsToBounds = true
         
-        let asset = info[UIImagePickerControllerPHAsset] //as? PHAsset {    // в ассет почему-то нил. Скорее всего это из-за того, что дефолтные фото в эмуляторе айфона не имеют никакой локации
-//            guard let photoLocation = asset.location else {
-//                // здесь вызвать метод, который скажет юзеру, что не удалось определить локацию фото
-//                return
-//            }
-//            self.uploadedPhotos[index].location = photoLocation
+                    let index = self.selectedRow!.row
+                    let selectedImageView = self.uploadedPhotos[index].imageView
+                    
+                    selectedImageView!.image = info[UIImagePickerControllerEditedImage] as? UIImage
+                    selectedImageView!.contentMode = .scaleAspectFill
+                    selectedImageView!.clipsToBounds = true
+                    
+                    if let asset = info[UIImagePickerControllerPHAsset] as? PHAsset {    // в ассет почему-то нил. Скорее всего это из-за того, что дефолтные фото в эмуляторе айфона не имеют никакой локации
+                        guard let photoLocation = asset.location else {
+                            // здесь вызвать метод, который скажет юзеру, что не удалось определить локацию фото
+                            return
+                        }
+                        
+                        print(photoLocation)
+                        self.uploadedPhotos[index].location = photoLocation
+                    }
         
-       // }
-    
-        dismiss(animated: true, completion: nil)
-        print(self.uploadedPhotos[index].location)
-    }
-    
-    
-    
-    
+                dismiss(animated: true, completion: nil)
+            }
+            
+        
+        
 
     
+        
 
+    
 }
+    
+
+
+    
+
+

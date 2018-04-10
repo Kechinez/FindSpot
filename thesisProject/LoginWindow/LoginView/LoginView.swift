@@ -38,6 +38,7 @@ class LoginView: UIView {
         emailTextField.borderStyle = .roundedRect
         emailTextField.autocorrectionType = .no
         emailTextField.keyboardType = .emailAddress
+        emailTextField.tag = TextFields.emailTextField.rawValue
         self.addSubview(emailTextField)
         self.emailTextField = emailTextField
         
@@ -47,6 +48,7 @@ class LoginView: UIView {
         passwordTextField.borderStyle = .roundedRect
         passwordTextField.autocorrectionType = .no
         passwordTextField.keyboardType = .emailAddress
+        passwordTextField.tag = TextFields.passwordTextField.rawValue
         self.addSubview(passwordTextField)
         self.passwordTextField = passwordTextField
         

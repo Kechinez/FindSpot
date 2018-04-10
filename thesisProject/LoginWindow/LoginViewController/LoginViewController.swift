@@ -90,14 +90,16 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             }
         }
         Auth.auth().createUser(withEmail: self.emailTextField!.text!, password: self.passTextField!.text!) { [weak self] (user, error) in
-            
-            guard error == nil, user != nil else {
-                // здесь разобраться с ошибкой ее типом и вывести эту ошибку в UILabel
-                return
+            let userName = self?.nameTextField?.text
+            DispatchQueue.global(qos: .userInitiated).async {
+                guard error == nil, user != nil else {
+                    // здесь разобраться с ошибкой ее типом и вывести эту ошибку в UILabel
+                    return
+                }
+                
+                guard let userRef = self?.ref.child((user?.uid)!) else { return }
+                userRef.setValue(["name": userName])
             }
-        
-            guard let userRef = self?.ref.child((user?.uid)!) else { return }
-            userRef.setValue(["name": self?.nameTextField?.text])
         }
         
         let navigationController = UINavigationController(rootViewController: CustomTabBarController())

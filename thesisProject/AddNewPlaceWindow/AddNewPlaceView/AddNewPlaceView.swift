@@ -18,11 +18,19 @@ class AddNewPlaceView: UIView {
         self.viewController = viewController
         self.backgroundColor = #colorLiteral(red: 0.3647058824, green: 0.6549019608, blue: 0.04705882353, alpha: 1)
         
-        let placeNameTextField = UITextField(frame: CGRect(x: 15, y: 20, width: frame.size.width - 30, height: 45))
+        let leftMargin = frame.size.width / 7
+        let placeNameTextField = UITextField(frame: CGRect(x: leftMargin, y: 20, width: frame.size.width - leftMargin * 2, height: 45))
         placeNameTextField.borderStyle = .roundedRect
         placeNameTextField.placeholder = "name of place"
         placeNameTextField.font = UIFont.systemFont(ofSize: 18)
         self.addSubview(placeNameTextField)
+        
+        let addPhotoButton = UIButton(frame: CGRect(x: placeNameTextField.frame.size.width - 40, y: 5, width: 35, height: 35))
+        let clipIcon = UIImage(named: "clipIcon.png")
+        addPhotoButton.setImage(clipIcon, for: UIControlState.normal)
+        placeNameTextField.addSubview(addPhotoButton)
+        
+        //let mapView = 
         
         let placeInfoTextView = UITextView(frame: CGRect(x: 15, y: 85, width: frame.size.width - 30, height: 65))
         placeInfoTextView.font = UIFont.systemFont(ofSize: 18)

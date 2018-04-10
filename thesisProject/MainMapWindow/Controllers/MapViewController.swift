@@ -12,27 +12,12 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
 
     private var locationManager: CLLocationManager?
     private var mainView: MainWindowView?
-    //private let url = ""
+    private var allPlaces: [Place]? = []
+    
     override func viewDidLoad() {
      
         
         super.viewDidLoad()
-        
-        
-        
-        
-        let url = URL(string: "https://maps.googleapis.com/maps/api/distancematrix/json?origins=61.686151,27.298954&destinations=61.681658,27.264764&mode=walking&language=en&key=AIzaSyAmV1T_J6_noWuMYBJukYv3-eDBvhr3zmY")
-        
-        TempNetManager.shared.getData(url: url!) { (data) in
-           
-            let result = DataConverter(data: data)
-            if let totalResult = result {
-                print("1@@@@@@@@@ total time is \(totalResult.time!) @@@@@@")
-            } else {
-                print("2@@@@@@@@@@ ERROR @@@@@@@@@@@")
-            }
-            
-        }
         
         let topBarHeight = UIApplication.shared.statusBarFrame.size.height +
             (self.navigationController?.navigationBar.frame.height ?? 0.0)
@@ -45,6 +30,38 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
         locationManager = CLLocationManager()
         locationManager!.delegate = self
         locationManager!.requestWhenInUseAuthorization()
+        
+        let databaseManager = DataBaseManager()
+        databaseManager.getPlacesWithin(city: "Mikkeli") { (array) in
+            
+            if let places = array {
+                self.allPlaces = places
+                for place in self.allPlaces! {
+                    self.showFoundPlace(with: place.coordinates, info: place.placeName)
+                }
+
+            } else {
+                print("There is no available spots in this city!")
+            }
+            
+            
+        }
+        
+        
+//        let url = URL(string: "https://maps.googleapis.com/maps/api/distancematrix/json?origins=61.686151,27.298954&destinations=61.681658,27.264764&mode=walking&language=en&key=AIzaSyAmV1T_J6_noWuMYBJukYv3-eDBvhr3zmY")
+//
+//        TempNetManager.shared.getData(url: url!) { (data) in
+//
+//            let result = DataConverter(data: data)
+//            if let totalResult = result {
+//                print("1@@@@@@@@@ total time is \(totalResult.time!) @@@@@@")
+//            } else {
+//                print("2@@@@@@@@@@ ERROR @@@@@@@@@@@")
+//            }
+//
+//        }
+        
+        
     
     }
 
@@ -58,13 +75,21 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
         
 
         
-        let url = URL(string: "https://maps.googleapis.com/maps/api/directions/json?origin=61.686151,27.298954&destination=61.681658,27.264764&key=AIzaSyAmV1T_J6_noWuMYBJukYv3-eDBvhr3zmY")
-        TempNetManager.shared.getRoutes(url: url!) { (route) in
-            let result = DataConverter(jsonArray: route)
-            if let result = result {
-                self.showPath(polyline: result.polyline!)
-            }
-        }
+//        let url = URL(string: "https://maps.googleapis.com/maps/api/directions/json?origin=61.686151,27.298954&destination=61.681658,27.264764&key=AIzaSyAmV1T_J6_noWuMYBJukYv3-eDBvhr3zmY")
+//        TempNetManager.shared.getRoutes(url: url!) { (route) in
+//            let result = DataConverter(jsonArray: route)
+//            if let result = result {
+//                self.showPath(polyline: result.polyline!)
+//            }
+//        }
+    }
+    
+    func showFoundPlace(with coordinates: CLLocationCoordinate2D, info: String) {
+        let placePin = GMSMarker()
+        placePin.position = coordinates
+        placePin.title = info
+        placePin.map = self.mainView!.mapView
+    
     }
     
     
@@ -86,4 +111,24 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
         
     }
 
+    func mapView(_ mapView: GMSMapView, didTapInfoWindowOf marker: GMSMarker) {
+        let placeVC = PlaceViewController()
+        placeVC.place = self.allPlaces![0]
+        self.present(placeVC, animated: true, completion: nil)
+    }
+    
+    func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
+        let placeVC = PlaceViewController()
+        let placeNavigationVC = UINavigationController(rootViewController: placeVC)
+        placeVC.place = self.allPlaces![0]
+        print("@@@@@@@")
+        print(placeVC.place!.photos)
+        print("@@@@@@@")
+        self.present(placeNavigationVC, animated: true, completion: nil)
+    }
+    
+    
+    
+    
+    
 }

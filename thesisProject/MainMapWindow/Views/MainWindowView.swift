@@ -19,8 +19,9 @@ class MainWindowView: UIView {
         mapView = GMSMapView(frame: CGRect(x: 0, y: 60, width: frame.size.width, height: frame.size.height - 80))
         let camera = GMSCameraPosition.camera(withLatitude: 61.690201, longitude: 27.272632, zoom: 14.0)
         mapView!.camera = camera
+        mapView!.delegate = viewController
         self.addSubview(mapView!)
-        self.showUsersPositionWith(coordinates: camera.target)
+        //self.showUsersPositionWith(coordinates: camera.target)
         //self.showUsersPosition(with, coordinates: camera.target)
         
         let searchTextField = UITextField(frame: CGRect(x: 10, y: 10, width: frame.size.width - 20, height: 40))
