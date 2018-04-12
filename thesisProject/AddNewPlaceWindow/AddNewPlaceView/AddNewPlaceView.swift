@@ -10,7 +10,7 @@ import UIKit
 
 class AddNewPlaceView: UIView {
     var viewController: AddNewPlaceViewController?
-    var photosPicker: UICollectionView?
+    var photosCollection: [UIImageView] = []
     
     init(frame: CGRect, with viewController: AddNewPlaceViewController) {
         super.init(frame: frame)
@@ -18,45 +18,42 @@ class AddNewPlaceView: UIView {
         self.viewController = viewController
         self.backgroundColor = #colorLiteral(red: 0.3647058824, green: 0.6549019608, blue: 0.04705882353, alpha: 1)
         
-        let leftMargin = frame.size.width / 7
-        let placeNameTextField = UITextField(frame: CGRect(x: leftMargin, y: 20, width: frame.size.width - leftMargin * 2, height: 45))
+        let placeNameTextField = UITextField(frame: CGRect(x: 25, y: 15, width: frame.size.width - 50, height: 45))
         placeNameTextField.borderStyle = .roundedRect
         placeNameTextField.placeholder = "name of place"
         placeNameTextField.font = UIFont.systemFont(ofSize: 18)
         self.addSubview(placeNameTextField)
         
-        let addPhotoButton = UIButton(frame: CGRect(x: placeNameTextField.frame.size.width - 40, y: 5, width: 35, height: 35))
+        let addPhotoButton = UIButton(frame: CGRect(x: placeNameTextField.bounds.maxX - 45, y: 5, width: 35, height: 35))
         let clipIcon = UIImage(named: "clipIcon.png")
         addPhotoButton.setImage(clipIcon, for: UIControlState.normal)
+        addPhotoButton.addTarget(viewController, action: #selector(AddNewPlaceViewController.addImage), for: .touchUpInside)
         placeNameTextField.addSubview(addPhotoButton)
+        placeNameTextField.bringSubview(toFront: addPhotoButton)
         
-        //let mapView = 
-        
-        let placeInfoTextView = UITextView(frame: CGRect(x: 15, y: 85, width: frame.size.width - 30, height: 65))
+        let placeInfoTextView = UITextView(frame: CGRect(x: 20, y: 75, width: frame.size.width - 40, height: 65))
         placeInfoTextView.font = UIFont.systemFont(ofSize: 18)
         placeInfoTextView.isEditable = true
         placeInfoTextView.layer.cornerRadius = 4
         self.addSubview(placeInfoTextView)
         
+        let placeHolderLabel = UILabel(frame: CGRect(x: 20, y: 85, width: frame.size.width - 30, height: 65))
+        placeHolderLabel.backgroundColor = .clear
+        placeHolderLabel.font = UIFont(name: "Helvetica", size: 13)
+        placeHolderLabel.textColor = UIColor.gray
+        placeHolderLabel.text = "Describe spot here"
+        self.addSubview(placeHolderLabel)
         
-        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-        layout.sectionInset = UIEdgeInsets(top: 30, left: 30, bottom: 30, right: 30)
-        layout.minimumInteritemSpacing = 30
-        layout.minimumLineSpacing = 30
-        layout.itemSize = CGSize(width: 180, height: 180)
-        
-        let photosPicker = UICollectionView(frame: CGRect(x: 60, y: 170, width: frame.size.width - 120, height: frame.size.height - 200), collectionViewLayout: layout)
-        self.photosPicker = photosPicker
-        
-        
+        for i in 0...3 {
+            let imageMergin = 25
+            let image = UIImageView(frame: CGRect(x: imageMergin + (i * (10 + 65)), y: 155, width: 65, height: 65))
+            image.layer.cornerRadius = 5.0
+            image.tag = i
+            self.addSubview(image)
+            self.photosCollection.append(image)
+        }
         
         
-        self.photosPicker!.delegate = viewController
-        self.photosPicker!.dataSource = viewController
-        self.photosPicker!.register(ImagePickerViewCell.self, forCellWithReuseIdentifier: "MyCell")
-        self.photosPicker!.backgroundColor = #colorLiteral(red: 0.8949046532, green: 0.9000587331, blue: 0.8950674136, alpha: 1)
-        self.photosPicker!.layer.cornerRadius = 20
-        self.addSubview(photosPicker)
     }
     
     required init?(coder aDecoder: NSCoder) {

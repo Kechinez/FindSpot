@@ -117,4 +117,13 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
     
     
     
+    
+    
+    // MARK: - NavigationBar's buttons action methods:
+    
+     @objc func addNewPlace() {
+        
+    }
+    
+    
 }

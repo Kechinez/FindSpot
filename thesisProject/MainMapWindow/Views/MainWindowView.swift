@@ -16,6 +16,11 @@ class MainWindowView: UIView {
     init(viewController: MapViewController, frame: CGRect) {
         super.init(frame: frame)
         
+        if let navigationVC = viewController.navigationController {
+            let addPlaceButton = UIBarButtonItem(title: "New spot", style: .plain, target: viewController, action: #selector(MapViewController.addNewPlace))
+            navigationVC.navigationItem.rightBarButtonItem = addPlaceButton
+        }
+        
         mapView = GMSMapView(frame: CGRect(x: 0, y: 60, width: frame.size.width, height: frame.size.height - 80))
         let camera = GMSCameraPosition.camera(withLatitude: 61.690201, longitude: 27.272632, zoom: 14.0)
         mapView!.camera = camera

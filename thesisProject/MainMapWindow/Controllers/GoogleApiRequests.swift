@@ -36,9 +36,6 @@ private enum GoogleAPIRequests {
         return URLRequest(url: url!)
     }
 }
-//https://maps.googleapis.com/maps/api/directions/json?origin=61.686151,27.298954&destination=61.681658,27.264764&mode=walking&key=AIzaSyAmV1T_J6_noWuMYBJukYv3-eDBvhr3zmY
-
-//https://maps.googleapis.com/maps/api/directions/json?origin=61.68587231,27.30429680&destination=61.681658,27.264764&mode=walking&language=en&key=AIzaSyAmV1T_J6_noWuMYBJukYv3-eDBvhr3zmY
 
 
 

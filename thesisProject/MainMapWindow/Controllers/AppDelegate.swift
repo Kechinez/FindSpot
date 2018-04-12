@@ -19,21 +19,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
         GMSServices.provideAPIKey(googleApiKey)
         FirebaseApp.configure()
+        
+        let navigationBarAppearace = UINavigationBar.appearance()
+        navigationBarAppearace.tintColor =  _ColorLiteralType(red: 0.3647058824, green: 0.6549019608, blue: 0.04705882353, alpha: 1)
+        navigationBarAppearace.barTintColor = .white
         window = UIWindow(frame: UIScreen.main.bounds)
-        
-        //let tabBarVC = CustomTabBarController()
-        //window?.rootViewController = tabBarVC
-        
+    
         
         
         window?.rootViewController = LoginViewController()
         window?.makeKeyAndVisible()
-        
-        
-        
         
         return true
     }

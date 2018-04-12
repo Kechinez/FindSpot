@@ -11,54 +11,56 @@ import Photos
 
 typealias PhotosArray = (imageView: UIImageView?, location: CLLocation?)
 
-class AddNewPlaceViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    var uploadedPhotos: [PhotosArray] = []
+class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    var uploadedPhotos: [UserLibraryPhoto] = []
     var imageViews: [UIImageView] = []
-    var selectedRow: IndexPath?
-    
-    
-    
+    var newPlaceView: AddNewPlaceView?
+    private var imageTag = 0
+    private let photoManager = PhotoManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         let tabBarHeight = self.tabBarController?.tabBar.frame.height ?? 0.0
         let topBarHeight = UIApplication.shared.statusBarFrame.size.height +
             (self.navigationController?.navigationBar.frame.height ?? 0.0)
-        let viewshechka = AddNewPlaceView(frame: CGRect(x: 0, y: topBarHeight, width: self.view.frame.size.width, height: self.view.frame.size.height - topBarHeight - tabBarHeight), with: self)
+        let newPlaceView = AddNewPlaceView(frame: CGRect(x: 0, y: topBarHeight, width: self.view.frame.size.width, height: self.view.frame.size.height - topBarHeight - tabBarHeight), with: self)
+        self.view.addSubview(newPlaceView)
+        self.newPlaceView = newPlaceView
         
-        self.view.addSubview(viewshechka)
+    }
+    
+    
+    
+    
+    
+    
+    // MARK: - UIImagePickerControllerDelegate methods
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        guard self.imageTag < 4 else { return }
+        let selectedImageView = self.newPlaceView!.photosCollection[self.imageTag]
         
-        // Do any additional setup after loading the view.
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    
-    
-    
-    
-    
-    // MARK: - UICollectionView Delegate and DataSource methods
-    
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 4
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MyCell", for: indexPath) as! ImagePickerViewCell
+        selectedImageView.image = info[UIImagePickerControllerEditedImage] as? UIImage
+        selectedImageView.contentMode = .scaleAspectFill
+        selectedImageView.clipsToBounds = true
         
-        //cell.backgroundColor = .red
-        uploadedPhotos.append((imageView: cell.imageView, location: nil))
-        return cell
+        if let asset = info[UIImagePickerControllerPHAsset] as? PHAsset {
+            guard let photoLocation = asset.location else {
+                // здесь вызвать метод, который скажет юзеру, что не удалось определить локацию фото
+                return
+            }
+            
+            print(photoLocation)
+            self.uploadedPhotos.append(UserLibraryPhoto(image: selectedImageView.image!, photoLocation: photoLocation.coordinate))
+        }
+        
+        self.imageTag += 1
+        dismiss(animated: true, completion: nil)
     }
     
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        self.selectedRow = indexPath
+        
+        
+    @objc func addImage() {
         let photos = PHPhotoLibrary.authorizationStatus()
         if photos == .notDetermined {
             PHPhotoLibrary.requestAuthorization({status in
@@ -75,39 +77,15 @@ class AddNewPlaceViewController: UIViewController, UICollectionViewDelegateFlowL
                 self.present(imagePicker, animated: true, completion: nil)
             }
         }
-    
     }
     
-    // MARK: - UIImagePickerControllerDelegate methods
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+    func savePlace() {
+        //здесь проверить, находятся ли фото в оной локации или еще что
+        //self.photoManager.
         
-        
-                    let index = self.selectedRow!.row
-                    let selectedImageView = self.uploadedPhotos[index].imageView
-                    
-                    selectedImageView!.image = info[UIImagePickerControllerEditedImage] as? UIImage
-                    selectedImageView!.contentMode = .scaleAspectFill
-                    selectedImageView!.clipsToBounds = true
-                    
-                    if let asset = info[UIImagePickerControllerPHAsset] as? PHAsset {    // в ассет почему-то нил. Скорее всего это из-за того, что дефолтные фото в эмуляторе айфона не имеют никакой локации
-                        guard let photoLocation = asset.location else {
-                            // здесь вызвать метод, который скажет юзеру, что не удалось определить локацию фото
-                            return
-                        }
-                        
-                        print(photoLocation)
-                        self.uploadedPhotos[index].location = photoLocation
-                    }
-        
-                dismiss(animated: true, completion: nil)
-            }
-            
-        
-        
-
+    }
     
-        
 
     
 }
