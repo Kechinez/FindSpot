@@ -8,9 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		3D60E1FE2062784B00FA4079 /* MainWindowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D60E1FD2062784B00FA4079 /* MainWindowView.swift */; };
-		3D60E2002062AEA500FA4079 /* TempNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D60E1FF2062AEA500FA4079 /* TempNetworkManager.swift */; };
-		3D60E2022062B55B00FA4079 /* DataConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D60E2012062B55B00FA4079 /* DataConverter.swift */; };
-		3DBA48C6206E60000067C6D7 /* CustomNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DBA48C5206E60000067C6D7 /* CustomNavBar.swift */; };
+		3D9A793B207CB83800AA3536 /* PhotoSliderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9A793A207CB83800AA3536 /* PhotoSliderViewController.swift */; };
+		3D9A793D207CBE2F00AA3536 /* ContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9A793C207CBE2F00AA3536 /* ContentViewController.swift */; };
+		3D9A793F207CC3C600AA3536 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9A793E207CC3C600AA3536 /* ContentView.swift */; };
+		3D9A7941207E5CA100AA3536 /* RequestedCity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9A7940207E5CA100AA3536 /* RequestedCity.swift */; };
+		3D9A7943207E7A5600AA3536 /* InfoWindowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9A7942207E7A5600AA3536 /* InfoWindowView.swift */; };
+		3D9A7945207F5F4200AA3536 /* RequestedRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9A7944207F5F4200AA3536 /* RequestedRoute.swift */; };
 		3DBA48CC2072865D0067C6D7 /* AddNewPlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DBA48CB2072865D0067C6D7 /* AddNewPlaceViewController.swift */; };
 		3DBA48CE20728D150067C6D7 /* AddNewPlaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DBA48CD20728D150067C6D7 /* AddNewPlaceView.swift */; };
 		3DCAEE22207910920088E790 /* PlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DCAEE21207910920088E790 /* PlaceViewController.swift */; };
@@ -26,15 +29,11 @@
 		3DDD9B1920651FC40040777E /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDD9B1820651FC40040777E /* LoginView.swift */; };
 		3DDD9B1B206951F90040777E /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDD9B1A206951F90040777E /* RegisterView.swift */; };
 		3DDF5ADE206162B1001BD7BE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDF5ADD206162B1001BD7BE /* AppDelegate.swift */; };
-		3DDF5AE0206162B1001BD7BE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDF5ADF206162B1001BD7BE /* ViewController.swift */; };
 		3DDF5AE5206162B1001BD7BE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3DDF5AE4206162B1001BD7BE /* Assets.xcassets */; };
 		3DDF5AE8206162B1001BD7BE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3DDF5AE6206162B1001BD7BE /* LaunchScreen.storyboard */; };
 		3DDF5AF0206163A6001BD7BE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3DDF5AEF206163A6001BD7BE /* GoogleService-Info.plist */; };
 		3DDF5AF220616B34001BD7BE /* CustomTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDF5AF120616B34001BD7BE /* CustomTabBarController.swift */; };
-		3DDF5AF420617486001BD7BE /* ViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDF5AF320617486001BD7BE /* ViewController2.swift */; };
-		3DDF5AF6206176D2001BD7BE /* CustomNavViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDF5AF5206176D2001BD7BE /* CustomNavViewController.swift */; };
 		3DDF5AFC2061798F001BD7BE /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDF5AFB2061798F001BD7BE /* MapViewController.swift */; };
-		3DDF5B0120617AEA001BD7BE /* PlacesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDF5B0020617AEA001BD7BE /* PlacesViewController.swift */; };
 		3DDF5B0320617BF9001BD7BE /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDF5B0220617BF9001BD7BE /* FavoritesViewController.swift */; };
 		3DEA1AEC2073714C00B09215 /* ImagePickerViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DEA1AEB2073714C00B09215 /* ImagePickerViewCell.swift */; };
 		FE46FD33CC414F62320E41D3 /* Pods_thesisProject.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58FF50E8D3FC3E9C6C8EDB05 /* Pods_thesisProject.framework */; };
@@ -42,9 +41,12 @@
 
 /* Begin PBXFileReference section */
 		3D60E1FD2062784B00FA4079 /* MainWindowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindowView.swift; sourceTree = "<group>"; };
-		3D60E1FF2062AEA500FA4079 /* TempNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempNetworkManager.swift; sourceTree = "<group>"; };
-		3D60E2012062B55B00FA4079 /* DataConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataConverter.swift; sourceTree = "<group>"; };
-		3DBA48C5206E60000067C6D7 /* CustomNavBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavBar.swift; sourceTree = "<group>"; };
+		3D9A793A207CB83800AA3536 /* PhotoSliderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSliderViewController.swift; sourceTree = "<group>"; };
+		3D9A793C207CBE2F00AA3536 /* ContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewController.swift; sourceTree = "<group>"; };
+		3D9A793E207CC3C600AA3536 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		3D9A7940207E5CA100AA3536 /* RequestedCity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestedCity.swift; sourceTree = "<group>"; };
+		3D9A7942207E7A5600AA3536 /* InfoWindowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoWindowView.swift; sourceTree = "<group>"; };
+		3D9A7944207F5F4200AA3536 /* RequestedRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestedRoute.swift; sourceTree = "<group>"; };
 		3DBA48CB2072865D0067C6D7 /* AddNewPlaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewPlaceViewController.swift; sourceTree = "<group>"; };
 		3DBA48CD20728D150067C6D7 /* AddNewPlaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewPlaceView.swift; sourceTree = "<group>"; };
 		3DCAEE21207910920088E790 /* PlaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceViewController.swift; sourceTree = "<group>"; };
@@ -61,16 +63,12 @@
 		3DDD9B1A206951F90040777E /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
 		3DDF5ADA206162B1001BD7BE /* thesisProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = thesisProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3DDF5ADD206162B1001BD7BE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		3DDF5ADF206162B1001BD7BE /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		3DDF5AE4206162B1001BD7BE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3DDF5AE7206162B1001BD7BE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3DDF5AE9206162B1001BD7BE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3DDF5AEF206163A6001BD7BE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3DDF5AF120616B34001BD7BE /* CustomTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarController.swift; sourceTree = "<group>"; };
-		3DDF5AF320617486001BD7BE /* ViewController2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController2.swift; sourceTree = "<group>"; };
-		3DDF5AF5206176D2001BD7BE /* CustomNavViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavViewController.swift; sourceTree = "<group>"; };
 		3DDF5AFB2061798F001BD7BE /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
-		3DDF5B0020617AEA001BD7BE /* PlacesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacesViewController.swift; sourceTree = "<group>"; };
 		3DDF5B0220617BF9001BD7BE /* FavoritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
 		3DEA1AEB2073714C00B09215 /* ImagePickerViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerViewCell.swift; sourceTree = "<group>"; };
 		58FF50E8D3FC3E9C6C8EDB05 /* Pods_thesisProject.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_thesisProject.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -155,6 +153,8 @@
 			isa = PBXGroup;
 			children = (
 				3DCAEE21207910920088E790 /* PlaceViewController.swift */,
+				3D9A793A207CB83800AA3536 /* PhotoSliderViewController.swift */,
+				3D9A793C207CBE2F00AA3536 /* ContentViewController.swift */,
 			);
 			path = PlaceViewController;
 			sourceTree = "<group>";
@@ -173,6 +173,8 @@
 			children = (
 				3DCAEE23207911350088E790 /* PlaceView.swift */,
 				3DCAEE25207922E30088E790 /* ImagesCollectionCell.swift */,
+				3D9A793E207CC3C600AA3536 /* ContentView.swift */,
+				3D9A7942207E7A5600AA3536 /* InfoWindowView.swift */,
 			);
 			path = PlaceView;
 			sourceTree = "<group>";
@@ -182,7 +184,8 @@
 			children = (
 				3DD98A17207629F200EDEAD2 /* User.swift */,
 				3DD98A1920762A6900EDEAD2 /* Place.swift */,
-				3DD98A1B20764CDC00EDEAD2 /* DataBaseManager.swift */,
+				3D9A7940207E5CA100AA3536 /* RequestedCity.swift */,
+				3D9A7944207F5F4200AA3536 /* RequestedRoute.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -230,11 +233,7 @@
 				3D60E20320651B0900FA4079 /* LoginWindow */,
 				3DDF5AF720617887001BD7BE /* MainMapWindow */,
 				3DDF5AFA20617922001BD7BE /* FavoritesWindow */,
-				3DDF5AF920617902001BD7BE /* PlacesWindow */,
 				3DDF5AF82061789A001BD7BE /* SupportingFiles */,
-				3DDF5AF5206176D2001BD7BE /* CustomNavViewController.swift */,
-				3DDF5ADF206162B1001BD7BE /* ViewController.swift */,
-				3DDF5AF320617486001BD7BE /* ViewController2.swift */,
 			);
 			path = thesisProject;
 			sourceTree = "<group>";
@@ -260,14 +259,6 @@
 			path = SupportingFiles;
 			sourceTree = "<group>";
 		};
-		3DDF5AF920617902001BD7BE /* PlacesWindow */ = {
-			isa = PBXGroup;
-			children = (
-				3DDF5AFE20617A6D001BD7BE /* Controllers */,
-			);
-			path = PlacesWindow;
-			sourceTree = "<group>";
-		};
 		3DDF5AFA20617922001BD7BE /* FavoritesWindow */ = {
 			isa = PBXGroup;
 			children = (
@@ -281,19 +272,9 @@
 			children = (
 				3DDF5AFB2061798F001BD7BE /* MapViewController.swift */,
 				3DDF5ADD206162B1001BD7BE /* AppDelegate.swift */,
+				3DD98A1B20764CDC00EDEAD2 /* DataBaseManager.swift */,
 				3DDF5AF120616B34001BD7BE /* CustomTabBarController.swift */,
-				3D60E1FF2062AEA500FA4079 /* TempNetworkManager.swift */,
-				3D60E2012062B55B00FA4079 /* DataConverter.swift */,
-				3DBA48C5206E60000067C6D7 /* CustomNavBar.swift */,
 				3DD98A1420752D9E00EDEAD2 /* GoogleApiRequests.swift */,
-			);
-			path = Controllers;
-			sourceTree = "<group>";
-		};
-		3DDF5AFE20617A6D001BD7BE /* Controllers */ = {
-			isa = PBXGroup;
-			children = (
-				3DDF5B0020617AEA001BD7BE /* PlacesViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -466,26 +447,25 @@
 				3DEA1AEC2073714C00B09215 /* ImagePickerViewCell.swift in Sources */,
 				3DCAEE2A20792B660088E790 /* Photo.swift in Sources */,
 				3DCAEE26207922E30088E790 /* ImagesCollectionCell.swift in Sources */,
-				3DDF5AF6206176D2001BD7BE /* CustomNavViewController.swift in Sources */,
-				3DDF5B0120617AEA001BD7BE /* PlacesViewController.swift in Sources */,
 				3DDD9B1B206951F90040777E /* RegisterView.swift in Sources */,
+				3D9A7941207E5CA100AA3536 /* RequestedCity.swift in Sources */,
 				3DD98A1520752D9E00EDEAD2 /* GoogleApiRequests.swift in Sources */,
 				3DDF5B0320617BF9001BD7BE /* FavoritesViewController.swift in Sources */,
 				3DD98A18207629F200EDEAD2 /* User.swift in Sources */,
 				3DCAEE28207929FE0088E790 /* PhotoManager.swift in Sources */,
 				3DDF5AFC2061798F001BD7BE /* MapViewController.swift in Sources */,
+				3D9A7943207E7A5600AA3536 /* InfoWindowView.swift in Sources */,
 				3DCAEE22207910920088E790 /* PlaceViewController.swift in Sources */,
+				3D9A793B207CB83800AA3536 /* PhotoSliderViewController.swift in Sources */,
 				3DD98A1C20764CDC00EDEAD2 /* DataBaseManager.swift in Sources */,
 				3DBA48CE20728D150067C6D7 /* AddNewPlaceView.swift in Sources */,
-				3D60E2002062AEA500FA4079 /* TempNetworkManager.swift in Sources */,
 				3DD98A1A20762A6900EDEAD2 /* Place.swift in Sources */,
-				3DDF5AE0206162B1001BD7BE /* ViewController.swift in Sources */,
-				3DDF5AF420617486001BD7BE /* ViewController2.swift in Sources */,
-				3DBA48C6206E60000067C6D7 /* CustomNavBar.swift in Sources */,
 				3DCAEE24207911350088E790 /* PlaceView.swift in Sources */,
-				3D60E2022062B55B00FA4079 /* DataConverter.swift in Sources */,
 				3DDF5ADE206162B1001BD7BE /* AppDelegate.swift in Sources */,
+				3D9A7945207F5F4200AA3536 /* RequestedRoute.swift in Sources */,
 				3DDD9B1920651FC40040777E /* LoginView.swift in Sources */,
+				3D9A793F207CC3C600AA3536 /* ContentView.swift in Sources */,
+				3D9A793D207CBE2F00AA3536 /* ContentViewController.swift in Sources */,
 				3D60E1FE2062784B00FA4079 /* MainWindowView.swift in Sources */,
 				3DDF5AF220616B34001BD7BE /* CustomTabBarController.swift in Sources */,
 			);

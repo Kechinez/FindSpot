@@ -12,7 +12,6 @@ import GoogleMaps
 class PlaceView: UIView {
     var mapView: GMSMapView?
     
-    
     init(with frame: CGRect, placeCoordinate: CLLocationCoordinate2D, placeDescription: String, corespondingVC: PlaceViewController) {
         super.init(frame: frame)
         
@@ -27,6 +26,7 @@ class PlaceView: UIView {
         let camera = GMSCameraPosition.camera(withLatitude: placeCoordinate.latitude, longitude: placeCoordinate.longitude, zoom: 15.0)
         self.mapView!.camera = camera
         self.addSubview(self.mapView!)
+        self.mapView!.delegate = corespondingVC
         
         //let desciptionLabel = UILabel(frame: CGRect(x: frame.size.width / 7, y: frame.size.height / 2 + 20, width: frame.size.width * 5/7, height: frame.size.height / 4 - 20))
         let desciptionLabel = UILabel(frame: CGRect(x: self.bounds.size.width / 7, y: self.bounds.size.height / 2 + 20, width: self.bounds.size.width * 5/7, height: self.bounds.size.height / 4 - 20))
@@ -52,6 +52,7 @@ class PlaceView: UIView {
         self.addSubview(imagesCollection)
         corespondingVC.collectionView = imagesCollection
         
+    
         
     }
     

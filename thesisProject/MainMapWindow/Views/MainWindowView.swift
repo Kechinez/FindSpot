@@ -21,6 +21,7 @@ class MainWindowView: UIView {
         mapView!.camera = camera
         mapView!.delegate = viewController
         self.addSubview(mapView!)
+        mapView!.isMyLocationEnabled = true
         //self.showUsersPositionWith(coordinates: camera.target)
         //self.showUsersPosition(with, coordinates: camera.target)
         

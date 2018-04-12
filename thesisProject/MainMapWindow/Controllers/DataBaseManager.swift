@@ -16,7 +16,6 @@ struct DataBaseManager {
     
     func getPlacesWithin(city: String, completionHandler: @escaping ([Place]?) -> ()) {
 
-        
         let placesQuery = self.ref.queryOrdered(byChild: "city").queryEqual(toValue: city)
         
         placesQuery.observeSingleEvent(of: .value, with: { (data) in
@@ -44,7 +43,7 @@ struct DataBaseManager {
     }
         
    
-   // func getPlaceImages
+ 
     
     
 }
