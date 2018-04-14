@@ -22,15 +22,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         GMSServices.provideAPIKey(googleApiKey)
         FirebaseApp.configure()
         
-        let navigationBarAppearace = UINavigationBar.appearance()
-        navigationBarAppearace.tintColor =  _ColorLiteralType(red: 0.3647058824, green: 0.6549019608, blue: 0.04705882353, alpha: 1)
-        navigationBarAppearace.barTintColor = .white
+        
         window = UIWindow(frame: UIScreen.main.bounds)
     
         
         
         window?.rootViewController = LoginViewController()
         window?.makeKeyAndVisible()
+        
+        let navigationBarAppearace = UINavigationBar.appearance()
+        navigationBarAppearace.tintColor =  _ColorLiteralType(red: 0.3647058824, green: 0.6549019608, blue: 0.04705882353, alpha: 1)
+        navigationBarAppearace.barTintColor = .white
         
         return true
     }

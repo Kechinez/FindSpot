@@ -48,6 +48,13 @@ class PlaceViewController: UIViewController, UICollectionViewDelegateFlowLayout,
         
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if let tabBarController = self.tabBarController {
+            tabBarController.tabBar.isHidden = true
+        }
+        
+    }
     
     
     

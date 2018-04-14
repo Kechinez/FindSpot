@@ -16,13 +16,10 @@ class CustomTabBarController: UITabBarController {
         let mainMapWindowNavVC = UINavigationController(rootViewController: MapViewController())
         mainMapWindowNavVC.tabBarItem = UITabBarItem(tabBarSystemItem: .history, tag: 0)
 
-        let placesWindowNavVC = UINavigationController(rootViewController: AddNewPlaceViewController())
-        placesWindowNavVC.tabBarItem = UITabBarItem(tabBarSystemItem: .favorites, tag: 1)
-
         let favouriteNavVC = UINavigationController(rootViewController: FavoritesViewController())
-        favouriteNavVC.tabBarItem = UITabBarItem(tabBarSystemItem: .topRated, tag: 2)
+        favouriteNavVC.tabBarItem = UITabBarItem(tabBarSystemItem: .topRated, tag: 1)
         
-        let tabBarArray = [mainMapWindowNavVC, placesWindowNavVC, favouriteNavVC]
+        let tabBarArray = [mainMapWindowNavVC, favouriteNavVC]
         self.viewControllers = tabBarArray
     
     }

@@ -29,10 +29,9 @@ struct DataBaseManager {
                     return
                 }
                 for child in data.children {
-                    print(data.childrenCount)
-                    guard let foundPlace = child as? DataSnapshot else { return }
-                    guard let obj = foundPlace.value as? JSON else { return }
-                    if let tempPlace = Place(with: obj) {
+                    guard let data = child as? DataSnapshot else { continue }
+                    guard let foundPlace = data.value as? JSON else { continue }
+                    if let tempPlace = Place(with: foundPlace) {
                         placesArray!.append(tempPlace)
                     }
                 }
@@ -45,21 +44,54 @@ struct DataBaseManager {
         
    
  
+    func getUserFavorites(with dataBaseReference: DatabaseReference, completionHandler: @escaping ([Place]?) -> ()) {
+        
+        dataBaseReference.observe(.value) { (snapshot) in
+            DispatchQueue.global().async(qos: .userInitiated) {
+                guard snapshot.childrenCount == 0 else { return }
+                var favorites: [Place]?
+                
+                for child in snapshot.children {
+                    guard let data = child as? DataSnapshot else { continue }
+                    guard let foundPlace = data.value as? JSON else { continue }
+                    if let place = Place(with: foundPlace) {
+                        favorites!.append(place)
+                    }
+                }
+                
+                DispatchQueue.main.async {
+                    completionHandler(favorites)
+                }
+            }
+        }
+    }
+    
+    
+    
     func saveNewPlace(with place: Place, completionHandler: @escaping () -> ()) {
 
-        func createDatabaseReference() -> DatabaseReference {
-            var placeName = "\(place.coordinates.latitude)"
-            placeName = placeName.trimmingCharacters(in: ["+", "-"]).replacingOccurrences(of: ".", with: "")
-            let reference = self.ref.child("\(placeName)")
-            return reference
-        }
-        
-        let reference = createDatabaseReference()
+        var placeName = "\(place.coordinates.latitude)"
+        placeName = self.cutAllSymbols(in: placeName)
+        let reference = self.ref.child(placeName)
         var tempPlace = place
         reference.setValue(tempPlace.convertToJSON())
     
     }
     
+    
+    
+    private func cutAllSymbols(in string: String) -> String {
+        let result = string.trimmingCharacters(in: ["+", "-"]).replacingOccurrences(of: ".", with: "")
+        return result
+    }
+    
+    
+    
+    func recreatePlaceDataReference(from databaseReference: DatabaseReference, and stringCoordinate: String) -> DatabaseReference {
+        let cutCoordinate = self.cutAllSymbols(in: stringCoordinate)
+        let recreatedReference = databaseReference.child(cutCoordinate)
+        return recreatedReference
+    }
     
     
 }

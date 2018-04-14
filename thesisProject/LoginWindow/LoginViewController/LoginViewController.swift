@@ -90,20 +90,20 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             }
         }
         Auth.auth().createUser(withEmail: self.emailTextField!.text!, password: self.passTextField!.text!) { [weak self] (user, error) in
+            
             let userName = self?.nameTextField?.text
-            DispatchQueue.global(qos: .userInitiated).async {
-                guard error == nil, user != nil else {
-                    // здесь разобраться с ошибкой ее типом и вывести эту ошибку в UILabel
-                    return
-                }
-                
-                guard let userRef = self?.ref.child((user?.uid)!) else { return }
-                userRef.setValue(["name": userName])
+            guard error == nil, user != nil else {
+                print(error!.localizedDescription)// здесь разобраться с ошибкой ее типом и вывести эту ошибку в UILabel
+                return
             }
+            guard let userRef = self?.ref.child((user?.uid)!) else { return }
+            userRef.setValue(["name": userName])
+            
+            let navigationController = UINavigationController(rootViewController: CustomTabBarController())
+            navigationController.navigationBar.barTintColor = UIColor.blue
+            self?.present(navigationController, animated: true, completion: nil)
         }
         
-        let navigationController = UINavigationController(rootViewController: CustomTabBarController())
-        self.present(navigationController, animated: true, completion: nil)
     }
     
     
@@ -215,8 +215,26 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 self.registrationIsAllowed[TextFields.emailTextField.rawValue] = false
                 return
             }
+        
+        /*
+        
+        !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+         !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        v
+        
+        Не забудь вернуть проверку пароля if resultText.count < 1.   Вместо 1 должно быть 8!!!!
+        
+        
+         !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+              !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+              !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+              !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        */
+        
+            
+            
         case TextFields.passwordTextField.rawValue:
-            if resultText.count < 8 {
+            if resultText.count < 1 {
                 self.showError(with: .passwordError, within: textField)
                 self.registrationIsAllowed[TextFields.passwordTextField.rawValue] = false
                 return

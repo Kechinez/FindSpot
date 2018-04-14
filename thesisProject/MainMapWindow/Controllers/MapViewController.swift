@@ -8,7 +8,8 @@
 
 import UIKit
 import GoogleMaps
-class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManagerDelegate, UITextFieldDelegate {
+import Firebase
+class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManagerDelegate, UITextFieldDelegate, UITabBarControllerDelegate {
 
     private var locationManager: CLLocationManager?
     private var userCurrentLocation: CLLocationCoordinate2D?
@@ -17,11 +18,17 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
     private var allPlaces: [Place]? = []
     private let googleAPIManager = GoogleApiRequests()
     private let databaseManager = DataBaseManager()
-    
-    
+    var favorites: [Place]?
+    private var userDatabaseRef: DatabaseReference?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if let tabBarController = self.tabBarController {
+            tabBarController.delegate = self
+        }
+        guard let currentUser = Auth.auth().currentUser else { return }
+        self.userDatabaseRef = Database.database().reference(withPath: "users").child(String(currentUser.uid))
         
         let topBarHeight = UIApplication.shared.statusBarFrame.size.height +
             (self.navigationController?.navigationBar.frame.height ?? 0.0)
@@ -59,6 +66,12 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
     }
         
 
+    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        guard let vc = viewController as? FavoritesViewController else { return }
+        vc.favorites = self.favorites
+        vc.userDatabaseRef = self.userDatabaseRef!
+    }
+    
     
     
     
@@ -106,10 +119,11 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
                   marker.position.longitude == place.coordinates.longitude  else { continue }
             
             let placeVC = PlaceViewController()
-            let placeNavigationVC = UINavigationController(rootViewController: placeVC)
             placeVC.place = self.allPlaces![index]
             placeVC.userLocation = self.userCurrentLocation!
-            self.present(placeNavigationVC, animated: true, completion: nil)
+            guard let navigationVC = self.tabBarController?.navigationController else { return true }
+            navigationVC.pushViewController(placeVC, animated: true)
+            //self.navigationController!.pushViewController(placeVC, animated: true)
         }
         return true
     }
