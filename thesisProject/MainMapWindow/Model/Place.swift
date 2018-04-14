@@ -15,8 +15,13 @@ struct Place {
     let placeName: String
     let placeDescription: String
     let coordinates: CLLocationCoordinate2D
-    let photos: [String]
+    let photosDownloadURLs: [URL]
     let city: String
+    
+    lazy var coordinatesInString: String = {
+        return "\(self.coordinates.latitude),\(self.coordinates.longitude)"
+    }()
+    
     
     init?(with data: JSON?) {
         guard let tempData = data else { return nil }
@@ -24,13 +29,14 @@ struct Place {
               let tempPlaceDescr = tempData["description"] as? String,
               let tempPlaceCoord = tempData["coordinates"] as? String,
               let tempCity = tempData["city"] as? String,
-              let tempPlacePhotos = tempData["photos"] as? JSON else { return nil }
+              let tempPlacePhotos = tempData["photos"] as? [String] else { return nil }//as? JSON else { return nil }
         
-        let photosInit = { () -> [String] in
-            var tempPhotos = [String]()
-            for index in 1...tempPlacePhotos.count {
-                guard let photo = tempPlacePhotos["photo\(index)"] as? String else { break }
-                tempPhotos.append(photo)
+        
+        let photosInit = { () -> [URL] in
+            var tempPhotos = [URL]()
+            for index in 0..<tempPlacePhotos.count {
+                let photo = tempPlacePhotos[index]
+                tempPhotos.append(URL(string: photo)!)
             }
             return tempPhotos
         }
@@ -44,7 +50,7 @@ struct Place {
         
         self.placeName = tempPlaceName
         self.placeDescription = tempPlaceDescr
-        self.photos = photosInit()
+        self.photosDownloadURLs = photosInit()
         self.city = tempCity
         self.coordinates = coordinatesInit()
         
@@ -52,4 +58,25 @@ struct Place {
 
 
 
+    init(placeName: String, placeDescription: String, photosDownloadURLs: [URL], cityName: String, coordinates: CLLocationCoordinate2D) {
+        self.placeName = placeName
+        self.placeDescription = placeDescription
+        self.photosDownloadURLs = photosDownloadURLs
+        self.city = cityName
+        self.coordinates = coordinates
+    }
+    
+    
+    mutating func convertToJSON() -> Any {
+        var placeJSON = [String: Any]()
+        var photosJSON = [String: String]()
+        for (index, url) in self.photosDownloadURLs.enumerated(){
+            photosJSON["\(index)"] = url.absoluteString
+        }
+        placeJSON = ["city": self.city, "name": self.placeName, "coordinates": self.coordinatesInString, "description": self.placeDescription, "photos": photosJSON]
+        
+        return placeJSON
+        
+    }
+    
 }

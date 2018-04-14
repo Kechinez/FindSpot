@@ -11,6 +11,9 @@ import UIKit
 class AddNewPlaceView: UIView {
     var viewController: AddNewPlaceViewController?
     var photosCollection: [UIImageView] = []
+    var placeName: UITextField?
+    var placeDescr: UITextView?
+    
     
     init(frame: CGRect, with viewController: AddNewPlaceViewController) {
         super.init(frame: frame)
@@ -23,8 +26,9 @@ class AddNewPlaceView: UIView {
         placeNameTextField.placeholder = "name of place"
         placeNameTextField.font = UIFont.systemFont(ofSize: 18)
         self.addSubview(placeNameTextField)
+        self.placeName = placeNameTextField
         
-        let addPhotoButton = UIButton(frame: CGRect(x: placeNameTextField.bounds.maxX - 45, y: 5, width: 35, height: 35))
+        let addPhotoButton = UIButton(frame: CGRect(x: placeNameTextField.bounds.maxX - 45, y: 5, width: 45, height: 45)) // it should be 35 x 35, but I changed it to test without problems
         let clipIcon = UIImage(named: "clipIcon.png")
         addPhotoButton.setImage(clipIcon, for: UIControlState.normal)
         addPhotoButton.addTarget(viewController, action: #selector(AddNewPlaceViewController.addImage), for: .touchUpInside)
@@ -36,6 +40,8 @@ class AddNewPlaceView: UIView {
         placeInfoTextView.isEditable = true
         placeInfoTextView.layer.cornerRadius = 4
         self.addSubview(placeInfoTextView)
+        self.placeDescr = placeInfoTextView
+
         
         let placeHolderLabel = UILabel(frame: CGRect(x: 20, y: 85, width: frame.size.width - 30, height: 65))
         placeHolderLabel.backgroundColor = .clear
@@ -52,6 +58,14 @@ class AddNewPlaceView: UIView {
             self.addSubview(image)
             self.photosCollection.append(image)
         }
+        
+        let addPlace = UIButton(frame: CGRect(x: 45, y: 300, width: 50, height: 30))
+        
+        addPlace.setTitle("Add place, asshole", for: .normal)
+        addPlace.setTitleColor(.white, for: .normal)
+        addPlace.addTarget(viewController, action: #selector(AddNewPlaceViewController.savePlace), for: .touchUpInside)
+        self.addSubview(addPlace)
+        
         
         
     }

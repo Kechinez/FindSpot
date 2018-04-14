@@ -13,6 +13,7 @@ struct UserLibraryPhoto {
     let image: UIImage
     let location: CLLocationCoordinate2D
     
+    //lazy var 
     lazy var stringLocation: String = {
         return "\(location.latitude)"
     }()

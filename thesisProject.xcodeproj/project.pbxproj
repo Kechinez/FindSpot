@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3D60E1FE2062784B00FA4079 /* MainWindowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D60E1FD2062784B00FA4079 /* MainWindowView.swift */; };
+		3D86A8B22080B1C800F6E440 /* DownloadURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D86A8B12080B1C800F6E440 /* DownloadURL.swift */; };
 		3D9A793B207CB83800AA3536 /* PhotoSliderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9A793A207CB83800AA3536 /* PhotoSliderViewController.swift */; };
 		3D9A793D207CBE2F00AA3536 /* ContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9A793C207CBE2F00AA3536 /* ContentViewController.swift */; };
 		3D9A793F207CC3C600AA3536 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9A793E207CC3C600AA3536 /* ContentView.swift */; };
@@ -42,6 +43,7 @@
 
 /* Begin PBXFileReference section */
 		3D60E1FD2062784B00FA4079 /* MainWindowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindowView.swift; sourceTree = "<group>"; };
+		3D86A8B12080B1C800F6E440 /* DownloadURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadURL.swift; sourceTree = "<group>"; };
 		3D9A793A207CB83800AA3536 /* PhotoSliderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSliderViewController.swift; sourceTree = "<group>"; };
 		3D9A793C207CBE2F00AA3536 /* ContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewController.swift; sourceTree = "<group>"; };
 		3D9A793E207CC3C600AA3536 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -167,6 +169,7 @@
 			children = (
 				3DCAEE27207929FE0088E790 /* PhotoManager.swift */,
 				3DCAEE2920792B660088E790 /* Photo.swift */,
+				3D86A8B12080B1C800F6E440 /* DownloadURL.swift */,
 			);
 			path = PlaceModel;
 			sourceTree = "<group>";
@@ -448,6 +451,7 @@
 				3DDD9B1620651CAF0040777E /* LoginViewController.swift in Sources */,
 				3DBA48CC2072865D0067C6D7 /* AddNewPlaceViewController.swift in Sources */,
 				3DEA1AEC2073714C00B09215 /* ImagePickerViewCell.swift in Sources */,
+				3D86A8B22080B1C800F6E440 /* DownloadURL.swift in Sources */,
 				3DCAEE2A20792B660088E790 /* Photo.swift in Sources */,
 				3DCAEE26207922E30088E790 /* ImagesCollectionCell.swift in Sources */,
 				3DDD9B1B206951F90040777E /* RegisterView.swift in Sources */,

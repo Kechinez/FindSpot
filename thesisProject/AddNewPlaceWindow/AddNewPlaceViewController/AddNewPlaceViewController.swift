@@ -17,6 +17,9 @@ class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelega
     var newPlaceView: AddNewPlaceView?
     private var imageTag = 0
     private let photoManager = PhotoManager()
+    private var cityOfMadePhoto: String?
+    private var placeLocation: CLLocationCoordinate2D?
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,7 +52,14 @@ class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelega
                 // здесь вызвать метод, который скажет юзеру, что не удалось определить локацию фото
                 return
             }
-            
+            if self.placeLocation == nil {
+                self.placeLocation = photoLocation.coordinate
+            }
+            let googleApiManager = GoogleApiRequests()
+            googleApiManager.coordinatesToAddressRequest(with: photoLocation.coordinate) { (city) in
+                guard let city = city else { return }
+                self.cityOfMadePhoto = city.cityName
+            }
             print(photoLocation)
             self.uploadedPhotos.append(UserLibraryPhoto(image: selectedImageView.image!, photoLocation: photoLocation.coordinate))
         }
@@ -80,9 +90,17 @@ class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelega
     }
     
     
-    func savePlace() {
-        //здесь проверить, находятся ли фото в оной локации или еще что
-        //self.photoManager.
+   @objc func savePlace() {
+        self.photoManager.uploadPhotos(with: self.uploadedPhotos) { (downloadURLs) in
+            guard let downloadURLs = downloadURLs else { return }
+            print(downloadURLs)
+            let databaseManager = DataBaseManager()
+            let newPlace = Place(placeName: self.newPlaceView!.placeName!.text!, placeDescription: self.newPlaceView!.placeDescr!.text!, photosDownloadURLs: downloadURLs, cityName: self.cityOfMadePhoto!, coordinates: self.placeLocation!)
+            
+            databaseManager.saveNewPlace(with: newPlace, completionHandler: {
+                
+            })
+        }
         
     }
     

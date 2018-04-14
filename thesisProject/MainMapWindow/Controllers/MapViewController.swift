@@ -77,45 +77,42 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
     // MARK: - Methods showing map's elements:
     
     func showFoundPlace(with coordinates: CLLocationCoordinate2D, info: String) {
-        let placePin = GMSMarker()
-        placePin.position = coordinates
-        placePin.title = info
-        placePin.map = self.mainView!.mapView
+        let marker = GMSMarker()
+        marker.position = coordinates
+        marker.title = info
+        marker.map = self.mainView!.mapView
     }
     
-    
-    func showPath(polyline: String) {
-        let path = GMSPath(fromEncodedPath: polyline)
-        DispatchQueue.main.async {
-            let polylineDraw = GMSPolyline(path: path)
-            polylineDraw.strokeWidth = 3.0
-            polylineDraw.strokeColor = UIColor.red
-            polylineDraw.map = self.mainView!.mapView
-        }
-        
-    }
     
     
     
     
     // MARK: - GMSMapView Delegate methods:
     
-    func mapView(_ mapView: GMSMapView, didTapInfoWindowOf marker: GMSMarker) {
-        let placeVC = PlaceViewController()
-        placeVC.place = self.allPlaces![0]
-        self.present(placeVC, animated: true, completion: nil)
-    }
+//    func mapView(_ mapView: GMSMapView, didTapInfoWindowOf marker: GMSMarker) {
+//        let placeVC = PlaceViewController()
+//        placeVC.place = self.allPlaces![0]
+//        self.present(placeVC, animated: true, completion: nil)
+//    }
     
     
     func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
-        let placeVC = PlaceViewController()
-        let placeNavigationVC = UINavigationController(rootViewController: placeVC)
-        placeVC.place = self.allPlaces![0]
-        placeVC.userLocation = self.userCurrentLocation!
-        self.present(placeNavigationVC, animated: true, completion: nil)
+        
     }
     
-    
+    func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
+        for (index, place) in self.allPlaces!.enumerated() {
+            guard marker.position.latitude == place.coordinates.latitude,
+                  marker.position.longitude == place.coordinates.longitude  else { continue }
+            
+            let placeVC = PlaceViewController()
+            let placeNavigationVC = UINavigationController(rootViewController: placeVC)
+            placeVC.place = self.allPlaces![index]
+            placeVC.userLocation = self.userCurrentLocation!
+            self.present(placeNavigationVC, animated: true, completion: nil)
+        }
+        return true
+    }
     
     
     

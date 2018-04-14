@@ -29,6 +29,7 @@ struct DataBaseManager {
                     return
                 }
                 for child in data.children {
+                    print(data.childrenCount)
                     guard let foundPlace = child as? DataSnapshot else { return }
                     guard let obj = foundPlace.value as? JSON else { return }
                     if let tempPlace = Place(with: obj) {
@@ -44,6 +45,21 @@ struct DataBaseManager {
         
    
  
+    func saveNewPlace(with place: Place, completionHandler: @escaping () -> ()) {
+
+        func createDatabaseReference() -> DatabaseReference {
+            var placeName = "\(place.coordinates.latitude)"
+            placeName = placeName.trimmingCharacters(in: ["+", "-"]).replacingOccurrences(of: ".", with: "")
+            let reference = self.ref.child("\(placeName)")
+            return reference
+        }
+        
+        let reference = createDatabaseReference()
+        var tempPlace = place
+        reference.setValue(tempPlace.convertToJSON())
+    
+    }
+    
     
     
 }

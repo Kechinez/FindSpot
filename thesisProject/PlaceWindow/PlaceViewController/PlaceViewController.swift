@@ -40,7 +40,7 @@ class PlaceViewController: UIViewController, UICollectionViewDelegateFlowLayout,
         self.placeView = placeView
         
         let photoManager = PhotoManager()
-        photoManager.getPhotoFromStorage(using: place!.photos) { (images) in
+        photoManager.getPhotoFromStorage(using: place!.photosDownloadURLs) { (images) in
             guard let tempImages = images.threadSafeImages else { return }
             self.images = tempImages
             self.setUpImages()
@@ -64,7 +64,7 @@ class PlaceViewController: UIViewController, UICollectionViewDelegateFlowLayout,
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.place!.photos.count // потом обратить на это внимание!!!!!! из
+        return self.place!.photosDownloadURLs.count // потом обратить на это внимание!!!!!! из
     }
     
     
