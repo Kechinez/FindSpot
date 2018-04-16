@@ -25,11 +25,19 @@ class PlaceViewController: UIViewController, UICollectionViewDelegateFlowLayout,
         super.viewDidLoad()
         
         self.googleApiManager.getRouteRequest(with: self.userLocation!, and: self.place!.coordinates) { (route) in
-            guard let routeInfo = route else { return }
-            self.distanceForInfoWin = routeInfo.distance
-            self.timeForInfoWin = routeInfo.time
+
+            switch route {
+            case  .Success(let route):
+                self.distanceForInfoWin = route.distance
+                self.timeForInfoWin = route.time
+                self.showPath(polyline: route.polylinePath)
+            case .Failure(let error):
+               // self.showGoogleMapError(with: error.localizedDescription)
+                return
+            }
             
-            self.showPath(polyline: routeInfo.polylinePath)
+            
+            
         }
 
         let topBarHeight = UIApplication.shared.statusBarFrame.size.height +
@@ -48,14 +56,15 @@ class PlaceViewController: UIViewController, UICollectionViewDelegateFlowLayout,
         
     }
 
+    
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         if let tabBarController = self.tabBarController {
             tabBarController.tabBar.isHidden = true
         }
-        
     }
-    
     
     
     
@@ -65,13 +74,15 @@ class PlaceViewController: UIViewController, UICollectionViewDelegateFlowLayout,
         let photoSlider = PhotoSliderViewController()
         photoSlider.currentIndex = indexPath.row
         photoSlider.images = self.images
-        self.navigationController!.pushViewController(photoSlider, animated: true)
+        
+        guard let navigationVC = self.navigationController else { return }
+        navigationVC.pushViewController(photoSlider, animated: true)
         
     }
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.place!.photosDownloadURLs.count // потом обратить на это внимание!!!!!! из
+        return self.place!.photosDownloadURLs.count
     }
     
     

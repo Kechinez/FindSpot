@@ -35,7 +35,9 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
         self.tableView!.delegate = self
         self.tableView!.dataSource = self
     }
-
+    
+    
+    
     
 
     // MARK: - Table view data source
@@ -67,9 +69,11 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             var place = self.favorites![indexPath.row]
-            let referenceForDeleting = self.databaseManager.recreatePlaceDataReference(from: self.userDatabaseRef!, and: place.coordinatesInString)
-            referenceForDeleting.removeValue()
-            tableView.deleteRows(at: [indexPath], with: .fade)
+            self.databaseManager.deleteDatabaseValue(at: self.userDatabaseRef!, with: place.coordinatesInString)
+            
+            //            let referenceForDeleting = self.databaseManager.recreatePlaceDataReference(from: self.userDatabaseRef!, and: place.coordinatesInString)
+//            referenceForDeleting.removeValue()
+//            tableView.deleteRows(at: [indexPath], with: .fade)
         }
     }
     

@@ -87,11 +87,22 @@ struct DataBaseManager {
     
     
     
-    func recreatePlaceDataReference(from databaseReference: DatabaseReference, and stringCoordinate: String) -> DatabaseReference {
+    
+    func deleteDatabaseValue(at databaseRef: DatabaseReference, with stringCoordinate: String) {
+        
+        let deleteRef = self.recreatePlaceDataReference(from: databaseRef, and: stringCoordinate)
+        deleteRef.removeValue()
+        
+    }
+    
+    
+    
+    private func recreatePlaceDataReference(from databaseReference: DatabaseReference, and stringCoordinate: String) -> DatabaseReference {
         let cutCoordinate = self.cutAllSymbols(in: stringCoordinate)
         let recreatedReference = databaseReference.child(cutCoordinate)
         return recreatedReference
     }
+    
     
     
 }

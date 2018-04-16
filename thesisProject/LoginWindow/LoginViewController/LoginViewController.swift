@@ -41,25 +41,33 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         self.view.addSubview(self.loginView!)
         ref = Database.database().reference(withPath: "users")
         
+        Auth.auth().addStateDidChangeListener { [weak self](auth, user) in
+            if user != nil {
+                self?.setViewController()
+            }
+        }
+        
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow(notification: )), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidHide), name: NSNotification.Name.UIKeyboardDidHide, object: nil)
         
     }
-
     
-
+    
+    
     
     
     // MARK: - register and login methods
     
-   @objc func loginActionMethod() {
+    @objc func loginActionMethod() {
         Auth.auth().signIn(withEmail: self.emailTextField!.text!, password: passTextField!.text!) { [weak self] (user, error) in
             guard error == nil, user != nil else {
-                // здесь напистаь метод для показа ошибки при логине
+                self?.showAuthenticationError(with: error!)
                 return
             }
-            let navigationController = UINavigationController(rootViewController: CustomTabBarController())
-            self?.present(navigationController, animated: true, completion: nil)
+            
+            self?.setViewController()
+            
+            
         }
     }
     
@@ -81,7 +89,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         
         
     }
-
+    
     
     @objc func registerNewUser() {
         for bool in self.registrationIsAllowed {
@@ -93,15 +101,15 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             
             let userName = self?.nameTextField?.text
             guard error == nil, user != nil else {
-                print(error!.localizedDescription)// здесь разобраться с ошибкой ее типом и вывести эту ошибку в UILabel
+                self?.showAuthenticationError(with: error!)
                 return
             }
             guard let userRef = self?.ref.child((user?.uid)!) else { return }
             userRef.setValue(["name": userName])
             
-            let navigationController = UINavigationController(rootViewController: CustomTabBarController())
-            navigationController.navigationBar.barTintColor = UIColor.blue
-            self?.present(navigationController, animated: true, completion: nil)
+            
+            self?.setViewController()
+            
         }
         
     }
@@ -127,7 +135,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
     
     
-
+    
     
     // MARK: - TextField delegate methods
     
@@ -138,7 +146,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
         return true
     }
-   
+    
     
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
         self.textFieldTextChecking(within: textField)
@@ -153,7 +161,11 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     
     
-   
+    override func viewWillAppear(_ animated: Bool) {
+        if let navVC = self.navigationController {
+            navVC.navigationBar.isHidden = true
+        }
+    }
     
     
     
@@ -215,26 +227,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 self.registrationIsAllowed[TextFields.emailTextField.rawValue] = false
                 return
             }
-        
-        /*
-        
-        !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-         !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        v
-        
-        Не забудь вернуть проверку пароля if resultText.count < 1.   Вместо 1 должно быть 8!!!!
-        
-        
-         !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-              !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-              !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-              !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        */
-        
-            
-            
         case TextFields.passwordTextField.rawValue:
-            if resultText.count < 1 {
+            if resultText.count < 8 {
                 self.showError(with: .passwordError, within: textField)
                 self.registrationIsAllowed[TextFields.passwordTextField.rawValue] = false
                 return
@@ -244,7 +238,38 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
         
         self.registrationIsAllowed[textField.tag] = true
+        
+    }
     
+    
+    
+    func setViewController() {
+        let tabBarController = UITabBarController()
+        
+        let mainMapWindowNavVC = MapViewController()
+        mainMapWindowNavVC.tabBarItem = UITabBarItem(tabBarSystemItem: .history, tag: 0)
+        
+        let favouriteNavVC = FavoritesViewController()
+        favouriteNavVC.tabBarItem = UITabBarItem(tabBarSystemItem: .topRated, tag: 1)
+        
+        let tabBarArray = [mainMapWindowNavVC, favouriteNavVC]
+        tabBarController.viewControllers = tabBarArray.map { UINavigationController(rootViewController: $0)}
+        
+        self.present(tabBarController, animated: true, completion: nil)
+        
+        
+    }
+   
+    
+    
+    func showAuthenticationError(with error: Error) {
+        let alertViewController = UIAlertController(title: "Problem occured!", message: "\(error.localizedDescription)", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "Ok", style: .default) { (action) in
+            
+        }
+        alertViewController.addAction(okAction)
+        self.present(alertViewController, animated: true, completion: nil)
+        
     }
     
     

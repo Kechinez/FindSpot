@@ -25,14 +25,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         window = UIWindow(frame: UIScreen.main.bounds)
     
+     
         
         
         window?.rootViewController = LoginViewController()
         window?.makeKeyAndVisible()
         
-        let navigationBarAppearace = UINavigationBar.appearance()
-        navigationBarAppearace.tintColor =  _ColorLiteralType(red: 0.3647058824, green: 0.6549019608, blue: 0.04705882353, alpha: 1)
-        navigationBarAppearace.barTintColor = .white
+      
+        
+
+        UITabBar.appearance().backgroundColor = #colorLiteral(red: 0.3647058824, green: 0.6549019608, blue: 0.04705882353, alpha: 1)
+        UITabBar.appearance().barTintColor = #colorLiteral(red: 0.3647058824, green: 0.6549019608, blue: 0.04705882353, alpha: 1)
+        UITabBar.appearance().tintColor = .white
+        
+        UINavigationBar.appearance().tintColor = .white
+        UINavigationBar.appearance().barTintColor = #colorLiteral(red: 0.3647058824, green: 0.6549019608, blue: 0.04705882353, alpha: 1)
+        if let navFont = UIFont(name: "Helvetica", size: 22) {
+            let navBarAttributesDictionary: [NSAttributedStringKey: Any] = [
+                NSAttributedStringKey(rawValue: NSAttributedStringKey.foregroundColor.rawValue): UIColor.white,
+                NSAttributedStringKey(rawValue: NSAttributedStringKey.font.rawValue): navFont]
+            
+            UINavigationBar.appearance().titleTextAttributes = navBarAttributesDictionary
+        }
+        
         
         return true
     }

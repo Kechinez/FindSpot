@@ -33,6 +33,13 @@ class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelega
     }
     
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if let tabBarController = self.tabBarController {
+            tabBarController.tabBar.isHidden = true
+        }
+        
+    }
     
     
     
@@ -54,13 +61,18 @@ class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelega
             }
             if self.placeLocation == nil {
                 self.placeLocation = photoLocation.coordinate
+                let googleApiManager = GoogleApiRequests()
+                googleApiManager.coordinatesToAddressRequest(with: photoLocation.coordinate) { (city) in
+                    switch city {
+                    case  .Success(let foundCity):
+                        self.cityOfMadePhoto = foundCity.cityName
+                    case .Failure(let error):
+                        //self.showGoogleMapError(with: error.localizedDescription)
+                        return
+                    }
+                }
             }
-            let googleApiManager = GoogleApiRequests()
-            googleApiManager.coordinatesToAddressRequest(with: photoLocation.coordinate) { (city) in
-                guard let city = city else { return }
-                self.cityOfMadePhoto = city.cityName
-            }
-            print(photoLocation)
+            
             self.uploadedPhotos.append(UserLibraryPhoto(image: selectedImageView.image!, photoLocation: photoLocation.coordinate))
         }
         
@@ -90,7 +102,7 @@ class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelega
     }
     
     
-   @objc func savePlace() {
+    @objc func savePlace() {
         self.photoManager.uploadPhotos(with: self.uploadedPhotos) { (downloadURLs) in
             guard let downloadURLs = downloadURLs else { return }
             print(downloadURLs)
@@ -101,7 +113,9 @@ class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelega
                 
             })
         }
-        
+        if let navigationController = self.navigationController {
+            navigationController.popToViewController(self, animated: true)
+        }
     }
     
 

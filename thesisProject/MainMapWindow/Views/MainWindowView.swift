@@ -39,6 +39,13 @@ class MainWindowView: UIView {
         
         self.backgroundColor = #colorLiteral(red: 0.3647058824, green: 0.6549019608, blue: 0.04705882353, alpha: 1)
     
+        
+        let signoutBarButton = UIBarButtonItem(title: "Sign out", style: .plain, target: viewController, action: #selector(MapViewController.signoutMethod))
+        viewController.navigationItem.leftBarButtonItem = signoutBarButton
+        
+        let addNewPlaceBarButton = UIBarButtonItem(title: "New spot", style: .plain, target: viewController, action: #selector(MapViewController.addNewPlace))
+        viewController.navigationItem.rightBarButtonItem = addNewPlaceBarButton
+        
     }
     
     required init?(coder aDecoder: NSCoder) {

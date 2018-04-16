@@ -24,6 +24,9 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.navigationItem.title = "FindSpot"
+        
+        
         if let tabBarController = self.tabBarController {
             tabBarController.delegate = self
         }
@@ -48,9 +51,15 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
         self.userCurrentLocation = locationManager!.location!.coordinate
         
         self.googleAPIManager.coordinatesToAddressRequest(with: self.userCurrentLocation!) { (city) in
-            guard let city = city else { return }
-            self.userCurrentCity = city.cityName
             
+            switch city {
+            case  .Success(let foundCity):
+                self.userCurrentCity = foundCity.cityName
+            case .Failure(let error):
+                self.showGoogleMapError(with: error.localizedDescription)
+                return
+            }
+
             self.databaseManager.getPlacesWithin(city: self.userCurrentCity!) { (places) in
                 if let places = places {
                     self.allPlaces = places
@@ -58,9 +67,10 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
                         self.showFoundPlace(with: place.coordinates, info: place.placeName)
                     }
                 } else {
-                    print("There is no available spots in this city!")
+                    self.showGoogleMapError(with: "No one has added spots in this city yet!")
                 }
             }
+        
         }
   
     }
@@ -121,19 +131,58 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
             let placeVC = PlaceViewController()
             placeVC.place = self.allPlaces![index]
             placeVC.userLocation = self.userCurrentLocation!
-            guard let navigationVC = self.tabBarController?.navigationController else { return true }
+            guard let navigationVC = self.navigationController else { return true }
             navigationVC.pushViewController(placeVC, animated: true)
-            //self.navigationController!.pushViewController(placeVC, animated: true)
         }
         return true
     }
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if let tabBarController = self.tabBarController {
+            tabBarController.tabBar.isHidden = false
+        }
+
+    }
+    
+    
+    
+
+    func showGoogleMapError(with error: String) {
+        let alertViewController = UIAlertController(title: "Problem occured!", message: "\(error)", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "Ok", style: .default) { (action) in
+            
+        }
+        alertViewController.addAction(okAction)
+        self.present(alertViewController, animated: true, completion: nil)
+        
+    }
+    
+    
+    
     
     
     
     // MARK: - NavigationBar's buttons action methods:
     
      @objc func addNewPlace() {
-        
+        if let navigationController = self.navigationController {
+            let newPlaceVC = AddNewPlaceViewController()
+            navigationController.pushViewController(newPlaceVC, animated: true)
+        }
+    }
+    
+    
+    
+    @objc func signoutMethod() {
+        do {
+            try Auth.auth().signOut()
+        } catch {
+            print(error.localizedDescription)
+        }
+        dismiss(animated: true, completion: nil)
     }
     
     

@@ -10,6 +10,12 @@ import Foundation
 import CoreLocation
 
 
+enum APIResult<T> {
+    case Success(T)
+    case Failure(Error)
+}
+
+
 private enum GoogleAPIRequests {
     case GeocodingAPI(coordinate: String)
     case DirectionAPI(sourceCoordinate: String, destCoordinate: String)
@@ -44,22 +50,26 @@ class GoogleApiRequests {
 //    private init() {}
     
     
-    func coordinatesToAddressRequest(with coordiantes: CLLocationCoordinate2D, completionHandler: @escaping (RequestedCity?) -> ()) {
+    func coordinatesToAddressRequest(with coordiantes: CLLocationCoordinate2D, completionHandler: @escaping (APIResult<RequestedCity>) -> ()) {
         let session = URLSession.shared
         let stringCoordinates = self.coordinatesToString(with: coordiantes)
         let request = GoogleAPIRequests.GeocodingAPI(coordinate: stringCoordinates).request
         
         let task = session.dataTask(with: request) { (data, response, error) in
         
-            if data == nil {
-                print("Error was occured")
+            if let error = error {
+                DispatchQueue.main.async {
+                    completionHandler(APIResult<RequestedCity>.Failure(error))
+                }
             }
             do {
                 let json = try JSONSerialization.jsonObject(with: data!, options: []) as! JSON
-                let city = RequestedCity(data: json)
-                DispatchQueue.main.async {
-                    completionHandler(city)
+                if let city = RequestedCity(data: json) {
+                    DispatchQueue.main.async {
+                        completionHandler(APIResult<RequestedCity>.Success(city))
+                    }
                 }
+                
             } catch {
                 print("Pizdec")
             }
@@ -69,18 +79,19 @@ class GoogleApiRequests {
     }
         
     
-    func getRouteRequest(with startCoordinate: CLLocationCoordinate2D, and finishCoordinate: CLLocationCoordinate2D, completionHandler: @escaping (RequestedRoute?) -> ()) {
+    func getRouteRequest(with startCoordinate: CLLocationCoordinate2D, and finishCoordinate: CLLocationCoordinate2D, completionHandler: @escaping (APIResult<RequestedRoute>) -> ()) {
+        
         let session = URLSession.shared
         let startStringCoordinate = self.coordinatesToString(with: startCoordinate)
         let finishStringCoordinate = self.coordinatesToString(with: finishCoordinate)
         let request = GoogleAPIRequests.DirectionAPI(sourceCoordinate: startStringCoordinate, destCoordinate: finishStringCoordinate).request
         
         let task = session.dataTask(with: request) { (data, response, error) in
-            
-           
-            if data == nil {
-                print("ERROR!!!! Data is nil!!!")
-                return
+
+            if let error = error {
+                DispatchQueue.main.async {
+                    completionHandler(APIResult<RequestedRoute>.Failure(error))
+                }
             }
             
             do {
@@ -91,13 +102,11 @@ class GoogleApiRequests {
 //                }
                 if let routeInfo = RequestedRoute(data: json) {
                     DispatchQueue.main.async {
-                        completionHandler(routeInfo)
+                        completionHandler(APIResult<RequestedRoute>.Success(routeInfo))
                     }
                 }
-            
-                
             } catch {
-                print("")
+                print("can't convert JSON object!")
             }
         }
         task.resume()
