@@ -20,7 +20,7 @@ class ImagesCollectionCell: UICollectionViewCell {
         self.imageView.frame = CGRect(x: 0, y: 0, width: self.bounds.width, height: self.bounds.height)
         self.imageView.clipsToBounds = true
         self.imageView.contentMode = .scaleAspectFill
-        self.imageView.layer.cornerRadius = 3.0
+        self.imageView.layer.cornerRadius = 10.0
         self.addSubview(imageView)
         self.bringSubview(toFront: imageView)
         

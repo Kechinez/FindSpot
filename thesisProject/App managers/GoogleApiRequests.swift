@@ -71,7 +71,7 @@ class GoogleApiRequests {
                 }
                 
             } catch {
-                print("Pizdec")
+                print("can't convert to JSON object!")
             }
         }
         task.resume()
@@ -96,17 +96,13 @@ class GoogleApiRequests {
             
             do {
                 let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON
-//                guard let route = json["routes"] as? NSArray else {
-//                    print("ERROR!!!! Can't get routes from JSON")
-//                    return
-//                }
                 if let routeInfo = RequestedRoute(data: json) {
                     DispatchQueue.main.async {
                         completionHandler(APIResult<RequestedRoute>.Success(routeInfo))
                     }
                 }
             } catch {
-                print("can't convert JSON object!")
+                print("can't convert to JSON object!")
             }
         }
         task.resume()

@@ -22,13 +22,12 @@ class MainWindowView: UIView {
         }
         
         mapView = GMSMapView(frame: CGRect(x: 0, y: 60, width: frame.size.width, height: frame.size.height - 80))
-        let camera = GMSCameraPosition.camera(withLatitude: 61.690201, longitude: 27.272632, zoom: 14.0)
+        let camera = GMSCameraPosition.camera(withTarget: viewController.userCurrentLocation!, zoom: 16.0)//(withLatitude: 61.690201, longitude: 27.272632, zoom: 14.0)
         mapView!.camera = camera
         mapView!.delegate = viewController
         self.addSubview(mapView!)
         mapView!.isMyLocationEnabled = true
-        //self.showUsersPositionWith(coordinates: camera.target)
-        //self.showUsersPosition(with, coordinates: camera.target)
+        
         
         let searchTextField = UITextField(frame: CGRect(x: 10, y: 10, width: frame.size.width - 20, height: 40))
         searchTextField.borderStyle = .roundedRect
@@ -52,12 +51,6 @@ class MainWindowView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func showUsersPositionWith(coordinates: CLLocationCoordinate2D) {
-        let marker = GMSMarker(position: coordinates)
-        marker.title = "Sokos paradise"
-        marker.snippet = "Mikkeli"
-        marker.map = mapView
-    }
     
     
 }

@@ -18,6 +18,7 @@ class PlaceViewController: UIViewController, UICollectionViewDelegateFlowLayout,
     var distanceForInfoWin: String?
     var timeForInfoWin: String?
     var infoWindow: InfoWindowView?
+    private var isFavorite = false
     
     
     
@@ -32,7 +33,7 @@ class PlaceViewController: UIViewController, UICollectionViewDelegateFlowLayout,
                 self.timeForInfoWin = route.time
                 self.showPath(polyline: route.polylinePath)
             case .Failure(let error):
-               // self.showGoogleMapError(with: error.localizedDescription)
+               ErrorManager.shared.showErrorMessage(with: error, shownAt: self)
                 return
             }
             
@@ -43,9 +44,12 @@ class PlaceViewController: UIViewController, UICollectionViewDelegateFlowLayout,
         let topBarHeight = UIApplication.shared.statusBarFrame.size.height +
             (self.navigationController?.navigationBar.frame.height ?? 0.0)
         
-        let placeView = PlaceView(with: CGRect(x: 0, y: topBarHeight, width: self.view.frame.size.width, height: self.view.frame.size.height - topBarHeight), placeCoordinate: place!.coordinates, placeDescription: place!.placeDescription, corespondingVC: self)
+        
+        let placeView = PlaceView(with: CGRect(x: 0, y: topBarHeight, width: self.view.frame.size.width, height: self.view.frame.size.height - topBarHeight), placeCoordinate: place!.coordinates, corespondingVC: self, with: self.place!.placeName, and: self.place!.city, and: self.place!.placeDescription)
+        
         self.view.addSubview(placeView)
         self.placeView = placeView
+        
         
         let photoManager = PhotoManager()
         photoManager.getPhotoFromStorage(using: place!.photosDownloadURLs) { (images) in
@@ -56,6 +60,16 @@ class PlaceViewController: UIViewController, UICollectionViewDelegateFlowLayout,
         
     }
 
+    
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if self.isFavorite {
+            DataBaseManager.shared.addPlaceToFavorites(with: self.place!)
+        }
+    }
+    
+    
     
     
     override func viewWillAppear(_ animated: Bool) {
@@ -140,6 +154,15 @@ class PlaceViewController: UIViewController, UICollectionViewDelegateFlowLayout,
             self.setUpRouteDetails()
             return self.infoWindow!
         }
+    }
+    
+    
+    @objc func addToFavorites() {
+        self.isFavorite = !self.isFavorite
+        self.placeView!.changeButtonColorToDark(bool: self.isFavorite)
+        
+        
+        
     }
     
     

@@ -8,7 +8,6 @@
 
 import Foundation
 import CoreLocation
-typealias Coordinates = (latitude: Double, longitude: Double)
 typealias JSON = [String: AnyObject]
 
 struct Place {
@@ -18,8 +17,8 @@ struct Place {
     let photosDownloadURLs: [URL]
     let city: String
     
-    lazy var coordinatesInString: String = {
-        return "\(self.coordinates.latitude),\(self.coordinates.longitude)"
+    lazy var stringLatitude: String = {
+        return "\(self.coordinates.latitude)"
     }()
     
     
@@ -73,7 +72,7 @@ struct Place {
         for (index, url) in self.photosDownloadURLs.enumerated(){
             photosJSON["\(index)"] = url.absoluteString
         }
-        placeJSON = ["city": self.city, "name": self.placeName, "coordinates": self.coordinatesInString, "description": self.placeDescription, "photos": photosJSON]
+        placeJSON = ["city": self.city, "name": self.placeName, "coordinates": "\(self.coordinates.latitude),\(self.coordinates.longitude)", "description": self.placeDescription, "photos": photosJSON]
         
         return placeJSON
         

@@ -18,6 +18,7 @@
 		3D9A7947207FBC6A00AA3536 /* UserLibraryPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9A7946207FBC6A00AA3536 /* UserLibraryPhoto.swift */; };
 		3DBA48CC2072865D0067C6D7 /* AddNewPlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DBA48CB2072865D0067C6D7 /* AddNewPlaceViewController.swift */; };
 		3DBA48CE20728D150067C6D7 /* AddNewPlaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DBA48CD20728D150067C6D7 /* AddNewPlaceView.swift */; };
+		3DC224202087623B006B70CF /* ErrorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DC2241F2087623B006B70CF /* ErrorManager.swift */; };
 		3DCAEE22207910920088E790 /* PlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DCAEE21207910920088E790 /* PlaceViewController.swift */; };
 		3DCAEE24207911350088E790 /* PlaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DCAEE23207911350088E790 /* PlaceView.swift */; };
 		3DCAEE26207922E30088E790 /* ImagesCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DCAEE25207922E30088E790 /* ImagesCollectionCell.swift */; };
@@ -35,7 +36,6 @@
 		3DDF5AE5206162B1001BD7BE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3DDF5AE4206162B1001BD7BE /* Assets.xcassets */; };
 		3DDF5AE8206162B1001BD7BE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3DDF5AE6206162B1001BD7BE /* LaunchScreen.storyboard */; };
 		3DDF5AF0206163A6001BD7BE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3DDF5AEF206163A6001BD7BE /* GoogleService-Info.plist */; };
-		3DDF5AF220616B34001BD7BE /* CustomTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDF5AF120616B34001BD7BE /* CustomTabBarController.swift */; };
 		3DDF5AFC2061798F001BD7BE /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDF5AFB2061798F001BD7BE /* MapViewController.swift */; };
 		3DDF5B0320617BF9001BD7BE /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDF5B0220617BF9001BD7BE /* FavoritesViewController.swift */; };
 		3DEA1AEC2073714C00B09215 /* ImagePickerViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DEA1AEB2073714C00B09215 /* ImagePickerViewCell.swift */; };
@@ -54,6 +54,7 @@
 		3D9A7946207FBC6A00AA3536 /* UserLibraryPhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserLibraryPhoto.swift; sourceTree = "<group>"; };
 		3DBA48CB2072865D0067C6D7 /* AddNewPlaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewPlaceViewController.swift; sourceTree = "<group>"; };
 		3DBA48CD20728D150067C6D7 /* AddNewPlaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewPlaceView.swift; sourceTree = "<group>"; };
+		3DC2241F2087623B006B70CF /* ErrorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorManager.swift; sourceTree = "<group>"; };
 		3DCAEE21207910920088E790 /* PlaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceViewController.swift; sourceTree = "<group>"; };
 		3DCAEE23207911350088E790 /* PlaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceView.swift; sourceTree = "<group>"; };
 		3DCAEE25207922E30088E790 /* ImagesCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesCollectionCell.swift; sourceTree = "<group>"; };
@@ -73,7 +74,6 @@
 		3DDF5AE7206162B1001BD7BE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3DDF5AE9206162B1001BD7BE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3DDF5AEF206163A6001BD7BE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		3DDF5AF120616B34001BD7BE /* CustomTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarController.swift; sourceTree = "<group>"; };
 		3DDF5AFB2061798F001BD7BE /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		3DDF5B0220617BF9001BD7BE /* FavoritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
 		3DEA1AEB2073714C00B09215 /* ImagePickerViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerViewCell.swift; sourceTree = "<group>"; };
@@ -144,6 +144,16 @@
 				3D9A7946207FBC6A00AA3536 /* UserLibraryPhoto.swift */,
 			);
 			path = AddNewPlaceModel;
+			sourceTree = "<group>";
+		};
+		3DC2241E20876203006B70CF /* App managers */ = {
+			isa = PBXGroup;
+			children = (
+				3DD98A1420752D9E00EDEAD2 /* GoogleApiRequests.swift */,
+				3DD98A1B20764CDC00EDEAD2 /* DataBaseManager.swift */,
+				3DC2241F2087623B006B70CF /* ErrorManager.swift */,
+			);
+			path = "App managers";
 			sourceTree = "<group>";
 		};
 		3DCAEE1D2079102F0088E790 /* PlaceWindow */ = {
@@ -244,6 +254,7 @@
 		3DDF5ADC206162B1001BD7BE /* thesisProject */ = {
 			isa = PBXGroup;
 			children = (
+				3DC2241E20876203006B70CF /* App managers */,
 				3DCAEE1D2079102F0088E790 /* PlaceWindow */,
 				3DBA48C7207285590067C6D7 /* AddNewPlaceWindow */,
 				3D60E20320651B0900FA4079 /* LoginWindow */,
@@ -289,9 +300,6 @@
 			children = (
 				3DDF5AFB2061798F001BD7BE /* MapViewController.swift */,
 				3DDF5ADD206162B1001BD7BE /* AppDelegate.swift */,
-				3DD98A1B20764CDC00EDEAD2 /* DataBaseManager.swift */,
-				3DDF5AF120616B34001BD7BE /* CustomTabBarController.swift */,
-				3DD98A1420752D9E00EDEAD2 /* GoogleApiRequests.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -483,11 +491,11 @@
 				3DCAEE24207911350088E790 /* PlaceView.swift in Sources */,
 				3DDF5ADE206162B1001BD7BE /* AppDelegate.swift in Sources */,
 				3D9A7945207F5F4200AA3536 /* RequestedRoute.swift in Sources */,
+				3DC224202087623B006B70CF /* ErrorManager.swift in Sources */,
 				3DDD9B1920651FC40040777E /* LoginView.swift in Sources */,
 				3D9A793F207CC3C600AA3536 /* ContentView.swift in Sources */,
 				3D9A793D207CBE2F00AA3536 /* ContentViewController.swift in Sources */,
 				3D60E1FE2062784B00FA4079 /* MainWindowView.swift in Sources */,
-				3DDF5AF220616B34001BD7BE /* CustomTabBarController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

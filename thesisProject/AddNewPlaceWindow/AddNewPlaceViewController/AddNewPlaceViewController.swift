@@ -11,9 +11,10 @@ import Photos
 
 typealias PhotosArray = (imageView: UIImageView?, location: CLLocation?)
 
-class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UITextViewDelegate {
+    
     var uploadedPhotos: [UserLibraryPhoto] = []
-    var imageViews: [UIImageView] = []
+    //var imageViews: [UIImageView] = []
     var newPlaceView: AddNewPlaceView?
     private var imageTag = 0
     private let photoManager = PhotoManager()
@@ -23,10 +24,10 @@ class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let tabBarHeight = self.tabBarController?.tabBar.frame.height ?? 0.0
+       // let tabBarHeight = self.tabBarController?.tabBar.frame.height ?? 0.0
         let topBarHeight = UIApplication.shared.statusBarFrame.size.height +
             (self.navigationController?.navigationBar.frame.height ?? 0.0)
-        let newPlaceView = AddNewPlaceView(frame: CGRect(x: 0, y: topBarHeight, width: self.view.frame.size.width, height: self.view.frame.size.height - topBarHeight - tabBarHeight), with: self)
+        let newPlaceView = AddNewPlaceView(frame: CGRect(x: 0, y: topBarHeight, width: self.view.frame.size.width, height: self.view.frame.size.height - topBarHeight), with: self)
         self.view.addSubview(newPlaceView)
         self.newPlaceView = newPlaceView
         
@@ -67,7 +68,7 @@ class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelega
                     case  .Success(let foundCity):
                         self.cityOfMadePhoto = foundCity.cityName
                     case .Failure(let error):
-                        //self.showGoogleMapError(with: error.localizedDescription)
+                        ErrorManager.shared.showErrorMessage(with: error, shownAt: self)
                         return
                     }
                 }
@@ -103,14 +104,15 @@ class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelega
     
     
     @objc func savePlace() {
+        guard self.isEverythingFilled() == true else { return }
         self.photoManager.uploadPhotos(with: self.uploadedPhotos) { (downloadURLs) in
             guard let downloadURLs = downloadURLs else { return }
             print(downloadURLs)
-            let databaseManager = DataBaseManager()
+            //let databaseManager = DataBaseManager()
             let newPlace = Place(placeName: self.newPlaceView!.placeName!.text!, placeDescription: self.newPlaceView!.placeDescr!.text!, photosDownloadURLs: downloadURLs, cityName: self.cityOfMadePhoto!, coordinates: self.placeLocation!)
             
-            databaseManager.saveNewPlace(with: newPlace, completionHandler: {
-                
+            //databaseManager.saveNewPlace(with: newPlace, completionHandler: {
+                DataBaseManager.shared.saveNewPlace(with: newPlace, completionHandler: {
             })
         }
         if let navigationController = self.navigationController {
@@ -118,7 +120,41 @@ class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelega
         }
     }
     
+    
+    
+    func isEverythingFilled() -> Bool {
+        if self.newPlaceView!.placeName!.text == "" || self.newPlaceView!.placeDescr!.text == "" || self.uploadedPhotos.count == 0 {
+            return false
+        } else {
+            return true
+        }
+    }
+    
 
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool
+    {
+        if(text == "\n")
+        {
+            view.endEditing(true)
+            return false
+        }
+        else
+        {
+            return true
+        }
+    }
+    
+    
+    
+    
+    
     
 }
     

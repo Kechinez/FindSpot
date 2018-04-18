@@ -26,6 +26,7 @@ class AddNewPlaceView: UIView {
         placeNameTextField.placeholder = "name of place"
         placeNameTextField.font = UIFont.systemFont(ofSize: 18)
         self.addSubview(placeNameTextField)
+        placeNameTextField.delegate = viewController
         self.placeName = placeNameTextField
         
         let addPhotoButton = UIButton(frame: CGRect(x: placeNameTextField.bounds.maxX - 45, y: 5, width: 45, height: 45)) // it should be 35 x 35, but I changed it to test without problems
@@ -39,6 +40,7 @@ class AddNewPlaceView: UIView {
         placeInfoTextView.font = UIFont.systemFont(ofSize: 18)
         placeInfoTextView.isEditable = true
         placeInfoTextView.layer.cornerRadius = 4
+        placeInfoTextView.delegate = viewController
         self.addSubview(placeInfoTextView)
         self.placeDescr = placeInfoTextView
 
@@ -59,12 +61,10 @@ class AddNewPlaceView: UIView {
             self.photosCollection.append(image)
         }
         
-        let addPlace = UIButton(frame: CGRect(x: 45, y: 300, width: 50, height: 30))
         
-        addPlace.setTitle("Add place, asshole", for: .normal)
-        addPlace.setTitleColor(.white, for: .normal)
-        addPlace.addTarget(viewController, action: #selector(AddNewPlaceViewController.savePlace), for: .touchUpInside)
-        self.addSubview(addPlace)
+            let savePlaceBarButton = UIBarButtonItem(title: "Save spot", style: .plain, target: viewController, action: #selector(AddNewPlaceViewController.savePlace))
+            viewController.navigationItem.rightBarButtonItem = savePlaceBarButton
+        
         
         
         

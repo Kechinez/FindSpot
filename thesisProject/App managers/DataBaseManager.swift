@@ -9,22 +9,28 @@
 import Foundation
 import Firebase
 
-struct DataBaseManager {
+class DataBaseManager {
     
+    static let shared = DataBaseManager()
+    var userRef: DatabaseReference?
     private let ref: DatabaseReference = Database.database().reference(withPath: "places")
     
+    private init() {}
     
-    func getPlacesWithin(city: String, completionHandler: @escaping ([Place]?) -> ()) {
+    func getPlacesWithin(city: String, completionHandler: @escaping (APIResult<[Place]>) -> ()) {
 
         let placesQuery = self.ref.queryOrdered(byChild: "city").queryEqual(toValue: city)
         
         placesQuery.observeSingleEvent(of: .value, with: { (data) in
-            var placesArray: [Place]? = []
+            var placesArray: [Place] = []
             let parsingDataQueue = DispatchQueue.global(qos: .userInitiated)
             parsingDataQueue.async {
                 guard data.childrenCount != 0 else  {
+                    
+                    let userInfo = [NSLocalizedDescriptionKey: NSLocalizedString("Couldn't download spots in \(city)", comment: "")]
+                    let error = NSError(domain: "errorDomain", code: 100, userInfo: userInfo)
                     DispatchQueue.main.async {
-                        completionHandler(nil)
+                        completionHandler(.Failure(error))
                     }
                     return
                 }
@@ -32,11 +38,11 @@ struct DataBaseManager {
                     guard let data = child as? DataSnapshot else { continue }
                     guard let foundPlace = data.value as? JSON else { continue }
                     if let tempPlace = Place(with: foundPlace) {
-                        placesArray!.append(tempPlace)
+                        placesArray.append(tempPlace)
                     }
                 }
                 DispatchQueue.main.async {
-                    completionHandler(placesArray)
+                    completionHandler(.Success(placesArray))
                 }
             }
         })
@@ -44,23 +50,31 @@ struct DataBaseManager {
         
    
  
-    func getUserFavorites(with dataBaseReference: DatabaseReference, completionHandler: @escaping ([Place]?) -> ()) {
+    func getUserFavorites(completionHandler: @escaping (APIResult<[Place]>) -> ()) {
         
-        dataBaseReference.observe(.value) { (snapshot) in
+        self.userRef!.observe(.value) { (snapshot) in
             DispatchQueue.global().async(qos: .userInitiated) {
-                guard snapshot.childrenCount == 0 else { return }
-                var favorites: [Place]?
+                guard snapshot.childrenCount != 0 else {
+                    let userInfo = [NSLocalizedDescriptionKey: NSLocalizedString("Couldn't download user's Favorites", comment: "")]
+                    let error = NSError(domain: "errorDomain", code: 100, userInfo: userInfo)
+                    DispatchQueue.main.async {
+                        completionHandler(.Failure(error))
+                    }
+                    return
+                    
+                }
+                var favorites: [Place] = []
                 
                 for child in snapshot.children {
                     guard let data = child as? DataSnapshot else { continue }
                     guard let foundPlace = data.value as? JSON else { continue }
                     if let place = Place(with: foundPlace) {
-                        favorites!.append(place)
+                        favorites.append(place)
                     }
                 }
                 
                 DispatchQueue.main.async {
-                    completionHandler(favorites)
+                    completionHandler(.Success(favorites))
                 }
             }
         }
@@ -69,11 +83,10 @@ struct DataBaseManager {
     
     
     func saveNewPlace(with place: Place, completionHandler: @escaping () -> ()) {
-
-        var placeName = "\(place.coordinates.latitude)"
+        var tempPlace = place
+        var placeName = tempPlace.stringLatitude
         placeName = self.cutAllSymbols(in: placeName)
         let reference = self.ref.child(placeName)
-        var tempPlace = place
         reference.setValue(tempPlace.convertToJSON())
     
     }
@@ -88,18 +101,30 @@ struct DataBaseManager {
     
     
     
-    func deleteDatabaseValue(at databaseRef: DatabaseReference, with stringCoordinate: String) {
-        
-        let deleteRef = self.recreatePlaceDataReference(from: databaseRef, and: stringCoordinate)
+    func deleteDatabaseValue(with stringCoordinate: String) {
+        let deleteRef = self.recreatePlaceDataReference(from: stringCoordinate)
         deleteRef.removeValue()
         
     }
     
     
     
-    private func recreatePlaceDataReference(from databaseReference: DatabaseReference, and stringCoordinate: String) -> DatabaseReference {
+    func addPlaceToFavorites(with place: Place) {
+        
+        var placeName = "\(place.coordinates.latitude)"
+        placeName = self.cutAllSymbols(in: placeName)
+        let reference = userRef?.child(placeName)
+        var tempPlace = place
+        reference!.setValue(tempPlace.convertToJSON())
+        
+    }
+    
+    
+    
+    
+    private func recreatePlaceDataReference(from stringCoordinate: String) -> DatabaseReference {
         let cutCoordinate = self.cutAllSymbols(in: stringCoordinate)
-        let recreatedReference = databaseReference.child(cutCoordinate)
+        let recreatedReference = self.userRef!.child(cutCoordinate)
         return recreatedReference
     }
     

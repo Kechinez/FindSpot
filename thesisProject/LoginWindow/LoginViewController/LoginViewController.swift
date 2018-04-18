@@ -61,7 +61,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @objc func loginActionMethod() {
         Auth.auth().signIn(withEmail: self.emailTextField!.text!, password: passTextField!.text!) { [weak self] (user, error) in
             guard error == nil, user != nil else {
-                self?.showAuthenticationError(with: error!)
+                ErrorManager.shared.showErrorMessage(with: error!, shownAt: self!)
                 return
             }
             
@@ -101,7 +101,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             
             let userName = self?.nameTextField?.text
             guard error == nil, user != nil else {
-                self?.showAuthenticationError(with: error!)
+                ErrorManager.shared.showErrorMessage(with: error!, shownAt: self!)
                 return
             }
             guard let userRef = self?.ref.child((user?.uid)!) else { return }
@@ -260,17 +260,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         
     }
    
-    
-    
-    func showAuthenticationError(with error: Error) {
-        let alertViewController = UIAlertController(title: "Problem occured!", message: "\(error.localizedDescription)", preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "Ok", style: .default) { (action) in
-            
-        }
-        alertViewController.addAction(okAction)
-        self.present(alertViewController, animated: true, completion: nil)
-        
-    }
     
     
     

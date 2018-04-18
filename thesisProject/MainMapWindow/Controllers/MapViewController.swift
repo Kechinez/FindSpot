@@ -12,12 +12,12 @@ import Firebase
 class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManagerDelegate, UITextFieldDelegate, UITabBarControllerDelegate {
 
     private var locationManager: CLLocationManager?
-    private var userCurrentLocation: CLLocationCoordinate2D?
+    var userCurrentLocation: CLLocationCoordinate2D?
     private var userCurrentCity: String?
     private var mainView: MainWindowView?
     private var allPlaces: [Place]? = []
     private let googleAPIManager = GoogleApiRequests()
-    private let databaseManager = DataBaseManager()
+    //private let databaseManager = DataBaseManager()
     var favorites: [Place]?
     private var userDatabaseRef: DatabaseReference?
     
@@ -25,14 +25,22 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
         super.viewDidLoad()
         
         self.navigationItem.title = "FindSpot"
+        guard let currentUser = Auth.auth().currentUser else { return }
+        self.userDatabaseRef = Database.database().reference(withPath: "users").child(String(currentUser.uid)).child("favorites")
+        DataBaseManager.shared.userRef = self.userDatabaseRef
         
+        locationManager = CLLocationManager()
+        locationManager!.delegate = self
+        if CLLocationManager.authorizationStatus() != .authorizedWhenInUse     {
+            locationManager!.requestWhenInUseAuthorization()
+        }
+        locationManager!.requestWhenInUseAuthorization()
+        locationManager!.desiredAccuracy = kCLLocationAccuracyBest
+        self.userCurrentLocation = locationManager!.location!.coordinate
         
         if let tabBarController = self.tabBarController {
             tabBarController.delegate = self
         }
-        guard let currentUser = Auth.auth().currentUser else { return }
-        self.userDatabaseRef = Database.database().reference(withPath: "users").child(String(currentUser.uid))
-        
         let topBarHeight = UIApplication.shared.statusBarFrame.size.height +
             (self.navigationController?.navigationBar.frame.height ?? 0.0)
         
@@ -40,15 +48,6 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
         
         self.view.addSubview(mainView!)
         
-        locationManager = CLLocationManager()
-        locationManager!.delegate = self
-
-        if CLLocationManager.authorizationStatus() != .authorizedWhenInUse     {
-            locationManager!.requestWhenInUseAuthorization()
-        }
-        locationManager!.requestWhenInUseAuthorization()
-        locationManager!.desiredAccuracy = kCLLocationAccuracyBest//kCLLocationAccuracyNearestTenMeters
-        self.userCurrentLocation = locationManager!.location!.coordinate
         
         self.googleAPIManager.coordinatesToAddressRequest(with: self.userCurrentLocation!) { (city) in
             
@@ -59,16 +58,18 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
                 self.showGoogleMapError(with: error.localizedDescription)
                 return
             }
-
-            self.databaseManager.getPlacesWithin(city: self.userCurrentCity!) { (places) in
-                if let places = places {
+            DataBaseManager.shared.getPlacesWithin(city: self.userCurrentCity!) { (places) in
+                
+                switch places {
+                case  .Success(let places):
                     self.allPlaces = places
                     for place in self.allPlaces! {
                         self.showFoundPlace(with: place.coordinates, info: place.placeName)
                     }
-                } else {
-                    self.showGoogleMapError(with: "No one has added spots in this city yet!")
+                case .Failure(let error):
+                    self.showGoogleMapError(with: error.localizedDescription)
                 }
+            
             }
         
         }
@@ -77,9 +78,10 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
         
 
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
-        guard let vc = viewController as? FavoritesViewController else { return }
-        vc.favorites = self.favorites
-        vc.userDatabaseRef = self.userDatabaseRef!
+        guard let favoritesVC = viewController as? UINavigationController else { return }
+        guard let vc = favoritesVC.childViewControllers.first as? FavoritesViewController else { return }
+        vc.userCurrentLocation = self.userCurrentLocation!
+        
     }
     
     
@@ -180,7 +182,7 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
         do {
             try Auth.auth().signOut()
         } catch {
-            print(error.localizedDescription)
+            ErrorManager.shared.showErrorMessage(with: error, shownAt: self)
         }
         dismiss(animated: true, completion: nil)
     }
