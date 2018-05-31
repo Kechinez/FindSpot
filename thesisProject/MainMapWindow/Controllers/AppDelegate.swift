@@ -40,13 +40,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         UINavigationBar.appearance().tintColor = .white
         UINavigationBar.appearance().barTintColor = #colorLiteral(red: 0.3647058824, green: 0.6549019608, blue: 0.04705882353, alpha: 1)
-        if let navFont = UIFont(name: "Helvetica", size: 22) {
+        if let navFont = UIFont(name: "Comfortaa", size: 22) {
             let navBarAttributesDictionary: [NSAttributedStringKey: Any] = [
                 NSAttributedStringKey(rawValue: NSAttributedStringKey.foregroundColor.rawValue): UIColor.white,
                 NSAttributedStringKey(rawValue: NSAttributedStringKey.font.rawValue): navFont]
             
             UINavigationBar.appearance().titleTextAttributes = navBarAttributesDictionary
         }
+        
+        if let barItemFont = UIFont(name: "OpenSans", size: 18) {
+            let barItemAttributesDictionary: [NSAttributedStringKey: Any] = [
+                NSAttributedStringKey(rawValue: NSAttributedStringKey.foregroundColor.rawValue): UIColor.white,
+                NSAttributedStringKey(rawValue: NSAttributedStringKey.font.rawValue): barItemFont]
+        
+            UIBarButtonItem.appearance().setTitleTextAttributes(barItemAttributesDictionary, for: .normal)
+        }
+        
         
         
         return true

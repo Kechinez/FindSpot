@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D10B0E820BEEAE400AF11B6 /* comfortaa.regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3D10B0E520BEEAE400AF11B6 /* comfortaa.regular.ttf */; };
+		3D10B0E920BEEAE400AF11B6 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3D10B0E620BEEAE400AF11B6 /* OpenSans-Bold.ttf */; };
+		3D10B0EA20BEEAE400AF11B6 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3D10B0E720BEEAE400AF11B6 /* OpenSans-Regular.ttf */; };
 		3D60E1FE2062784B00FA4079 /* MainWindowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D60E1FD2062784B00FA4079 /* MainWindowView.swift */; };
 		3D86A8B22080B1C800F6E440 /* DownloadURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D86A8B12080B1C800F6E440 /* DownloadURL.swift */; };
 		3D9A793B207CB83800AA3536 /* PhotoSliderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9A793A207CB83800AA3536 /* PhotoSliderViewController.swift */; };
@@ -43,6 +46,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3D10B0E520BEEAE400AF11B6 /* comfortaa.regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = comfortaa.regular.ttf; sourceTree = "<group>"; };
+		3D10B0E620BEEAE400AF11B6 /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Bold.ttf"; sourceTree = "<group>"; };
+		3D10B0E720BEEAE400AF11B6 /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Regular.ttf"; sourceTree = "<group>"; };
 		3D60E1FD2062784B00FA4079 /* MainWindowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindowView.swift; sourceTree = "<group>"; };
 		3D86A8B12080B1C800F6E440 /* DownloadURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadURL.swift; sourceTree = "<group>"; };
 		3D9A793A207CB83800AA3536 /* PhotoSliderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSliderViewController.swift; sourceTree = "<group>"; };
@@ -94,6 +100,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3D10B0E420BEEAE400AF11B6 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				3D10B0E520BEEAE400AF11B6 /* comfortaa.regular.ttf */,
+				3D10B0E620BEEAE400AF11B6 /* OpenSans-Bold.ttf */,
+				3D10B0E720BEEAE400AF11B6 /* OpenSans-Regular.ttf */,
+			);
+			path = Fonts;
+			sourceTree = SOURCE_ROOT;
+		};
 		3D60E1FA2062771800FA4079 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -278,6 +294,7 @@
 		3DDF5AF82061789A001BD7BE /* SupportingFiles */ = {
 			isa = PBXGroup;
 			children = (
+				3D10B0E420BEEAE400AF11B6 /* Fonts */,
 				3DDF5AE6206162B1001BD7BE /* LaunchScreen.storyboard */,
 				3DDF5AEF206163A6001BD7BE /* GoogleService-Info.plist */,
 				3DDF5AE9206162B1001BD7BE /* Info.plist */,
@@ -392,7 +409,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				3DDF5AE8206162B1001BD7BE /* LaunchScreen.storyboard in Resources */,
+				3D10B0E820BEEAE400AF11B6 /* comfortaa.regular.ttf in Resources */,
 				3DDF5AF0206163A6001BD7BE /* GoogleService-Info.plist in Resources */,
+				3D10B0E920BEEAE400AF11B6 /* OpenSans-Bold.ttf in Resources */,
+				3D10B0EA20BEEAE400AF11B6 /* OpenSans-Regular.ttf in Resources */,
 				3DDF5AE5206162B1001BD7BE /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

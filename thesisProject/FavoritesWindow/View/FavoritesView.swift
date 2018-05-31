@@ -24,7 +24,7 @@ class FavoritesView: UIView {
         imageView.alpha = 0.45
         backgroundView.addSubview(imageView)
         //self.bringSubview(toFront: backgroundView)
-        backgroundView.backgroundColor = #colorLiteral(red: 0.3647058824, green: 0.6549019608, blue: 0.04705882353, alpha: 1)
+        backgroundView.backgroundColor = #colorLiteral(red: 0.4078431373, green: 0.6941176471, blue: 0.09411764706, alpha: 1)
         
         tableView.backgroundView = backgroundView
         tableView.separatorStyle = .singleLine

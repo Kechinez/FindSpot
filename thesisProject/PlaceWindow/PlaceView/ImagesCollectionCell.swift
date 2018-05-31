@@ -16,7 +16,7 @@ class ImagesCollectionCell: UICollectionViewCell {
         self.imageView = UIImageView()
         super.init(frame: frame)
         
-        self.backgroundColor =  #colorLiteral(red: 0.3647058824, green: 0.6549019608, blue: 0.04705882353, alpha: 1)
+        self.backgroundColor =  #colorLiteral(red: 0.4078431373, green: 0.6941176471, blue: 0.09411764706, alpha: 1)
         self.imageView.frame = CGRect(x: 0, y: 0, width: self.bounds.width, height: self.bounds.height)
         self.imageView.clipsToBounds = true
         self.imageView.contentMode = .scaleAspectFill
