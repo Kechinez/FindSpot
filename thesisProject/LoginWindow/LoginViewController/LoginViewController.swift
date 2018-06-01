@@ -247,10 +247,12 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         let tabBarController = UITabBarController()
         
         let mainMapWindowNavVC = MapViewController()
-        mainMapWindowNavVC.tabBarItem = UITabBarItem(tabBarSystemItem: .history, tag: 0)
+        mainMapWindowNavVC.tabBarItem = UITabBarItem(title: "Spots", image: UIImage(named: "map.png"), tag: 0)
+        //mainMapWindowNavVC.tabBarItem = UITabBarItem(tabBarSystemItem: .history, tag: 0)
         
         let favouriteNavVC = FavoritesViewController()
-        favouriteNavVC.tabBarItem = UITabBarItem(tabBarSystemItem: .topRated, tag: 1)
+        favouriteNavVC.tabBarItem = UITabBarItem(title: "Favorites", image: UIImage(named: "favorites.png"), tag: 1)
+        //favouriteNavVC.tabBarItem = UITabBarItem(tabBarSystemItem: .topRated, tag: 1)
         
         let tabBarArray = [mainMapWindowNavVC, favouriteNavVC]
         tabBarController.viewControllers = tabBarArray.map { UINavigationController(rootViewController: $0)}

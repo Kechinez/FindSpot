@@ -56,7 +56,7 @@ class GoogleApiRequests {
         let request = GoogleAPIRequests.GeocodingAPI(coordinate: stringCoordinates).request
         
         let task = session.dataTask(with: request) { (data, response, error) in
-        
+            
             if let error = error {
                 DispatchQueue.main.async {
                     completionHandler(APIResult<RequestedCity>.Failure(error))
@@ -64,12 +64,19 @@ class GoogleApiRequests {
             }
             do {
                 let json = try JSONSerialization.jsonObject(with: data!, options: []) as! JSON
-                if let city = RequestedCity(data: json) {
+                guard let city = RequestedCity(data: json) else {
                     DispatchQueue.main.async {
-                        completionHandler(APIResult<RequestedCity>.Success(city))
+                        let userInfo = [NSLocalizedDescriptionKey: NSLocalizedString("Couldn't define the curent city", comment: "")]
+                        let error = NSError(domain: "errorDomain", code: 100, userInfo: userInfo)
+                        completionHandler(APIResult<RequestedCity>.Failure(error))
                     }
+                    return
                 }
                 
+                DispatchQueue.main.async {
+                    completionHandler(APIResult<RequestedCity>.Success(city))
+                }
+            
             } catch {
                 print("can't convert to JSON object!")
             }
@@ -77,7 +84,7 @@ class GoogleApiRequests {
         task.resume()
         
     }
-        
+    
     
     func getRouteRequest(with startCoordinate: CLLocationCoordinate2D, and finishCoordinate: CLLocationCoordinate2D, completionHandler: @escaping (APIResult<RequestedRoute>) -> ()) {
         
@@ -87,11 +94,12 @@ class GoogleApiRequests {
         let request = GoogleAPIRequests.DirectionAPI(sourceCoordinate: startStringCoordinate, destCoordinate: finishStringCoordinate).request
         
         let task = session.dataTask(with: request) { (data, response, error) in
-
+            
             if let error = error {
                 DispatchQueue.main.async {
                     completionHandler(APIResult<RequestedRoute>.Failure(error))
                 }
+                return 
             }
             
             do {

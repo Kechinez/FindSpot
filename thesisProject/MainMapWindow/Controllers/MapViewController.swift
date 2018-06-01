@@ -41,15 +41,17 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
         if let tabBarController = self.tabBarController {
             tabBarController.delegate = self
         }
+        let tabBarHeight = self.tabBarController?.tabBar.frame.height ?? 0.0
         let topBarHeight = UIApplication.shared.statusBarFrame.size.height +
             (self.navigationController?.navigationBar.frame.height ?? 0.0)
         
-        mainView = MainWindowView(viewController: self, frame: CGRect(x: 0, y: topBarHeight, width: self.view.bounds.width, height: self.view.bounds.height - topBarHeight))
+        mainView = MainWindowView(viewController: self, frame: CGRect(x: 0, y: topBarHeight, width: self.view.bounds.width, height: self.view.bounds.height - topBarHeight - tabBarHeight))
         
         self.view.addSubview(mainView!)
         
+        let tempCoordinate = CLLocationCoordinate2D(latitude: 59.882023, longitude: 30.339113) //  temp coordinates should be used to emulate Saint-P current location
         
-        self.googleAPIManager.coordinatesToAddressRequest(with: self.userCurrentLocation!) { (city) in
+        self.googleAPIManager.coordinatesToAddressRequest(with: tempCoordinate) { (city) in
             
             switch city {
             case  .Success(let foundCity):

@@ -93,6 +93,7 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
 
         cell.textLabel?.text = self.favorites![indexPath.row].placeName
         cell.textLabel?.textColor = .white
+        cell.textLabel?.font = UIFont(name: "OpenSans", size: 18)
         cell.backgroundColor = .clear
         cell.selectionStyle = .blue
         

@@ -13,6 +13,7 @@ struct RequestedCity {
     
     init?(data: JSON) {
         guard let result = data["results"] as? [JSON] else { return nil }
+        guard result.count != 0 else { return nil }
         guard let addressComponent = result[0]["address_components"] as? [JSON] else { return nil }
         guard let tempCityName = addressComponent[0]["long_name"] as? String else { return nil }
         self.cityName = tempCityName
