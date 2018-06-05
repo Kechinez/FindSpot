@@ -18,8 +18,8 @@ class DataBaseManager {
     private init() {}
     
     func getPlacesWithin(city: String, completionHandler: @escaping (APIResult<[Place]>) -> ()) {
-
-        let placesQuery = self.ref.queryOrdered(byChild: "city").queryEqual(toValue: city)
+        let modifiedCityString = self.prepareString(string: city)
+        let placesQuery = self.ref.queryOrdered(byChild: "city").queryEqual(toValue: modifiedCityString)
         
         placesQuery.observeSingleEvent(of: .value, with: { (data) in
             var placesArray: [Place] = []
@@ -99,6 +99,11 @@ class DataBaseManager {
     }
     
     
+    
+    private func prepareString(string: String) -> String {
+        let result = string.trimmingCharacters(in: [" "]).replacingOccurrences(of: "-", with: " ").capitalized(with: nil)
+        return result
+    }
     
     
     func deleteDatabaseValue(with stringCoordinate: String) {

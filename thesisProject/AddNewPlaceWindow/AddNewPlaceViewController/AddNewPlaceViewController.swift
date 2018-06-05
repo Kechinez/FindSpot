@@ -27,6 +27,9 @@ class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow(notification: )), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidHide), name: NSNotification.Name.UIKeyboardDidHide, object: nil)
+        
         let topBarHeight = UIApplication.shared.statusBarFrame.size.height +
             (self.navigationController?.navigationBar.frame.height ?? 0.0)
         let newPlaceView = AddNewPlaceView(frame: CGRect(x: 0, y: topBarHeight, width: self.view.frame.size.width, height: self.view.frame.size.height - topBarHeight), with: self)
@@ -54,7 +57,7 @@ class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelega
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         
         if self.imageTag == 0 || self.imageTag == 2 {
-            self.newPlaceView!.increaseHeightOfScrollView(with: self.imageTag)
+            self.newPlaceView!.increaseHeightOfScrollView(onImageHeightWith: self.imageTag, or: nil)
         }
         
         let selectedImage = info[UIImagePickerControllerEditedImage] as? UIImage
@@ -145,6 +148,7 @@ class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelega
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NewPlaceViewCell", for: indexPath) as! UserImagesCell
         if self.uploadedPhotos.count == 0 {
             cell.tag = indexPath.row
+            cell.imageView.image = nil
         } else if self.uploadedPhotos.count > indexPath.row {
             cell.imageView.image = self.uploadedPhotos[indexPath.row]
             cell.addGestureRecognizer(to: self)
@@ -216,7 +220,7 @@ class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelega
             self.uploadedPhotos.remove(at: indexPathOfTouchedCell.row)
             
             if self.imageTag == 1 || self.imageTag == 3 {
-                self.newPlaceView!.decreaseHeightOfScrollView(with: self.imageTag)
+                self.newPlaceView!.decreaseHeightOfScrollView(onImageHeightWith: self.imageTag)
             }
             self.imageTag -= 1
             self.newPlaceView!.imagesCollectionView!.reloadData()
@@ -286,6 +290,29 @@ class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelega
     }
 
 
+    
+    
+    
+    // MARK: - keyboard notification methods
+    
+    @objc func keyboardDidShow(notification: Notification) {
+        guard let userInfo = notification.userInfo else { return }
+        let keyboardFrameSize = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        self.newPlaceView!.increaseHeightOfScrollView(onImageHeightWith: nil, or: keyboardFrameSize.height)
+        
+    }
+    
+    
+    
+    @objc func keyboardDidHide() {
+        switch self.uploadedPhotos.count {
+        case 0: self.newPlaceView!.decreaseHeightOfScrollView(onImageHeightWith: nil)
+        case 1...2: self.newPlaceView!.increaseHeightOfScrollView(onImageHeightWith: 0, or: nil)
+        case 3...4: self.newPlaceView!.increaseHeightOfScrollView(onImageHeightWith: 2, or: nil)
+        default: break
+        }
+    }
+    
 
 }
     

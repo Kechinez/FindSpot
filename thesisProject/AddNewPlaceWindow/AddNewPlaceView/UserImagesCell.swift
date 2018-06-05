@@ -19,15 +19,12 @@ class UserImagesCell: UICollectionViewCell {
         self.tag = tag
         self.backgroundColor = .clear
         self.imageView.frame = CGRect(x: 0, y: 0, width: self.bounds.width, height: self.bounds.height)
-        //self.imageView.isUserInteractionEnabled = false
-        //self.ges
-        //self.imageView.isUserInteractionEnabled = false
+        self.imageView.alpha = 0.5
         self.addSubview(imageView)
         self.bringSubview(toFront: imageView)
-    
-        
-        
+
     }
+    
     
     
     func addGestureRecognizer(to viewController: AddNewPlaceViewController) {
@@ -38,13 +35,13 @@ class UserImagesCell: UICollectionViewCell {
     }
     
     
+    
     func deleteGestureRecognizer() {
         self.removeGestureRecognizer(self.gestureRecognizer!)
     }
     
     
-    
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

@@ -43,11 +43,7 @@ class AddNewPlaceView: UIScrollView {
         map.layer.borderWidth = 1.0
         map.alpha = 0.2
         greyView.addSubview(map)
-        //let placeMarker = GMSMarker(position: place.coordinates)
-//        placeMarker.map = map
         self.mapView = map
-        //let camera = GMSCameraPosition.camera(withLatitude: place.coordinates.latitude, longitude: place.coordinates.longitude, zoom: 15.0)
-//        self.mapView!.camera = camera
         self.addSubview(self.mapView!)
         self.mapView!.delegate = viewController
         
@@ -91,7 +87,6 @@ class AddNewPlaceView: UIScrollView {
         placeInfoTextView.delegate = viewController
         self.addSubview(placeInfoTextView)
         self.placeDescr = placeInfoTextView
-
         
         let placeHolderLabel = UILabel(frame: CGRect(x: 25, y: frame.size.width + 120, width: frame.size.width - 60, height: 30))
         placeHolderLabel.backgroundColor = .clear
@@ -101,51 +96,20 @@ class AddNewPlaceView: UIScrollView {
         self.placeholderLabel = placeHolderLabel
         
         let imageSide = (self.bounds.width - 40) / 2 - 10
-        
-        
-        
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 5, left: 0, bottom: 5, right: 0)
         layout.minimumInteritemSpacing = 10
         layout.minimumLineSpacing = 10
         let itemSide = imageSide
-        
         layout.itemSize = CGSize(width: itemSide, height: itemSide)
-        //layout.scrollDirection = .horizontal
-        
-        //let imagesCollectionHeight = itemSide + 10
         
         let imagesCollection = UICollectionView(frame: CGRect(x: 20, y: frame.size.width + 215, width: self.bounds.size.width - 40, height: imageSide * 2 + 30), collectionViewLayout: layout)
         imagesCollection.backgroundColor = UIColor.clear
-//        let longPressGestureRecognizer = UILongPressGestureRecognizer(target: viewController, action: #selector(AddNewPlaceViewController.removeImage(sender:)))
-//        longPressGestureRecognizer.minimumPressDuration = 1.0
-//        imagesCollection.addGestureRecognizer(longPressGestureRecognizer)
         imagesCollection.register(UserImagesCell.self, forCellWithReuseIdentifier: "NewPlaceViewCell")
         imagesCollection.dataSource = viewController
         imagesCollection.delegate = viewController
         self.imagesCollectionView = imagesCollection
         self.addSubview(imagesCollection)
-        
-//        for i in 0...3 {
-//            let image = UIImageView()
-//            let longPressGestureRecognizer = UILongPressGestureRecognizer(target: viewController, action: #selector(AddNewPlaceViewController.removeImage(sender:)))
-//            longPressGestureRecognizer.minimumPressDuration = 1.0
-//            image.addGestureRecognizer(longPressGestureRecognizer)
-//            image.isUserInteractionEnabled = false
-//            image.alpha = 0.5
-//            switch i {
-//            case 0: image.frame = CGRect(x: 20, y: frame.size.width + 215, width: imageSide, height: imageSide)
-//            case 1: image.frame = CGRect(x: 30 + imageSide, y: frame.size.width + 215, width: imageSide, height: imageSide)
-//            case 2: image.frame = CGRect(x: 20, y: frame.size.width + 225 + imageSide, width: imageSide, height: imageSide)
-//            case 3: image.frame = CGRect(x: 30 + imageSide, y: frame.size.width + 225 + imageSide, width: imageSide, height: imageSide)
-//            default: break
-//            }
-//
-//            image.layer.cornerRadius = 5.0
-//            image.tag = i
-//            self.addSubview(image)
-//            self.photosCollection.append(image)
-//        }
         
         self.contentSize = CGSize(width: self.bounds.width, height: self.bounds.height + 40)
         self.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: self.bounds.height, right: 0)
@@ -166,6 +130,7 @@ class AddNewPlaceView: UIScrollView {
     }
     
     
+    
     func setMarkerOnTheMap(with coordinates: CLLocationCoordinate2D) {
         self.mapView!.alpha = 1.0
         let placeMarker = GMSMarker(position: coordinates)
@@ -182,29 +147,42 @@ class AddNewPlaceView: UIScrollView {
     
     
     
-    func increaseHeightOfScrollView(with index: Int) {
-        let imageSide = (self.bounds.width - 40) / 2 - 10
+    func increaseHeightOfScrollView(onImageHeightWith multiplier: Int?, or particularValue: CGFloat?) {
         var frame = CGSize.zero
-        switch index {
-        case 0: frame = CGSize(width: self.bounds.width, height: self.bounds.height + imageSide + 50)
-        case 2: frame = CGSize(width: self.bounds.width, height: self.bounds.height + 2 * imageSide + 60)
-        default: break
-            
-        }
-        self.contentSize = frame
+        if let multiplier = multiplier {
+            let imageSide = (self.bounds.width - 40) / 2 - 10
+            switch multiplier {
+            case 0: frame = CGSize(width: self.bounds.width, height: self.bounds.height + imageSide + 50)
+            case 2: frame = CGSize(width: self.bounds.width, height: self.bounds.height + 2 * imageSide + 60)
+            default: break
+            }
+        } else {
+            frame = CGSize(width: self.bounds.width, height: self.bounds.height + 40 + particularValue!)
+            }
+
+        UIView.transition(with: self, duration: 0.4 , options: .curveEaseOut, animations: {
+            self.contentSize = frame
+        }, completion: nil)
     }
     
     
-    func decreaseHeightOfScrollView(with index: Int) {
-        let imageSide = (self.bounds.width - 40) / 2 - 10
+    
+    func decreaseHeightOfScrollView(onImageHeightWith multiplier: Int?) {
         var frame = CGSize.zero
-        switch index {
-        case 1: frame = CGSize(width: self.bounds.width, height: self.bounds.height + 40)
-        case 3: frame = CGSize(width: self.bounds.width, height: self.bounds.height + imageSide + 50)
-        default: break
-            
+        if let multiplier = multiplier {
+            let imageSide = (self.bounds.width - 40) / 2 - 10
+            switch multiplier {
+            case 1: frame = CGSize(width: self.bounds.width, height: self.bounds.height + 40)
+            case 3: frame = CGSize(width: self.bounds.width, height: self.bounds.height + imageSide + 50)
+            default: break
+            }
+        } else {
+           frame = CGSize(width: self.bounds.width, height: self.bounds.height + 40)
         }
-        self.contentSize = frame
+        
+        UIView.transition(with: self, duration: 0.4 , options: .curveEaseOut, animations: {
+            self.contentSize = frame
+        }, completion: nil)
     }
     
     

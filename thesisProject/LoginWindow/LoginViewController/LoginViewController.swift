@@ -54,6 +54,15 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     
     
+    override func viewWillAppear(_ animated: Bool) {
+        if let navVC = self.navigationController {
+            navVC.navigationBar.isHidden = true
+        }
+    }
+    
+    
+    
+    
     
     
     // MARK: - register and login methods
@@ -161,11 +170,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     
     
-    override func viewWillAppear(_ animated: Bool) {
-        if let navVC = self.navigationController {
-            navVC.navigationBar.isHidden = true
-        }
-    }
+    
     
     
     

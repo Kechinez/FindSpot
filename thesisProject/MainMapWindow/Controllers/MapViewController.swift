@@ -92,7 +92,21 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
     // MARK: - UITextField Delegate methods:
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        //в этом методе вызывать запрос загрузки координат мест в введеном городе
+        DataBaseManager.shared.getPlacesWithin(city: textField.text!) { (places) in
+            switch places {
+            case  .Success(let places):
+                self.allPlaces = places
+                let examplePlaceLocation = places[0].coordinates
+                self.mainView!.setMapCameraPosition(using: examplePlaceLocation, with: 11.0)
+                for place in self.allPlaces! {
+                    self.showFoundPlace(with: place.coordinates, info: place.placeName)
+                }
+            case .Failure(let error):
+                ErrorManager.shared.showErrorMessage(with: error, shownAt: self)
+            }
+            
+        }
+        textField.resignFirstResponder()
         return true
     }
     
@@ -110,21 +124,6 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
     }
     
     
-    
-    
-    
-    // MARK: - GMSMapView Delegate methods:
-    
-//    func mapView(_ mapView: GMSMapView, didTapInfoWindowOf marker: GMSMarker) {
-//        let placeVC = PlaceViewController()
-//        placeVC.place = self.allPlaces![0]
-//        self.present(placeVC, animated: true, completion: nil)
-//    }
-    
-    
-    func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
-        
-    }
     
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
         for (index, place) in self.allPlaces!.enumerated() {

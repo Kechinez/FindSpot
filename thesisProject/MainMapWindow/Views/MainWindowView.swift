@@ -16,14 +16,8 @@ class MainWindowView: UIView {
     init(viewController: MapViewController, frame: CGRect) {
         super.init(frame: frame)
         
-//        if let navigationVC = viewController.navigationController {
-//            let addPlaceButton = UIBarButtonItem(title: "New spot", style: .plain, target: viewController, action: #selector(MapViewController.addNewPlace))
-//            navigationVC.navigationItem.rightBarButtonItem = addPlaceButton
-//        }
-        
         mapView = GMSMapView(frame: CGRect(x: 0, y: 0, width: frame.size.width, height: frame.size.height))
-        let camera = GMSCameraPosition.camera(withTarget: viewController.userCurrentLocation!, zoom: 16.0)
-        mapView!.camera = camera
+        self.setMapCameraPosition(using: viewController.userCurrentLocation!, with: 15.0)
         mapView!.delegate = viewController
         self.addSubview(mapView!)
         mapView!.isMyLocationEnabled = true
@@ -44,6 +38,8 @@ class MainWindowView: UIView {
         searchTextField.layer.borderWidth = 1.0
         searchTextField.layer.borderColor = #colorLiteral(red: 0.7817531158, green: 0.7817531158, blue: 0.7817531158, alpha: 1)
         searchTextField.clearButtonMode = .whileEditing
+        searchTextField.autocorrectionType = .no
+        searchTextField.autocapitalizationType = .words
         let searchIconView = UILabel()
         searchIconView.text = "🔍"
         searchIconView.sizeToFit()
@@ -62,6 +58,14 @@ class MainWindowView: UIView {
         viewController.navigationItem.rightBarButtonItem = addNewPlaceBarButton
         
     }
+    
+    
+    
+    func setMapCameraPosition(using coordinates: CLLocationCoordinate2D, with zoom: Float) {
+        let camera = GMSCameraPosition.camera(withTarget: coordinates, zoom: zoom)
+        self.mapView!.animate(to: camera)
+    }
+    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
