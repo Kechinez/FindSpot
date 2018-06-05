@@ -29,6 +29,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     var registrationIsAllowed = [false, false, false]
     var ref: DatabaseReference!
     
+    
+    
     override func loadView() {
         let scrollView = UIScrollView()
         self.view = scrollView
@@ -39,6 +41,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         let loginView = LoginView(withAssociated: self)
         self.loginView = loginView
         self.view.addSubview(self.loginView!)
+        //self.loginView!.setLayout()
         ref = Database.database().reference(withPath: "users")
         
         Auth.auth().addStateDidChangeListener { [weak self](auth, user) in
@@ -253,16 +256,14 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         
         let mainMapWindowNavVC = MapViewController()
         mainMapWindowNavVC.tabBarItem = UITabBarItem(title: "Spots", image: UIImage(named: "map.png"), tag: 0)
-        //mainMapWindowNavVC.tabBarItem = UITabBarItem(tabBarSystemItem: .history, tag: 0)
         
         let favouriteNavVC = FavoritesViewController()
         favouriteNavVC.tabBarItem = UITabBarItem(title: "Favorites", image: UIImage(named: "favorites.png"), tag: 1)
-        //favouriteNavVC.tabBarItem = UITabBarItem(tabBarSystemItem: .topRated, tag: 1)
         
         let tabBarArray = [mainMapWindowNavVC, favouriteNavVC]
         tabBarController.viewControllers = tabBarArray.map { UINavigationController(rootViewController: $0)}
         
-        self.present(tabBarController, animated: true, completion: nil)
+        //self.present(tabBarController, animated: true, completion: nil)
         
         
     }
