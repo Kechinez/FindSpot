@@ -16,7 +16,6 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
     private var userCurrentCity: String?
     private var mainView: MainWindowView?
     private var allPlaces: [Place]? = []
-    private let googleAPIManager = GoogleApiRequests()
     //private let databaseManager = DataBaseManager()
     var favorites: [Place]?
     private var userDatabaseRef: DatabaseReference?
@@ -51,13 +50,13 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
         
         let tempCoordinate = CLLocationCoordinate2D(latitude: 59.882023, longitude: 30.339113) //  temp coordinates should be used to emulate Saint-P current location
         
-        self.googleAPIManager.coordinatesToAddressRequest(with: tempCoordinate) { (city) in
+        GoogleApiRequests.shared.coordinatesToAddressRequest(with: tempCoordinate) { (city) in
             
             switch city {
             case  .Success(let foundCity):
                 self.userCurrentCity = foundCity.cityName
             case .Failure(let error):
-                self.showGoogleMapError(with: error.localizedDescription)
+                ErrorManager.shared.showErrorMessage(with: error, shownAt: self)
                 return
             }
             DataBaseManager.shared.getPlacesWithin(city: self.userCurrentCity!) { (places) in
@@ -69,7 +68,7 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
                         self.showFoundPlace(with: place.coordinates, info: place.placeName)
                     }
                 case .Failure(let error):
-                    self.showGoogleMapError(with: error.localizedDescription)
+                    ErrorManager.shared.showErrorMessage(with: error, shownAt: self)
                 }
             
             }
@@ -153,18 +152,6 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
     
     
     
-
-    func showGoogleMapError(with error: String) {
-        let alertViewController = UIAlertController(title: "Problem occured!", message: "\(error)", preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "Ok", style: .default) { (action) in
-            
-        }
-        alertViewController.addAction(okAction)
-        self.present(alertViewController, animated: true, completion: nil)
-        
-    }
-    
-    
     
     
     
@@ -174,6 +161,7 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
      @objc func addNewPlace() {
         if let navigationController = self.navigationController {
             let newPlaceVC = AddNewPlaceViewController()
+            newPlaceVC.currentUserLocation = self.userCurrentLocation
             navigationController.pushViewController(newPlaceVC, animated: true)
         }
     }

@@ -14,7 +14,6 @@ class PlaceViewController: UIViewController, UICollectionViewDelegateFlowLayout,
     var place: Place?
     var collectionView: UICollectionView?
     var userLocation: CLLocationCoordinate2D?
-    let googleApiManager = GoogleApiRequests()
     var distanceForInfoWin: String?
     var timeForInfoWin: String?
     var infoWindow: InfoWindowView?
@@ -24,7 +23,7 @@ class PlaceViewController: UIViewController, UICollectionViewDelegateFlowLayout,
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.googleApiManager.getRouteRequest(with: self.userLocation!, and: self.place!.coordinates) { (route) in
+        GoogleApiRequests.shared.getRouteRequest(with: self.userLocation!, and: self.place!.coordinates) { (route) in
 
             switch route {
             case  .Success(let route):
@@ -45,9 +44,7 @@ class PlaceViewController: UIViewController, UICollectionViewDelegateFlowLayout,
         self.view.addSubview(placeView)
         self.placeView = placeView
         
-        
-        let photoManager = PhotoManager()
-        photoManager.getPhotoFromStorage(using: place!.photosDownloadURLs) { (images) in
+        PhotoManager.shared.getPhotoFromStorage(using: place!.photosDownloadURLs) { (images) in
             guard let tempImages = images.threadSafeImages else { return }
             self.images = tempImages
             self.setUpImages()
@@ -86,7 +83,7 @@ class PlaceViewController: UIViewController, UICollectionViewDelegateFlowLayout,
     
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MyCell", for: indexPath) as! ImagesCollectionCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PlaceViewCell", for: indexPath) as! ImagesCollectionCell
         if images.count > 0 {
             cell.imageView.image = images[indexPath.row]
             cell.activityIndicator.stopAnimating()

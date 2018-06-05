@@ -79,7 +79,7 @@ class PlaceView: UIScrollView {
         
         let imagesCollection = UICollectionView(frame: CGRect(x: 20, y: self.frame.width + 100 + labelHeight, width: self.bounds.size.width - 40, height: imagesCollectionHeight + 20), collectionViewLayout: layout)
         
-        imagesCollection.register(ImagesCollectionCell.self, forCellWithReuseIdentifier: "MyCell")
+        imagesCollection.register(ImagesCollectionCell.self, forCellWithReuseIdentifier: "PlaceViewCell")
         imagesCollection.dataSource = corespondingVC
         imagesCollection.delegate = corespondingVC
 

@@ -46,8 +46,9 @@ private enum GoogleAPIRequests {
 
 
 class GoogleApiRequests {
-//    static let shared = GoogleApiRequests()
-//    private init() {}
+    static let shared = GoogleApiRequests()
+    private init() {}
+    
     
     
     func coordinatesToAddressRequest(with coordiantes: CLLocationCoordinate2D, completionHandler: @escaping (APIResult<RequestedCity>) -> ()) {

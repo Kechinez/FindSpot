@@ -19,6 +19,13 @@ class PhotoManager {
     private let dispatchGroup = DispatchGroup()
     private var downloadURLs = DownloadURL()
     private var fileFolderName: String?
+    static let shared = PhotoManager()
+    
+    
+    
+    private init() {}
+    
+    
     
     func getPhotoFromStorage(using URLs: [URL], with completionHandler: @escaping (Photo) -> ()) {
         
@@ -47,7 +54,7 @@ class PhotoManager {
     }
 
     
-    func uploadPhotos(with photos: [UserLibraryPhoto], comletionHandler: @escaping ([URL]?) -> ()) {
+    func uploadPhotos(with photos: [UIImage], and location: CLLocationCoordinate2D, comletionHandler: @escaping ([URL]?) -> ()) {
         
         DispatchQueue.global(qos: .utility).async(group: dispatchGroup) {
             
@@ -63,11 +70,11 @@ class PhotoManager {
             let metaData = StorageMetadata()
             metaData.contentType = "image/jpeg"
             
-            for (index, var photo) in photos.enumerated() {
+            for (index, photo) in photos.enumerated() {
                
                 self.dispatchGroup.enter()
-                guard let data = UIImagePNGRepresentation(photo.image) else { break }
-                let storageRef = createStorageReferenceFromCoordinate(coordinate: photo.stringLocation, with: index)
+                guard let data = UIImagePNGRepresentation(photo) else { break }
+                let storageRef = createStorageReferenceFromCoordinate(coordinate: "\(location.latitude)", with: index)
                 
                 storageRef.putData(data, metadata: metaData) { (metaData, error) in
                     guard let metaData = metaData else { return }

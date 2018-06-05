@@ -88,7 +88,7 @@ class DataBaseManager {
         placeName = self.cutAllSymbols(in: placeName)
         let reference = self.ref.child(placeName)
         reference.setValue(tempPlace.convertToJSON())
-    
+        completionHandler()
     }
     
     
