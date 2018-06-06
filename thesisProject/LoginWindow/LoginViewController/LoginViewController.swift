@@ -10,15 +10,15 @@ import UIKit
 import Firebase
 
 public enum TextFields: Int {
-    case nameTextField     = 0
-    case emailTextField    = 1
-    case passwordTextField = 2
+    case nameTextField           = 0
+    case emailTextField          = 1
+    case passwordTextField       = 2
 }
 
 enum TextFeildsErrorType: String {
-    case invalidEmailFormat = "wrong email address format"
-    case invalidName = "name contains invalid symbols"
-    case passwordError = "must be more than 8 letters"
+    case invalidEmailFormat =    "wrong email address format"
+    case invalidName =           "name contains invalid symbols"
+    case passwordError =         "must be more than 8 letters"
 }
 
 class LoginViewController: UIViewController, UITextFieldDelegate {
@@ -36,12 +36,12 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         self.view = scrollView
     }
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         let loginView = LoginView(withAssociated: self)
         self.loginView = loginView
         self.view.addSubview(self.loginView!)
-        //self.loginView!.setLayout()
         ref = Database.database().reference(withPath: "users")
         
         Auth.auth().addStateDidChangeListener { [weak self](auth, user) in
@@ -84,23 +84,14 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
     
     
+    
     @objc func registerActionMethod() {
-        let registerRect = CGRect(x: (self.view.bounds.width / 7 - 15), y: (self.view.frame.height / 3 - 15), width: self.view.frame.width * 5/7 + 30, height: 355)
-        let registerView = RegisterView(frame: registerRect, loginViewController: self)
-        registerView.tag = 10
-        
-        registerView.alpha = 0
-        registerView.setTextFieldsDelegate(with: self)
-        registerView.setTextFeildsForRegisterUsage(within: self)
-        self.loginView!.addSubview(registerView)
-        self.loginView!.bringSubview(toFront: registerView)
-        
-        UIView.animate(withDuration: 1.2, animations: {
-            registerView.alpha = 1
-        }, completion: nil)
-        
-        
+        self.loginView!.createRegisterView()
+        self.loginView!.setAnimationOf(type: .AppearingOfView)
+        self.loginView!.setTextFeildsForRegisterUsage()
+    
     }
+    
     
     
     @objc func registerNewUser() {
@@ -123,8 +114,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             self?.setViewController()
             
         }
-        
     }
+    
     
     
     
@@ -134,17 +125,16 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @objc func keyboardDidShow(notification: Notification) {
         guard let userInfo = notification.userInfo else { return }
         let keyboardFrameSize = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
-        let scrollableView = self.view as! UIScrollView
-        scrollableView.contentSize = CGSize(width: self.view.bounds.width, height: self.view.bounds.height + keyboardFrameSize.height / 2)
-        scrollableView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardFrameSize.height, right: 0)
+        self.loginView!.increaseContentSizeOn(value: keyboardFrameSize.height)
         
     }
     
     
+    
     @objc func keyboardDidHide() {
-        let scrollableView = self.view as! UIScrollView
-        scrollableView.contentSize = CGSize(width: self.view.bounds.width, height: self.view.bounds.height)
+        self.loginView!.decreaseContentSizeToDefaultValues()
     }
+    
     
     
     
@@ -176,30 +166,12 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     
     
-    
     // MARK: - Additional methods
     
     @objc func removeRegisterView() {
-        var tempRegisterView: RegisterView?
-        for view in self.loginView!.subviews {
-            if view.tag == 10 {
-                tempRegisterView = view as? RegisterView
-            }
-        }
-        guard let registerView = tempRegisterView else { return }
-        print(registerView.subviews.count)
-        UIView.animate(withDuration: 1.2, animations: {
-            registerView.alpha = 0
-            
-            
-            self.view.layoutSubviews()
-        }, completion: { (true) in
-            registerView.removeFromSuperview()
-            self.loginView?.setTextFieldDelegate(with: self)
-            self.loginView?.setTextFieldsForLoginUsage(within: self)
-        })
-        
+        self.loginView!.setAnimationOf(type: .DisappearingOfView)
     }
+    
     
     
     func showError(with error: TextFeildsErrorType, within textField: UITextField) {
@@ -213,6 +185,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
         textField.textColor = UIColor.red
     }
+    
     
     
     func textFieldTextChecking(within textField: UITextField) {
@@ -263,7 +236,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         let tabBarArray = [mainMapWindowNavVC, favouriteNavVC]
         tabBarController.viewControllers = tabBarArray.map { UINavigationController(rootViewController: $0)}
         
-        //self.present(tabBarController, animated: true, completion: nil)
+        self.present(tabBarController, animated: true, completion: nil)
         
         
     }

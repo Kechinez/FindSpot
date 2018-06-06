@@ -10,9 +10,11 @@ import UIKit
 
 class RegisterView: UIView {
     private var viewController: LoginViewController
-    private var nameField: UITextField?
-    private var emailField: UITextField?
-    private var passField: UITextField?
+    var nameField: UITextField?
+    var emailField: UITextField?
+    var passField: UITextField?
+    
+    
     
     init(frame: CGRect, loginViewController: LoginViewController) {
         self.viewController = loginViewController
@@ -20,18 +22,25 @@ class RegisterView: UIView {
         
         self.backgroundColor = #colorLiteral(red: 0.2549019608, green: 0.4588235294, blue: 0.01960784314, alpha: 1)
         self.layer.cornerRadius = 10
+        self.alpha = 0.0
+        self.tag = 10
+    }
+    
+    
+    
+    func setUI() {
         
         let placeholderFont = UIFont(name: "OpenSans", size: 14.0)
         let textFieldFont = UIFont(name: "OpenSans", size: 18.0)
         let buttonFont = UIFont(name: "OpenSans", size: 22.0)
         let attributesDictionary: [NSAttributedStringKey: Any] = [
-            NSAttributedStringKey(rawValue: NSAttributedStringKey.foregroundColor.rawValue): #colorLiteral(red: 0.6257788431, green: 0.6374320992, blue: 0.6723918676, alpha: 1),
+            NSAttributedStringKey(rawValue: NSAttributedStringKey.foregroundColor.rawValue):  #colorLiteral(red: 0.6257788431, green: 0.6374320992, blue: 0.6723918676, alpha: 1),
             NSAttributedStringKey(rawValue: NSAttributedStringKey.font.rawValue): placeholderFont!]
         
         let atributedPlaceholder = NSMutableAttributedString(string: "write your nickname")
         atributedPlaceholder.addAttributes(attributesDictionary, range: NSRange (location:0, length: atributedPlaceholder.length))
         
-        let nameField = UITextField(frame: CGRect(x: 15, y: 15, width: self.bounds.width - 30, height: 45))
+        let nameField = UITextField()
         nameField.attributedPlaceholder = atributedPlaceholder
         nameField.font = textFieldFont!
         nameField.borderStyle = .roundedRect
@@ -41,7 +50,14 @@ class RegisterView: UIView {
         self.addSubview(nameField)
         self.nameField = nameField
         
-        let emailField = UITextField(frame: CGRect(x: 15, y: 90, width: self.bounds.width - 30, height: 45))
+        nameField.translatesAutoresizingMaskIntoConstraints = false
+        nameField.topAnchor.constraint(equalTo: self.topAnchor, constant: 25).isActive = true
+        nameField.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        nameField.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.9375).isActive = true
+        nameField.heightAnchor.constraint(equalToConstant: 45).isActive = true
+        
+
+        let emailField = UITextField()
         atributedPlaceholder.mutableString.setString("write your email address")
         emailField.attributedPlaceholder = atributedPlaceholder
         emailField.font = textFieldFont!
@@ -52,7 +68,14 @@ class RegisterView: UIView {
         self.addSubview(emailField)
         self.emailField = emailField
         
-        let passField = UITextField(frame: CGRect(x: 15, y: 165, width: self.bounds.width - 30, height: 45))
+        emailField.translatesAutoresizingMaskIntoConstraints = false
+        emailField.topAnchor.constraint(equalTo: nameField.bottomAnchor, constant: 20).isActive = true
+        emailField.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        emailField.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.9375).isActive = true
+        emailField.heightAnchor.constraint(equalToConstant: 45).isActive = true
+        
+        
+        let passField = UITextField()
         atributedPlaceholder.mutableString.setString("write your password")
         passField.attributedPlaceholder = atributedPlaceholder
         passField.font = textFieldFont!
@@ -63,7 +86,14 @@ class RegisterView: UIView {
         self.addSubview(passField)
         self.passField = passField
         
-        let registerButton = UIButton(frame: CGRect(x: 42, y: 245, width: (self.bounds.width - 30) * 0.8, height: 55))
+        passField.translatesAutoresizingMaskIntoConstraints = false
+        passField.topAnchor.constraint(equalTo: emailField.bottomAnchor, constant: 20).isActive = true
+        passField.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        passField.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.9375).isActive = true
+        passField.heightAnchor.constraint(equalToConstant: 45).isActive = true
+        
+        
+        let registerButton = UIButton()
         registerButton.setTitle("Register", for: .normal)
         registerButton.setTitleColor(.white, for: .normal)
         registerButton.titleLabel?.font = buttonFont!
@@ -72,17 +102,29 @@ class RegisterView: UIView {
         registerButton.addTarget(viewController, action: #selector(LoginViewController.registerNewUser), for: .touchUpInside)
         self.addSubview(registerButton)
         
-        let haveAccountButton = UIButton(frame: CGRect(x: 15, y: 310, width: self.bounds.width - 30, height: 30))
+        registerButton.translatesAutoresizingMaskIntoConstraints = false
+        registerButton.topAnchor.constraint(equalTo: passField.bottomAnchor, constant: 35).isActive = true
+        registerButton.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        registerButton.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.75).isActive = true
+        registerButton.heightAnchor.constraint(equalToConstant: 55).isActive = true
+        
+        
+        let haveAccountButton = UIButton()
         haveAccountButton.setTitle("I already have account", for: .normal)
         haveAccountButton.setTitleColor(.white, for: .normal)
-        haveAccountButton.titleLabel?.font = buttonFont!
+        haveAccountButton.titleLabel?.font = buttonFont!.withSize(19.0)
         haveAccountButton.addTarget(viewController, action: #selector(LoginViewController.removeRegisterView), for: .touchUpInside)
         self.addSubview(haveAccountButton)
         
-        
+        haveAccountButton.translatesAutoresizingMaskIntoConstraints = false
+        haveAccountButton.topAnchor.constraint(equalTo: registerButton.bottomAnchor, constant: 10).isActive = true
+        haveAccountButton.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        haveAccountButton.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.85).isActive = true
+        haveAccountButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
+   
+        self.setTextFieldsDelegates()
         
     }
-    
     
     
     
@@ -90,16 +132,15 @@ class RegisterView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setTextFieldsDelegate(with delegate: LoginViewController) {
-        self.emailField?.delegate = delegate
-        self.nameField?.delegate = delegate
-        self.passField?.delegate = delegate
+    
+    
+    func setTextFieldsDelegates() {
+        self.emailField?.delegate = self.viewController
+        self.nameField?.delegate = self.viewController
+        self.passField?.delegate = self.viewController
     }
     
-    func setTextFeildsForRegisterUsage(within viewController: LoginViewController) {
-        viewController.nameTextField = self.nameField
-        viewController.emailTextField = self.emailField
-        viewController.passTextField = self.passField
-    }
+    
+    
     
 }
