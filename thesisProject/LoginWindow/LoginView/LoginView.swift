@@ -50,10 +50,10 @@ class LoginView: UIScrollView {
         
         backgroundView.translatesAutoresizingMaskIntoConstraints = false
         backgroundView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        backgroundView.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
-        backgroundView.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
+        //backgroundView.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
+        //backgroundView.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
         backgroundView.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.5).isActive = true
-        
+        backgroundView.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
         
         let placeholderFont = UIFont(name: "OpenSans", size: 14.0)
         let textFieldFont = UIFont(name: "OpenSans", size: 18.0)

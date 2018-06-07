@@ -31,17 +31,17 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     
     
-    override func loadView() {
-        let scrollView = UIScrollView()
-        self.view = scrollView
-    }
+//    override func loadView() {
+//        let scrollView = UIScrollView()
+//        self.view = scrollView
+//    }
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         let loginView = LoginView(withAssociated: self)
         self.loginView = loginView
-        self.view.addSubview(self.loginView!)
+        //self.view.addSubview(self.loginView!)
         ref = Database.database().reference(withPath: "users")
         
         Auth.auth().addStateDidChangeListener { [weak self](auth, user) in
@@ -58,13 +58,19 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         if let navVC = self.navigationController {
             navVC.navigationBar.isHidden = true
         }
     }
     
     
-    
+//    override func viewWillDisappear(_ animated: Bool) {
+//        super.viewWillDisappear(animated)
+//        self.resignFirstResponder()
+//        
+//    }
+//    
     
     
     

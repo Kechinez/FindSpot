@@ -14,7 +14,7 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
     private var locationManager: CLLocationManager?
     var userCurrentLocation: CLLocationCoordinate2D?
     private var userCurrentCity: String?
-    private var mainView: MainWindowView?
+    private var mainView: MainMapView?
     private var allPlaces: [Place]? = []
     //private let databaseManager = DataBaseManager()
     var favorites: [Place]?
@@ -22,6 +22,7 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
         
         self.navigationItem.title = "FindSpot"
         guard let currentUser = Auth.auth().currentUser else { return }
@@ -30,25 +31,28 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
         
         locationManager = CLLocationManager()
         locationManager!.delegate = self
-        if CLLocationManager.authorizationStatus() != .authorizedWhenInUse     {
-            locationManager!.requestWhenInUseAuthorization()
-        }
-        locationManager!.requestWhenInUseAuthorization()
-        locationManager!.desiredAccuracy = kCLLocationAccuracyBest
-        self.userCurrentLocation = locationManager!.location!.coordinate
+        
+//        if CLLocationManager.authorizationStatus() != .authorizedWhenInUse     {
+//            locationManager!.requestWhenInUseAuthorization()
+//        } else {
+//            locationManager!.requestWhenInUseAuthorization()
+//            locationManager!.desiredAccuracy = kCLLocationAccuracyBest
+//            self.userCurrentLocation = locationManager!.location!.coordinate
+//        }
+        
         
         if let tabBarController = self.tabBarController {
             tabBarController.delegate = self
         }
-        let tabBarHeight = self.tabBarController?.tabBar.frame.height ?? 0.0
-        let topBarHeight = UIApplication.shared.statusBarFrame.size.height +
-            (self.navigationController?.navigationBar.frame.height ?? 0.0)
+//        let tabBarHeight = self.tabBarController?.tabBar.frame.height ?? 0.0
+//        let topBarHeight = UIApplication.shared.statusBarFrame.size.height +
+//            (self.navigationController?.navigationBar.frame.height ?? 0.0)
         
-        mainView = MainWindowView(viewController: self, frame: CGRect(x: 0, y: topBarHeight, width: self.view.bounds.width, height: self.view.bounds.height - topBarHeight - tabBarHeight))
         
-        self.view.addSubview(mainView!)
         
         let tempCoordinate = CLLocationCoordinate2D(latitude: 59.882023, longitude: 30.339113) //  temp coordinates should be used to emulate Saint-P current location
+     self.userCurrentLocation = tempCoordinate
+        mainView = MainMapView(viewController: self)
         
         GoogleApiRequests.shared.coordinatesToAddressRequest(with: tempCoordinate) { (city) in
             
@@ -88,23 +92,23 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
     
     
     
-    
     // MARK: - UITextField Delegate methods:
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        DataBaseManager.shared.getPlacesWithin(city: textField.text!) { (places) in
-            switch places {
-            case  .Success(let places):
-                self.allPlaces = places
-                let examplePlaceLocation = places[0].coordinates
-                self.mainView!.setMapCameraPosition(using: examplePlaceLocation, with: 11.0)
-                for place in self.allPlaces! {
-                    self.showFoundPlace(with: place.coordinates, info: place.placeName)
+        if textField.text!.count > 2 {
+            DataBaseManager.shared.getPlacesWithin(city: textField.text!) { (places) in
+                switch places {
+                case  .Success(let places):
+                    self.allPlaces = places
+                    let examplePlaceLocation = places[0].coordinates
+                    self.mainView!.setMapCameraPosition(using: examplePlaceLocation, with: 11.0)
+                    for place in self.allPlaces! {
+                        self.showFoundPlace(with: place.coordinates, info: place.placeName)
+                    }
+                case .Failure(let error):
+                    ErrorManager.shared.showErrorMessage(with: error, shownAt: self)
                 }
-            case .Failure(let error):
-                ErrorManager.shared.showErrorMessage(with: error, shownAt: self)
             }
-            
         }
         textField.resignFirstResponder()
         return true
@@ -120,6 +124,7 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
         let marker = GMSMarker()
         marker.position = coordinates
         marker.title = info
+       // marker.map = self.mainView!.mapView
         marker.map = self.mainView!.mapView
     }
     
