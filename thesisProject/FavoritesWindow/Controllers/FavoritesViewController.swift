@@ -37,13 +37,13 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
         
         let topBarHeight = UIApplication.shared.statusBarFrame.size.height +
             (self.navigationController?.navigationBar.frame.height ?? 0.0)
-        let favoriteView = FavoritesView(frame: CGRect(x: 0, y: topBarHeight, width: self.view.bounds.width, height: self.view.bounds.height - topBarHeight))
+        let favoriteView = FavoritesView(viewController: self)//(frame: CGRect(x: 0, y: topBarHeight, width: self.view.bounds.width, height: self.view.bounds.height - topBarHeight))
         
         self.tableView = favoriteView.tableView!
         self.tableView!.delegate = self
         self.tableView!.dataSource = self
         self.tableView!.register(UITableViewCell.self, forCellReuseIdentifier: "myCell")
-        self.view.addSubview(favoriteView)
+        //self.view.addSubview(favoriteView)
         
         
     }

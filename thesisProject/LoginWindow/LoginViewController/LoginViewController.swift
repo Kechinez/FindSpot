@@ -31,12 +31,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     
     
-//    override func loadView() {
-//        let scrollView = UIScrollView()
-//        self.view = scrollView
-//    }
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         let loginView = LoginView(withAssociated: self)
@@ -65,12 +59,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
     
     
-//    override func viewWillDisappear(_ animated: Bool) {
-//        super.viewWillDisappear(animated)
-//        self.resignFirstResponder()
-//        
-//    }
-//    
     
     
     
@@ -94,8 +82,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @objc func registerActionMethod() {
         self.loginView!.createRegisterView()
         self.loginView!.setAnimationOf(type: .AppearingOfView)
-        self.loginView!.setTextFeildsForRegisterUsage()
-    
     }
     
     

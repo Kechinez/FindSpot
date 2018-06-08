@@ -23,7 +23,7 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        
+        //self.view.translatesAutoresizingMaskIntoConstraints = false
         self.navigationItem.title = "FindSpot"
         guard let currentUser = Auth.auth().currentUser else { return }
         self.userDatabaseRef = Database.database().reference(withPath: "users").child(String(currentUser.uid)).child("favorites")

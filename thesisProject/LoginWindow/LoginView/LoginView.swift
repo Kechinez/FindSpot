@@ -18,6 +18,10 @@ class LoginView: UIScrollView {
     private var emailTextField: UITextField?
     private var passwordTextField: UITextField?
     private var registerView: RegisterView?
+    private var findSpotLabel: UILabel?
+    private var loginButton: UIButton?
+    private var registerButton: UIButton?
+    private var backgroundView: UIView?
     
     
     
@@ -25,16 +29,7 @@ class LoginView: UIScrollView {
         let rect = CGRect.zero
         self.viewController = usedViewController
         super.init(frame: rect)
-        
         viewController.view.addSubview(self)
-        self.translatesAutoresizingMaskIntoConstraints = false
-        self.topAnchor.constraint(equalTo: viewController.view.topAnchor).isActive = true
-        self.widthAnchor.constraint(equalTo: viewController.view.widthAnchor).isActive = true
-        self.heightAnchor.constraint(equalTo: viewController.view.heightAnchor).isActive = true
-        self.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
-        self.leadingAnchor.constraint(equalTo: viewController.view.leadingAnchor).isActive = true
-        self.trailingAnchor.constraint(equalTo: viewController.view.trailingAnchor).isActive = true
-        
     }
     
     
@@ -47,13 +42,7 @@ class LoginView: UIScrollView {
         self.addSubview(backgroundView)
         self.bringSubview(toFront: backgroundView)
         self.backgroundColor = #colorLiteral(red: 0.4078431373, green: 0.6941176471, blue: 0.09411764706, alpha: 1)
-        
-        backgroundView.translatesAutoresizingMaskIntoConstraints = false
-        backgroundView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        //backgroundView.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
-        //backgroundView.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
-        backgroundView.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.5).isActive = true
-        backgroundView.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
+        self.backgroundView = backgroundView
         
         let placeholderFont = UIFont(name: "OpenSans", size: 14.0)
         let textFieldFont = UIFont(name: "OpenSans", size: 18.0)
@@ -62,7 +51,6 @@ class LoginView: UIScrollView {
             NSAttributedStringKey(rawValue: NSAttributedStringKey.foregroundColor.rawValue): #colorLiteral(red: 0.6257788431, green: 0.6374320992, blue: 0.6723918676, alpha: 1),
             NSAttributedStringKey(rawValue: NSAttributedStringKey.font.rawValue): placeholderFont!]
         
-        
         let findSpotLabel = UILabel()
         findSpotLabel.text = "FindSpot"
         if let font = UIFont(name: "Comfortaa", size: 38) {
@@ -70,10 +58,7 @@ class LoginView: UIScrollView {
         }
         findSpotLabel.textColor = UIColor.white
         self.addSubview(findSpotLabel)
-        
-        findSpotLabel.translatesAutoresizingMaskIntoConstraints = false
-        findSpotLabel.topAnchor.constraintEqualToSystemSpacingBelow(self.topAnchor, multiplier: 10).isActive = true
-        findSpotLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        self.findSpotLabel = findSpotLabel
         
         let atributedPlaceholder = NSMutableAttributedString(string: "write your password")
         atributedPlaceholder.addAttributes(attributesDictionary, range: NSRange (location:0, length: atributedPlaceholder.length))
@@ -88,15 +73,8 @@ class LoginView: UIScrollView {
         self.addSubview(passwordTextField)
         self.passwordTextField = passwordTextField
         
-        passwordTextField.translatesAutoresizingMaskIntoConstraints = false
-        passwordTextField.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        passwordTextField.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.75).isActive = true
-        passwordTextField.heightAnchor.constraint(equalToConstant: 45).isActive = true
-        
-        
         let emailTextField = UITextField()
         self.addSubview(emailTextField)
-        
         emailTextField.translatesAutoresizingMaskIntoConstraints = false
         emailTextField.topAnchor.constraintEqualToSystemSpacingBelow(findSpotLabel.bottomAnchor, multiplier: 8).isActive = true
         emailTextField.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
@@ -114,7 +92,6 @@ class LoginView: UIScrollView {
         self.addSubview(emailTextField)
         self.emailTextField = emailTextField
         
-        
         let loginButton = UIButton()
         loginButton.setTitle("Login", for: .normal)
         loginButton.titleLabel?.font = buttonFont!
@@ -123,14 +100,7 @@ class LoginView: UIScrollView {
         loginButton.backgroundColor = #colorLiteral(red: 0.2549019608, green: 0.5137254902, blue: 0.7568627451, alpha: 1)
         loginButton.addTarget(viewController, action: #selector(LoginViewController.loginActionMethod), for: .touchUpInside)
         self.addSubview(loginButton)
-        
-        loginButton.translatesAutoresizingMaskIntoConstraints = false
-        loginButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 35).isActive = true
-        loginButton.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        loginButton.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.6).isActive = true
-        loginButton.heightAnchor.constraint(equalToConstant: 55).isActive = true
-        loginButton.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        
+        self.loginButton = loginButton
         
         let registerButton = UIButton()
         registerButton.setTitle("Register", for: .normal)
@@ -138,14 +108,11 @@ class LoginView: UIScrollView {
         registerButton.titleLabel?.font = buttonFont!.withSize(19.0)
         registerButton.addTarget(viewController, action: #selector(LoginViewController.registerActionMethod), for: .touchUpInside)
         self.addSubview(registerButton)
-        
-        registerButton.translatesAutoresizingMaskIntoConstraints = false
-        registerButton.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 10).isActive = true
-        registerButton.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        registerButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        self.registerButton = registerButton
         
         self.setTextFieldDelegate()
         self.setTextFieldsForLoginUsage()
+        self.setUpConstraints()
     }
 
     
@@ -155,20 +122,49 @@ class LoginView: UIScrollView {
     }
     
     
+    
+    private func setUpConstraints() {
+        
+        self.translatesAutoresizingMaskIntoConstraints = false
+        self.topAnchor.constraint(equalTo: viewController.view.topAnchor).isActive = true
+        self.widthAnchor.constraint(equalTo: viewController.view.widthAnchor).isActive = true
+        self.heightAnchor.constraint(equalTo: viewController.view.heightAnchor).isActive = true
+        self.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
+        self.leadingAnchor.constraint(equalTo: viewController.view.leadingAnchor).isActive = true
+        self.trailingAnchor.constraint(equalTo: viewController.view.trailingAnchor).isActive = true
+        
+        self.backgroundView!.translatesAutoresizingMaskIntoConstraints = false
+        self.backgroundView!.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+        self.backgroundView!.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.5).isActive = true
+        self.backgroundView!.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
+        
+        self.findSpotLabel!.translatesAutoresizingMaskIntoConstraints = false
+        self.findSpotLabel!.topAnchor.constraintEqualToSystemSpacingBelow(self.topAnchor, multiplier: 10).isActive = true
+        self.findSpotLabel!.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        
+        self.passwordTextField!.translatesAutoresizingMaskIntoConstraints = false
+        self.passwordTextField!.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        self.passwordTextField!.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.75).isActive = true
+        self.passwordTextField!.heightAnchor.constraint(equalToConstant: 45).isActive = true
+        
+        self.loginButton!.translatesAutoresizingMaskIntoConstraints = false
+        self.loginButton!.topAnchor.constraint(equalTo: self.passwordTextField!.bottomAnchor, constant: 35).isActive = true
+        self.loginButton!.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        self.loginButton!.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.6).isActive = true
+        self.loginButton!.heightAnchor.constraint(equalToConstant: 55).isActive = true
+        self.loginButton!.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        
+        self.registerButton!.translatesAutoresizingMaskIntoConstraints = false
+        self.registerButton!.topAnchor.constraint(equalTo: self.loginButton!.bottomAnchor, constant: 10).isActive = true
+        self.registerButton!.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        self.registerButton!.heightAnchor.constraint(equalToConstant: 30).isActive = true
+    }
+    
+    
+    
     func createRegisterView() {
-        let registerView = RegisterView(frame: CGRect.zero, loginViewController: viewController)
-        self.addSubview(registerView)
-        self.bringSubview(toFront: registerView)
-        
-        registerView.translatesAutoresizingMaskIntoConstraints = false
-        registerView.topAnchor.constraintEqualToSystemSpacingBelow(self.topAnchor, multiplier: 20).isActive = true
-        registerView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        registerView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.8).isActive = true
-        registerView.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.6).isActive = true
-        registerView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
-        
+        let registerView = RegisterView(with: self, loginViewController: self.viewController)
         self.registerView = registerView
-        registerView.setUI()
     }
     
     
@@ -176,14 +172,6 @@ class LoginView: UIScrollView {
     func setTextFieldsForLoginUsage() {
         self.viewController.emailTextField = self.emailTextField
         self.viewController.passTextField = self.passwordTextField
-    }
-    
-    
-    
-    func setTextFeildsForRegisterUsage() {
-        self.viewController.emailTextField = self.registerView!.emailField
-        self.viewController.passTextField = self.registerView!.passField
-        self.viewController.nameTextField = self.registerView!.nameField
     }
     
     
