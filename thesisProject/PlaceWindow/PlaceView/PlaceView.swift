@@ -11,33 +11,54 @@ import GoogleMaps
 
 class PlaceView: UIScrollView {
     var mapView: GMSMapView?
+    private let viewController: PlaceViewController
     private var addToFavoritesButton: UIButton?
     private var descriptionLabel: UILabel?
+    private var backgroundView: UIImageView?
+    private var nameLabel: UILabel?
+    private var cityLabel: UILabel?
+    private var blackBackgroundView: UIView?
+    private var collectionView: UICollectionView?
+    private var contentView: UIView?
+    private var collectionViewHeight: CGFloat?
+    private var showSpotsImagesButton: UIButton?
+    
     
     init(with frame: CGRect, place: Place, and corespondingVC: PlaceViewController) {
+        self.viewController = corespondingVC
         super.init(frame: frame)
+        corespondingVC.view.addSubview(self)
+        self.collectionViewHeight = frame.width
+        
+        let contentView = UIView(frame: CGRect.zero)
+        self.contentView = contentView
+        self.addSubview(contentView)
         
         let leavesImage = UIImage(named: "Leaves.png")
-        let backgroundView = UIImageView(frame: CGRect(x: 0, y: 0, width: self.bounds.width, height: self.bounds.height * 0.6))
+        let backgroundView = UIImageView()
         backgroundView.image = leavesImage
         backgroundView.alpha = 0.45
-        self.addSubview(backgroundView)
+        contentView.addSubview(backgroundView)
         self.bringSubview(toFront: backgroundView)
         self.backgroundColor = #colorLiteral(red: 0.4078431373, green: 0.6941176471, blue: 0.09411764706, alpha: 1)
+        self.backgroundView = backgroundView
         
-        let nameLabel = UILabel(frame: CGRect(x: 20, y: 20, width: self.bounds.width - 40, height: 30))
+        let nameLabel = UILabel()
         nameLabel.font = UIFont(name: "OpenSans", size: 25)
         nameLabel.textColor = .white
         nameLabel.text = place.placeName
-        self.addSubview(nameLabel)
+        contentView.addSubview(nameLabel)
+        self.nameLabel = nameLabel
         
-        let cityLabel = UILabel(frame: CGRect(x: 20, y: 50, width: self.bounds.width - 40, height: 30))
+        
+        let cityLabel = UILabel()
         cityLabel.font = UIFont(name: "OpenSans", size: 19)
         cityLabel.textColor = .white
         cityLabel.text = place.city
-        self.addSubview(cityLabel)
+        contentView.addSubview(cityLabel)
+        self.cityLabel = cityLabel
         
-        let map = GMSMapView(frame: CGRect(x: 20, y: 100, width: self.bounds.size.width - 40, height: self.bounds.size.width - 40))
+        let map = GMSMapView()
         map.layer.borderColor = #colorLiteral(red: 0.6257788431, green: 0.6374320992, blue: 0.6723918676, alpha: 1)
         map.layer.borderWidth = 1.0
         let placeMarker = GMSMarker(position: place.coordinates)
@@ -45,13 +66,14 @@ class PlaceView: UIScrollView {
         self.mapView = map
         let camera = GMSCameraPosition.camera(withLatitude: place.coordinates.latitude, longitude: place.coordinates.longitude, zoom: 15.0)
         self.mapView!.camera = camera
-        self.addSubview(self.mapView!)
+        contentView.addSubview(self.mapView!)
         self.mapView!.delegate = corespondingVC
         
-        let blackBackgroundView = UIView(frame: CGRect(x: 0, y: self.bounds.size.width + 80, width: self.bounds.size.width, height: self.bounds.height - self.bounds.size.width + 80))
-        blackBackgroundView.backgroundColor = .black
-        blackBackgroundView.alpha = 0.2
-        self.addSubview(blackBackgroundView)
+//        let blackBackgroundView = UIView()
+//        blackBackgroundView.backgroundColor = .black
+//        blackBackgroundView.alpha = 0.2
+//        contentView.addSubview(blackBackgroundView)
+//        self.blackBackgroundView = blackBackgroundView
         
         let descriptionLabel = UILabel()
         descriptionLabel.text = place.placeDescription
@@ -60,51 +82,102 @@ class PlaceView: UIScrollView {
         descriptionLabel.lineBreakMode = .byWordWrapping
         descriptionLabel.numberOfLines = 0
         self.descriptionLabel = descriptionLabel
-        self.setNeedsLayout()
         descriptionLabel.layer.cornerRadius = 7.0
-        self.addSubview(descriptionLabel)
+        contentView.addSubview(descriptionLabel)
         
-        let labelHeight = descriptionLabel.frame.height
+        let buttonFont = UIFont(name: "OpenSans", size: 19.0)
+        let showImagesButton = UIButton()
+        showImagesButton.setTitle("Show spot's images", for: .normal)
+        showImagesButton.setTitleColor(UIColor.white, for: .normal)
+        showImagesButton.titleLabel?.font = buttonFont
+        showImagesButton.layer.cornerRadius = 8.0
+        showImagesButton.backgroundColor = #colorLiteral(red: 0.2549019608, green: 0.5137254902, blue: 0.7568627451, alpha: 1)
+        showImagesButton.addTarget(self.viewController, action: #selector(PlaceViewController.showSpotsImagesMethod), for: .touchUpInside)
+        contentView.addSubview(showImagesButton)
+        self.showSpotsImagesButton = showImagesButton
         
-        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-        layout.sectionInset = UIEdgeInsets(top: 5, left: 15, bottom: 5, right: 15)
-        layout.minimumInteritemSpacing = 30
-        layout.minimumLineSpacing = 30
-        let itemSide = self.bounds.size.width - 70
-        
-        layout.itemSize = CGSize(width: itemSide, height: itemSide)
-        layout.scrollDirection = .horizontal
-        
-        let imagesCollectionHeight = itemSide + 10
-        
-        let imagesCollection = UICollectionView(frame: CGRect(x: 20, y: self.frame.width + 100 + labelHeight, width: self.bounds.size.width - 40, height: imagesCollectionHeight + 20), collectionViewLayout: layout)
-        
-        imagesCollection.register(ImagesCollectionCell.self, forCellWithReuseIdentifier: "PlaceViewCell")
-        imagesCollection.dataSource = corespondingVC
-        imagesCollection.delegate = corespondingVC
-
-        imagesCollection.backgroundColor = UIColor.clear
-        self.addSubview(imagesCollection)
-        corespondingVC.collectionView = imagesCollection
-        
-        let totalHeight = (self.frame.width + 120 + labelHeight + imagesCollection.frame.size.height) - self.bounds.height
-        self.contentSize = CGSize(width: self.bounds.width, height: self.bounds.height + totalHeight)
-        self.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: self.bounds.height, right: 0)
-        blackBackgroundView.frame.size = self.contentSize
-    
+//        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+//        layout.sectionInset = UIEdgeInsets(top: 5, left: 35, bottom: 5, right: 35)
+//        layout.minimumInteritemSpacing = 70
+//        layout.minimumLineSpacing = 70
+//        layout.scrollDirection = .horizontal
+//
+//        let imagesCollection = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
+//        imagesCollection.register(ImagesCollectionCell.self, forCellWithReuseIdentifier: "PlaceViewCell")
+//        imagesCollection.dataSource = corespondingVC
+//        imagesCollection.delegate = corespondingVC
+//        imagesCollection.backgroundColor = UIColor.clear
+//        contentView.addSubview(imagesCollection)
+//        corespondingVC.collectionView = imagesCollection
+//        self.collectionView = imagesCollection
         
         let addToFavoritesButton = UIBarButtonItem(title: "Add spot", style: .plain, target: corespondingVC, action: #selector(PlaceViewController.addToFavorites))
         corespondingVC.navigationItem.rightBarButtonItem = addToFavoritesButton
     
+        self.setUpConstraints()
     }
     
     
     
-    override func setNeedsLayout() {
-        self.descriptionLabel!.frame = CGRect(x: 0, y: 0, width: bounds.width - 40, height: 0)
-        self.descriptionLabel!.sizeToFit()
-        self.descriptionLabel!.frame.size = self.descriptionLabel!.bounds.size
-        self.descriptionLabel!.frame.origin = CGPoint(x: 20, y: self.frame.width + 80)
+    private func setUpConstraints() {
+        self.translatesAutoresizingMaskIntoConstraints = false
+        self.topAnchor.constraint(equalTo: self.viewController.view.safeAreaLayoutGuide.topAnchor).isActive = true
+        self.widthAnchor.constraint(equalTo: self.viewController.view.widthAnchor).isActive = true
+        self.bottomAnchor.constraint(equalTo: self.viewController.view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+
+        self.contentView!.translatesAutoresizingMaskIntoConstraints = false
+        self.contentView!.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+        self.contentView!.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
+        self.contentView!.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
+        
+        self.backgroundView!.translatesAutoresizingMaskIntoConstraints = false
+        self.backgroundView!.topAnchor.constraint(equalTo: self.contentView!.topAnchor).isActive = true
+        self.backgroundView!.widthAnchor.constraint(equalTo: self.contentView!.widthAnchor).isActive = true
+        self.backgroundView!.heightAnchor.constraint(equalTo: self.contentView!.heightAnchor, multiplier: 0.4).isActive = true
+        
+        self.nameLabel!.translatesAutoresizingMaskIntoConstraints = false
+        self.nameLabel!.topAnchor.constraint(equalTo: self.contentView!.topAnchor, constant: 20).isActive = true
+        self.nameLabel!.leadingAnchor.constraint(equalTo: self.contentView!.leadingAnchor, constant: 20).isActive = true
+        self.nameLabel!.trailingAnchor.constraint(equalTo: self.contentView!.trailingAnchor).isActive = true
+        self.nameLabel!.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        
+        self.cityLabel!.translatesAutoresizingMaskIntoConstraints = false
+        self.cityLabel!.topAnchor.constraint(equalTo: self.nameLabel!.bottomAnchor).isActive = true
+        self.cityLabel!.leadingAnchor.constraint(equalTo: self.contentView!.leadingAnchor, constant: 20).isActive = true
+        self.cityLabel!.trailingAnchor.constraint(equalTo: self.contentView!.trailingAnchor).isActive = true
+        self.cityLabel!.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        
+        self.mapView!.translatesAutoresizingMaskIntoConstraints = false
+        self.mapView!.topAnchor.constraint(equalTo: self.cityLabel!.bottomAnchor, constant: 20).isActive = true
+        self.mapView!.leadingAnchor.constraint(equalTo: self.contentView!.leadingAnchor, constant: 20).isActive = true
+        self.mapView!.trailingAnchor.constraint(equalTo: self.contentView!.trailingAnchor, constant: -20).isActive = true
+        self.mapView!.heightAnchor.constraint(equalTo: self.contentView!.widthAnchor).isActive = true
+        
+//        self.blackBackgroundView!.translatesAutoresizingMaskIntoConstraints = false
+//        self.blackBackgroundView!.topAnchor.constraint(equalTo: self.mapView!.bottomAnchor, constant: 20).isActive = true
+//        self.blackBackgroundView!.widthAnchor.constraint(equalTo: self.contentView!.widthAnchor).isActive = true
+//        self.blackBackgroundView!.bottomAnchor.constraint(equalTo: self.contentView!.bottomAnchor).isActive = true
+        
+        self.descriptionLabel!.translatesAutoresizingMaskIntoConstraints = false
+        self.descriptionLabel!.topAnchor.constraint(equalTo: self.mapView!.bottomAnchor, constant: 20).isActive = true
+        self.descriptionLabel!.leadingAnchor.constraint(equalTo: self.contentView!.leadingAnchor, constant: 20).isActive = true
+        self.descriptionLabel!.widthAnchor.constraint(equalToConstant: self.frame.width - 40).isActive = true
+        
+        self.showSpotsImagesButton!.translatesAutoresizingMaskIntoConstraints = false
+        self.showSpotsImagesButton!.topAnchor.constraint(equalTo: self.descriptionLabel!.bottomAnchor, constant: 50).isActive = true
+        self.showSpotsImagesButton!.centerXAnchor.constraint(equalTo: self.contentView!.centerXAnchor).isActive = true
+        self.showSpotsImagesButton!.widthAnchor.constraint(equalTo: self.contentView!.widthAnchor, multiplier: 0.6).isActive = true
+        self.showSpotsImagesButton!.heightAnchor.constraint(equalToConstant: 55).isActive = true
+        self.showSpotsImagesButton!.bottomAnchor.constraint(equalTo: self.contentView!.bottomAnchor, constant: -20).isActive = true
+        
+        
+//        self.collectionView!.translatesAutoresizingMaskIntoConstraints = false
+//        self.collectionView!.topAnchor.constraint(equalTo: self.descriptionLabel!.bottomAnchor, constant: 5).isActive = true
+//        self.collectionView!.leadingAnchor.constraint(equalTo: self.contentView!.leadingAnchor, constant: 20).isActive = true
+//        self.collectionView!.trailingAnchor.constraint(equalTo: self.contentView!.trailingAnchor, constant: -20).isActive = true
+//        self.collectionView!.heightAnchor.constraint(equalToConstant: self.collectionViewHeight! - 40).isActive = true
+//        self.collectionView!.bottomAnchor.constraint(equalTo: self.contentView!.bottomAnchor, constant: -20).isActive = true
+        
     }
     
     

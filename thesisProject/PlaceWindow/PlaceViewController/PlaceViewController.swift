@@ -8,11 +8,11 @@
 
 import UIKit
 import GoogleMaps
-class PlaceViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UINavigationControllerDelegate, GMSMapViewDelegate {
+class PlaceViewController: UIViewController, UINavigationControllerDelegate, GMSMapViewDelegate {
     private var images: [UIImage] = []
     var placeView: PlaceView?
     var place: Place?
-    var collectionView: UICollectionView?
+    var imagesCollectionView: ImagesCollectionController?
     var userLocation: CLLocationCoordinate2D?
     var distanceForInfoWin: String?
     var timeForInfoWin: String?
@@ -41,7 +41,6 @@ class PlaceViewController: UIViewController, UICollectionViewDelegateFlowLayout,
         
         let placeView = PlaceView(with: CGRect(x: 0, y: topBarHeight, width: self.view.frame.size.width, height: self.view.frame.size.height - topBarHeight) , place: self.place!, and: self)
         
-        self.view.addSubview(placeView)
         self.placeView = placeView
         
         PhotoManager.shared.getPhotoFromStorage(using: place!.photosDownloadURLs) { (images) in
@@ -53,7 +52,7 @@ class PlaceViewController: UIViewController, UICollectionViewDelegateFlowLayout,
     }
 
     
-
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -62,39 +61,6 @@ class PlaceViewController: UIViewController, UICollectionViewDelegateFlowLayout,
         }
     }
     
-    
-    
-    // MARK: - CollectionView dataSource methods:
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let photoSlider = PhotoSliderViewController()
-        photoSlider.currentIndex = indexPath.row
-        photoSlider.images = self.images
-        
-        guard let navigationVC = self.navigationController else { return }
-        navigationVC.pushViewController(photoSlider, animated: true)
-        
-    }
-    
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.place!.photosDownloadURLs.count
-    }
-    
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PlaceViewCell", for: indexPath) as! ImagesCollectionCell
-        if images.count > 0 {
-            cell.imageView.image = images[indexPath.row]
-            cell.activityIndicator.stopAnimating()
-        }
-        return cell
-    }
-    
-    
-    func setUpImages() {
-        self.collectionView!.reloadData()
-    }
     
     
     
@@ -143,6 +109,13 @@ class PlaceViewController: UIViewController, UICollectionViewDelegateFlowLayout,
     }
     
     
+    
+    
+    
+    
+    // MARK: - Additional methods
+    
+    
     @objc func addToFavorites() {
         self.navigationItem.rightBarButtonItem!.isEnabled = false
         self.navigationItem.rightBarButtonItem!.tintColor = #colorLiteral(red: 0.8497060029, green: 0.8497060029, blue: 0.8497060029, alpha: 1)
@@ -152,4 +125,25 @@ class PlaceViewController: UIViewController, UICollectionViewDelegateFlowLayout,
     
     
     
+    @objc func showSpotsImagesMethod() {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        let imagesCollection = ImagesCollectionController(collectionViewLayout: layout, expectedNumberOfItems: self.place!.photosDownloadURLs.count)
+        self.imagesCollectionView = imagesCollection
+        if self.images.count > 0 {
+            imagesCollection.images = self.images
+        }
+        guard let navigationVC = self.navigationController else { return }
+        navigationVC.pushViewController(imagesCollection, animated: true)
+    }
+    
+    
+    
+    func setUpImages() {
+        guard let imagesCollection = self.imagesCollectionView else { return }
+        imagesCollection.images = self.images
+    }
+
+
 }

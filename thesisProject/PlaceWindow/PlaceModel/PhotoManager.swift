@@ -28,7 +28,7 @@ class PhotoManager {
     
     
     func getPhotoFromStorage(using URLs: [URL], with completionHandler: @escaping (Photo) -> ()) {
-        
+        self.images.threadSafeImages = []
         DispatchQueue.global(qos: .utility).async(group: dispatchGroup) {
             
             for url in URLs {
