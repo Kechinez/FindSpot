@@ -37,7 +37,11 @@ class UserImagesCell: UICollectionViewCell {
     
     
     func deleteGestureRecognizer() {
-        self.removeGestureRecognizer(self.gestureRecognizer!)
+        guard let gestureRecognizer = self.gestureRecognizer else { return }
+        self.removeGestureRecognizer(gestureRecognizer)
+        self.gestureRecognizer = nil
+        
+        
     }
     
     

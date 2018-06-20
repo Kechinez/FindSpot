@@ -69,12 +69,6 @@ class PlaceView: UIScrollView {
         contentView.addSubview(self.mapView!)
         self.mapView!.delegate = corespondingVC
         
-//        let blackBackgroundView = UIView()
-//        blackBackgroundView.backgroundColor = .black
-//        blackBackgroundView.alpha = 0.2
-//        contentView.addSubview(blackBackgroundView)
-//        self.blackBackgroundView = blackBackgroundView
-        
         let descriptionLabel = UILabel()
         descriptionLabel.text = place.placeDescription
         descriptionLabel.font = UIFont(name: "OpenSans", size: 18)
@@ -95,21 +89,6 @@ class PlaceView: UIScrollView {
         showImagesButton.addTarget(self.viewController, action: #selector(PlaceViewController.showSpotsImagesMethod), for: .touchUpInside)
         contentView.addSubview(showImagesButton)
         self.showSpotsImagesButton = showImagesButton
-        
-//        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-//        layout.sectionInset = UIEdgeInsets(top: 5, left: 35, bottom: 5, right: 35)
-//        layout.minimumInteritemSpacing = 70
-//        layout.minimumLineSpacing = 70
-//        layout.scrollDirection = .horizontal
-//
-//        let imagesCollection = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
-//        imagesCollection.register(ImagesCollectionCell.self, forCellWithReuseIdentifier: "PlaceViewCell")
-//        imagesCollection.dataSource = corespondingVC
-//        imagesCollection.delegate = corespondingVC
-//        imagesCollection.backgroundColor = UIColor.clear
-//        contentView.addSubview(imagesCollection)
-//        corespondingVC.collectionView = imagesCollection
-//        self.collectionView = imagesCollection
         
         let addToFavoritesButton = UIBarButtonItem(title: "Add spot", style: .plain, target: corespondingVC, action: #selector(PlaceViewController.addToFavorites))
         corespondingVC.navigationItem.rightBarButtonItem = addToFavoritesButton
@@ -133,7 +112,7 @@ class PlaceView: UIScrollView {
         self.backgroundView!.translatesAutoresizingMaskIntoConstraints = false
         self.backgroundView!.topAnchor.constraint(equalTo: self.contentView!.topAnchor).isActive = true
         self.backgroundView!.widthAnchor.constraint(equalTo: self.contentView!.widthAnchor).isActive = true
-        self.backgroundView!.heightAnchor.constraint(equalTo: self.contentView!.heightAnchor, multiplier: 0.4).isActive = true
+        self.backgroundView!.heightAnchor.constraint(equalTo: self.contentView!.heightAnchor, multiplier: 0.5).isActive = true
         
         self.nameLabel!.translatesAutoresizingMaskIntoConstraints = false
         self.nameLabel!.topAnchor.constraint(equalTo: self.contentView!.topAnchor, constant: 20).isActive = true
@@ -153,11 +132,6 @@ class PlaceView: UIScrollView {
         self.mapView!.trailingAnchor.constraint(equalTo: self.contentView!.trailingAnchor, constant: -20).isActive = true
         self.mapView!.heightAnchor.constraint(equalTo: self.contentView!.widthAnchor).isActive = true
         
-//        self.blackBackgroundView!.translatesAutoresizingMaskIntoConstraints = false
-//        self.blackBackgroundView!.topAnchor.constraint(equalTo: self.mapView!.bottomAnchor, constant: 20).isActive = true
-//        self.blackBackgroundView!.widthAnchor.constraint(equalTo: self.contentView!.widthAnchor).isActive = true
-//        self.blackBackgroundView!.bottomAnchor.constraint(equalTo: self.contentView!.bottomAnchor).isActive = true
-        
         self.descriptionLabel!.translatesAutoresizingMaskIntoConstraints = false
         self.descriptionLabel!.topAnchor.constraint(equalTo: self.mapView!.bottomAnchor, constant: 20).isActive = true
         self.descriptionLabel!.leadingAnchor.constraint(equalTo: self.contentView!.leadingAnchor, constant: 20).isActive = true
@@ -169,14 +143,6 @@ class PlaceView: UIScrollView {
         self.showSpotsImagesButton!.widthAnchor.constraint(equalTo: self.contentView!.widthAnchor, multiplier: 0.6).isActive = true
         self.showSpotsImagesButton!.heightAnchor.constraint(equalToConstant: 55).isActive = true
         self.showSpotsImagesButton!.bottomAnchor.constraint(equalTo: self.contentView!.bottomAnchor, constant: -20).isActive = true
-        
-        
-//        self.collectionView!.translatesAutoresizingMaskIntoConstraints = false
-//        self.collectionView!.topAnchor.constraint(equalTo: self.descriptionLabel!.bottomAnchor, constant: 5).isActive = true
-//        self.collectionView!.leadingAnchor.constraint(equalTo: self.contentView!.leadingAnchor, constant: 20).isActive = true
-//        self.collectionView!.trailingAnchor.constraint(equalTo: self.contentView!.trailingAnchor, constant: -20).isActive = true
-//        self.collectionView!.heightAnchor.constraint(equalToConstant: self.collectionViewHeight! - 40).isActive = true
-//        self.collectionView!.bottomAnchor.constraint(equalTo: self.contentView!.bottomAnchor, constant: -20).isActive = true
         
     }
     
