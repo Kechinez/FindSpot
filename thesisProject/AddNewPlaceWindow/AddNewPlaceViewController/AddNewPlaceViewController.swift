@@ -10,6 +10,7 @@ import UIKit
 import Photos
 import GoogleMaps
 
+
 class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UITextViewDelegate, GMSMapViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource {
     
     var currentUserLocation: CLLocationCoordinate2D?
@@ -33,9 +34,7 @@ class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelega
         let topBarHeight = UIApplication.shared.statusBarFrame.size.height +
             (self.navigationController?.navigationBar.frame.height ?? 0.0)
         let newPlaceView = AddNewPlaceView(frame: CGRect(x: 0, y: topBarHeight, width: self.view.frame.size.width, height: self.view.frame.size.height - topBarHeight), with: self)
-        //self.view.addSubview(newPlaceView)
         self.newPlaceView = newPlaceView
-        
     }
     
     
@@ -52,18 +51,18 @@ class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelega
     
     
     
+    
     // MARK: - UIImagePickerControllerDelegate methods
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        
         self.imageTag += 1
+        
         if self.imageTag == 1 || self.imageTag == 3 {
             self.newPlaceView!.increaseHeightOfImageCollectionXTimesBigger(x: self.imageTag)
         }
         
         let selectedImage = info[UIImagePickerControllerEditedImage] as? UIImage
-
-        ifLocationSourceisPhoto: if !self.manualChoosingLocation {
+        ifLocationSourceIsPhoto: if !self.manualChoosingLocation {
             if let asset = info[UIImagePickerControllerPHAsset] as? PHAsset {
                 guard let photoLocation = asset.location else {
                     DispatchQueue.main.async {
@@ -71,7 +70,7 @@ class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelega
                         let error = NSError(domain: "errorDomain", code: 100, userInfo: userInfo)
                         ErrorManager.shared.showErrorMessage(with: error, shownAt: self)
                     }
-                    break ifLocationSourceisPhoto
+                    break ifLocationSourceIsPhoto
                 }
                 if self.autoChosenLocation == nil {
                     self.autoChosenLocation = photoLocation.coordinate
@@ -88,14 +87,11 @@ class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelega
                         }
                     }
                 }
-                
             }
         }
-        
         self.uploadedPhotos.append(selectedImage!)
         let cellIndexPathOfImage = IndexPath(row: self.imageTag - 1, section: 0)
         self.newPlaceView!.imagesCollectionView!.reloadItems(at: [cellIndexPathOfImage])
-        
         picker.dismiss(animated: true, completion: nil)
     }
     
@@ -137,6 +133,7 @@ class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelega
     
     
     
+    
     // MARK: - UICollectionView DataSource methods:
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -163,10 +160,8 @@ class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelega
     
     
     
+    
     // MARK: - TextField delegate methods:
-    
-   
-    
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
@@ -175,8 +170,8 @@ class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelega
     
     
     
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool
-    {
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+       
         if(text == "\n")
         {
             if textView.text == "" {
@@ -202,13 +197,10 @@ class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelega
             self.newPlaceView!.setCameraOnTheMap(with: self.currentUserLocation!)
         } else {
             self.manualChoosingLocation = false
-            guard let placeLocation = self.autoChosenLocation else {
-                return
-            }
+            guard let placeLocation = self.autoChosenLocation else { return }
             self.newPlaceView!.setCameraOnTheMap(with: placeLocation)
             self.newPlaceView!.setMarkerOnTheMap(with: placeLocation)
         }
-        
     }
     
     
@@ -222,11 +214,10 @@ class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelega
             if self.imageTag == 3 || self.imageTag == 1 {
                 self.newPlaceView!.decreaseHeightOfImageCollectionXTimesFewer(x: self.imageTag)
             }
-    
+            
             self.imageTag -= 1
             self.newPlaceView!.imagesCollectionView!.reloadData()
         }
-        
     }
     
     
@@ -245,7 +236,7 @@ class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelega
         guard self.imageTag < 5 else { return }
         let photos = PHPhotoLibrary.authorizationStatus()
         if photos == .notDetermined {
-            PHPhotoLibrary.requestAuthorization({status in
+            PHPhotoLibrary.requestAuthorization({ status in
                 if status == .authorized {
                 }
             })
@@ -288,8 +279,8 @@ class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelega
             navigationController.popViewController(animated: true)
         }
     }
-
-
+    
+    
     
     
     
@@ -307,6 +298,6 @@ class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelega
         self.newPlaceView!.decreaseContentHeightWhileShowingKeyboard(with: self.imageTag)
     }
     
-
+    
 }
 

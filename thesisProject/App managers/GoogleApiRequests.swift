@@ -9,7 +9,6 @@
 import Foundation
 import CoreLocation
 
-
 enum APIResult<T> {
     case Success(T)
     case Failure(Error)
@@ -19,7 +18,7 @@ enum APIResult<T> {
 private enum GoogleAPIRequests {
     case GeocodingAPI(coordinate: String)
     case DirectionAPI(sourceCoordinate: String, destCoordinate: String)
-
+    
     private var baseURL: URL {
         return URL(string: "https://maps.googleapis.com/maps/api/")!
     }
@@ -27,7 +26,7 @@ private enum GoogleAPIRequests {
     private var apiKey: String {
         return "AIzaSyAmV1T_J6_noWuMYBJukYv3-eDBvhr3zmY"
     }
-
+    
     private var path: String {
         switch self {
         case GoogleAPIRequests.DirectionAPI(let sourceCoordinate, let destCoordinate):
@@ -36,7 +35,6 @@ private enum GoogleAPIRequests {
             return "geocode/json?latlng=\(coordinate)&result_type=locality&language=en&key=\(apiKey)"
         }
     }
-
     var request: URLRequest {
         let url = URL(string: path, relativeTo: baseURL)
         return URLRequest(url: url!)
@@ -48,7 +46,6 @@ private enum GoogleAPIRequests {
 class GoogleApiRequests {
     static let shared = GoogleApiRequests()
     private init() {}
-    
     
     
     func coordinatesToAddressRequest(with coordiantes: CLLocationCoordinate2D, completionHandler: @escaping (APIResult<RequestedCity>) -> ()) {
@@ -73,18 +70,16 @@ class GoogleApiRequests {
                     }
                     return
                 }
-                
                 DispatchQueue.main.async {
                     completionHandler(APIResult<RequestedCity>.Success(city))
                 }
-            
             } catch {
                 print("can't convert to JSON object!")
             }
         }
         task.resume()
-        
     }
+    
     
     
     func getRouteRequest(with startCoordinate: CLLocationCoordinate2D, and finishCoordinate: CLLocationCoordinate2D, completionHandler: @escaping (APIResult<RequestedRoute>) -> ()) {
@@ -102,7 +97,6 @@ class GoogleApiRequests {
                 }
                 return 
             }
-            
             do {
                 let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON
                 if let routeInfo = RequestedRoute(data: json) {
@@ -124,7 +118,7 @@ class GoogleApiRequests {
         return stringCoordinates
     }
     
-
+    
 }
 
 

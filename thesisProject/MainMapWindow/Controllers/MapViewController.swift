@@ -10,20 +10,23 @@ import UIKit
 import GoogleMaps
 import Firebase
 class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManagerDelegate, UITextFieldDelegate, UITabBarControllerDelegate {
-
+    
     private var locationManager: CLLocationManager?
     var userCurrentLocation: CLLocationCoordinate2D?
     private var userCurrentCity: String?
     private var mainView: MainMapView?
     private var allPlaces: [Place]? = []
-    //private let databaseManager = DataBaseManager()
     var favorites: [Place]?
     private var userDatabaseRef: DatabaseReference?
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        //self.view.translatesAutoresizingMaskIntoConstraints = false
+        
+        if let tabBarController = self.tabBarController {
+            tabBarController.delegate = self
+        }
         self.navigationItem.title = "FindSpot"
         guard let currentUser = Auth.auth().currentUser else { return }
         self.userDatabaseRef = Database.database().reference(withPath: "users").child(String(currentUser.uid)).child("favorites")
@@ -32,30 +35,12 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
         locationManager = CLLocationManager()
         locationManager!.delegate = self
         
-//        if CLLocationManager.authorizationStatus() != .authorizedWhenInUse     {
-//            locationManager!.requestWhenInUseAuthorization()
-//        } else {
-//            locationManager!.requestWhenInUseAuthorization()
-//            locationManager!.desiredAccuracy = kCLLocationAccuracyBest
-//            self.userCurrentLocation = locationManager!.location!.coordinate
-//        }
-        
-        
-        if let tabBarController = self.tabBarController {
-            tabBarController.delegate = self
-        }
-//        let tabBarHeight = self.tabBarController?.tabBar.frame.height ?? 0.0
-//        let topBarHeight = UIApplication.shared.statusBarFrame.size.height +
-//            (self.navigationController?.navigationBar.frame.height ?? 0.0)
-        
-        
         
         let tempCoordinate = CLLocationCoordinate2D(latitude: 59.882023, longitude: 30.339113) //  temp coordinates should be used to emulate Saint-P current location
-     self.userCurrentLocation = tempCoordinate
+        self.userCurrentLocation = tempCoordinate
         mainView = MainMapView(viewController: self)
         
         GoogleApiRequests.shared.coordinatesToAddressRequest(with: tempCoordinate) { (city) in
-            
             switch city {
             case  .Success(let foundCity):
                 self.userCurrentCity = foundCity.cityName
@@ -63,8 +48,8 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
                 ErrorManager.shared.showErrorMessage(with: error, shownAt: self)
                 return
             }
+            
             DataBaseManager.shared.getPlacesWithin(city: self.userCurrentCity!) { (places) in
-                
                 switch places {
                 case  .Success(let places):
                     self.allPlaces = places
@@ -74,20 +59,19 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
                 case .Failure(let error):
                     ErrorManager.shared.showErrorMessage(with: error, shownAt: self)
                 }
-            
             }
-        
         }
-  
     }
-        
-
+    
+    
+    
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         guard let favoritesVC = viewController as? UINavigationController else { return }
         guard let vc = favoritesVC.childViewControllers.first as? FavoritesViewController else { return }
         vc.userCurrentLocation = self.userCurrentLocation!
-        
     }
+    
+    
     
     
     
@@ -117,20 +101,20 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
     
     
     
-
+    
     // MARK: - Methods showing map's elements:
     
     func showFoundPlace(with coordinates: CLLocationCoordinate2D, info: String) {
         let marker = GMSMarker()
         marker.position = coordinates
         marker.title = info
-       // marker.map = self.mainView!.mapView
         marker.map = self.mainView!.mapView
     }
     
     
     
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
+        
         for (index, place) in self.allPlaces!.enumerated() {
             guard marker.position.latitude == place.coordinates.latitude,
                   marker.position.longitude == place.coordinates.longitude  else { continue }
@@ -145,13 +129,13 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
     }
     
     
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         if let tabBarController = self.tabBarController {
             tabBarController.tabBar.isHidden = false
         }
-
     }
     
     
@@ -162,7 +146,7 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
     
     // MARK: - NavigationBar's buttons action methods:
     
-     @objc func addNewPlace() {
+    @objc func addNewPlace() {
         if let navigationController = self.navigationController {
             let newPlaceVC = AddNewPlaceViewController()
             newPlaceVC.currentUserLocation = self.userCurrentLocation
@@ -180,6 +164,7 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
         }
         dismiss(animated: true, completion: nil)
     }
+    
     
     
 }

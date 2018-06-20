@@ -62,7 +62,7 @@ class LoginView: UIScrollView {
         
         let atributedPlaceholder = NSMutableAttributedString(string: "write your password")
         atributedPlaceholder.addAttributes(attributesDictionary, range: NSRange (location:0, length: atributedPlaceholder.length))
-
+        
         let passwordTextField = UITextField()
         passwordTextField.attributedPlaceholder = atributedPlaceholder
         passwordTextField.font = textFieldFont!
@@ -114,7 +114,7 @@ class LoginView: UIScrollView {
         self.setTextFieldsForLoginUsage()
         self.setUpConstraints()
     }
-
+    
     
     
     required init?(coder aDecoder: NSCoder) {
@@ -162,12 +162,13 @@ class LoginView: UIScrollView {
     
     
     
-    func createRegisterView() {
-        let registerView = RegisterView(with: self, loginViewController: self.viewController)
-        self.registerView = registerView
-    }
     
     
+    
+    
+    
+    
+    //MARK: - setting UITextField delegate methods
     
     func setTextFieldsForLoginUsage() {
         self.viewController.emailTextField = self.emailTextField
@@ -181,6 +182,11 @@ class LoginView: UIScrollView {
         self.passwordTextField?.delegate = self.viewController
     }
     
+    
+    
+    
+    
+    //MARK: - animating appearing/disappearing of RegisterView methods
     
     
     func setAnimationOf(type: AnimationType) {
@@ -204,6 +210,18 @@ class LoginView: UIScrollView {
     
     
     
+    func createRegisterView() {
+        let registerView = RegisterView(with: self, loginViewController: self.viewController)
+        self.registerView = registerView
+    }
+    
+    
+    
+    
+    
+    
+    //MARK: -Adjasting content size methods
+    
     func increaseContentSizeOn(value: CGFloat) {
         self.contentSize = CGSize(width: self.bounds.width, height: self.bounds.height + value)
         self.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: value, right: 0)
@@ -216,7 +234,6 @@ class LoginView: UIScrollView {
             self.contentSize = CGSize(width: self.bounds.width, height: self.bounds.height)
         }, completion: nil)
     }
-   
     
 }
 

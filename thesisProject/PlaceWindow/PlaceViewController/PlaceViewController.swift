@@ -10,13 +10,13 @@ import UIKit
 import GoogleMaps
 class PlaceViewController: UIViewController, UINavigationControllerDelegate, GMSMapViewDelegate {
     private var images: [UIImage] = []
-    var placeView: PlaceView?
+    private var placeView: PlaceView?
     var place: Place?
-    var imagesCollectionView: ImagesCollectionController?
+    private var imagesCollectionView: ImagesCollectionController?
     var userLocation: CLLocationCoordinate2D?
-    var distanceForInfoWin: String?
-    var timeForInfoWin: String?
-    var infoWindow: InfoWindowView?
+    private var distanceForInfoWin: String?
+    private var timeForInfoWin: String?
+    private var infoWindow: InfoWindowView?
     
     
     
@@ -24,23 +24,20 @@ class PlaceViewController: UIViewController, UINavigationControllerDelegate, GMS
         super.viewDidLoad()
         
         GoogleApiRequests.shared.getRouteRequest(with: self.userLocation!, and: self.place!.coordinates) { (route) in
-
             switch route {
             case  .Success(let route):
                 self.distanceForInfoWin = route.distance
                 self.timeForInfoWin = route.time
                 self.showPath(polyline: route.polylinePath)
             case .Failure(let error):
-               ErrorManager.shared.showErrorMessage(with: error, shownAt: self)
+                ErrorManager.shared.showErrorMessage(with: error, shownAt: self)
                 return
             }
         }
-
+        
         let topBarHeight = UIApplication.shared.statusBarFrame.size.height +
             (self.navigationController?.navigationBar.frame.height ?? 0.0)
-        
         let placeView = PlaceView(with: CGRect(x: 0, y: topBarHeight, width: self.view.frame.size.width, height: self.view.frame.size.height - topBarHeight) , place: self.place!, and: self)
-        
         self.placeView = placeView
         
         PhotoManager.shared.getPhotoFromStorage(using: place!.photosDownloadURLs) { (images) in
@@ -50,12 +47,12 @@ class PlaceViewController: UIViewController, UINavigationControllerDelegate, GMS
         }
         
     }
-
+    
     
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+    
         if let tabBarController = self.tabBarController {
             tabBarController.tabBar.isHidden = true
         }
@@ -76,8 +73,8 @@ class PlaceViewController: UIViewController, UINavigationControllerDelegate, GMS
             polylineDraw.strokeColor = UIColor.red
             polylineDraw.map = self.placeView!.mapView!
         }
-        
     }
+    
     
     
     func setUpRouteDetails() {
@@ -85,16 +82,15 @@ class PlaceViewController: UIViewController, UINavigationControllerDelegate, GMS
             self.infoWindow!.distanceLable!.text = "route distance: \(self.distanceForInfoWin!)"
             self.infoWindow!.timeLable!.text = "route time: \(self.timeForInfoWin!)"
         }
-        
     }
-
+    
     
     
     
     
     
     // MARK: - GMSMapView Delegate methods:
-
+    
     func mapView(_ mapView: GMSMapView, markerInfoWindow marker: GMSMarker) -> UIView? {
         if self.infoWindow == nil {
             let infoWindow = InfoWindowView(frame: CGRect(x: 0, y: 0, width: 200, height: 50), with: self)
@@ -113,6 +109,7 @@ class PlaceViewController: UIViewController, UINavigationControllerDelegate, GMS
     
     
     
+    
     // MARK: - Additional methods
     
     
@@ -120,7 +117,6 @@ class PlaceViewController: UIViewController, UINavigationControllerDelegate, GMS
         self.navigationItem.rightBarButtonItem!.isEnabled = false
         self.navigationItem.rightBarButtonItem!.tintColor = #colorLiteral(red: 0.8497060029, green: 0.8497060029, blue: 0.8497060029, alpha: 1)
         DataBaseManager.shared.addPlaceToFavorites(with: self.place!)
-        
     }
     
     
@@ -131,6 +127,7 @@ class PlaceViewController: UIViewController, UINavigationControllerDelegate, GMS
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         let imagesCollection = ImagesCollectionController(collectionViewLayout: layout, expectedNumberOfItems: self.place!.photosDownloadURLs.count)
         self.imagesCollectionView = imagesCollection
+        
         if self.images.count > 0 {
             imagesCollection.images = self.images
         }
@@ -144,6 +141,6 @@ class PlaceViewController: UIViewController, UINavigationControllerDelegate, GMS
         guard let imagesCollection = self.imagesCollectionView else { return }
         imagesCollection.images = self.images
     }
-
-
+    
+    
 }

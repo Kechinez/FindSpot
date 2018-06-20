@@ -23,7 +23,6 @@ class ImagesCollectionCell: UICollectionViewCell, UIGestureRecognizerDelegate {
         self.backgroundColor = UIColor.clear
         self.clipsToBounds = false
         
-        //self.image.clipsToBounds = true
         self.image.contentMode = .scaleAspectFit
         self.contentView.addSubview(image)
         self.image.isUserInteractionEnabled = true
@@ -68,7 +67,6 @@ class ImagesCollectionCell: UICollectionViewCell, UIGestureRecognizerDelegate {
                 self.delegate!.collectionView!.isScrollEnabled = false
             }
         } else if sender.state == .changed {
-            
             guard let view = sender.view else { return }
             
             let pinchCenter = CGPoint(x: sender.location(in: view).x - view.bounds.midX,
@@ -76,10 +74,9 @@ class ImagesCollectionCell: UICollectionViewCell, UIGestureRecognizerDelegate {
             let transform = view.transform.translatedBy(x: pinchCenter.x, y: pinchCenter.y)
                 .scaledBy(x: sender.scale, y: sender.scale)
                 .translatedBy(x: -pinchCenter.x, y: -pinchCenter.y)
-            
+        
             let currentScale = self.image.frame.size.width / self.image.bounds.size.width
             var newScale = currentScale * sender.scale
-            
             if newScale < 1 {
                 newScale = 1
                 let transform = CGAffineTransform(scaleX: newScale, y: newScale)
@@ -103,7 +100,6 @@ class ImagesCollectionCell: UICollectionViewCell, UIGestureRecognizerDelegate {
                 self.isZooming = false
             })
         }
-        
     }
     
     
@@ -135,9 +131,7 @@ class ImagesCollectionCell: UICollectionViewCell, UIGestureRecognizerDelegate {
         self.image.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor).isActive = true
         self.image.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor).isActive = true
         self.image.heightAnchor.constraint(equalTo: self.contentView.heightAnchor).isActive = true
-    
-        
-    
+
     }
     
     
@@ -145,6 +139,5 @@ class ImagesCollectionCell: UICollectionViewCell, UIGestureRecognizerDelegate {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-   
     
 }

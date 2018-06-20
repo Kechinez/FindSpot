@@ -17,6 +17,7 @@ class DataBaseManager {
     
     private init() {}
     
+    
     func getPlacesWithin(city: String, completionHandler: @escaping (APIResult<[Place]>) -> ()) {
         let modifiedCityString = self.prepareString(string: city)
         let placesQuery = self.ref.queryOrdered(byChild: "city").queryEqual(toValue: modifiedCityString)
@@ -47,9 +48,9 @@ class DataBaseManager {
             }
         })
     }
-        
-   
- 
+    
+    
+    
     func getUserFavorites(completionHandler: @escaping (APIResult<[Place]>) -> ()) {
         
         self.userRef!.observe(.value) { (snapshot) in
@@ -61,10 +62,9 @@ class DataBaseManager {
                         completionHandler(.Failure(error))
                     }
                     return
-                    
                 }
-                var favorites: [Place] = []
                 
+                var favorites: [Place] = []
                 for child in snapshot.children {
                     guard let data = child as? DataSnapshot else { continue }
                     guard let foundPlace = data.value as? JSON else { continue }
@@ -72,7 +72,6 @@ class DataBaseManager {
                         favorites.append(place)
                     }
                 }
-                
                 DispatchQueue.main.async {
                     completionHandler(.Success(favorites))
                 }
@@ -109,19 +108,16 @@ class DataBaseManager {
     func deleteDatabaseValue(with stringCoordinate: String) {
         let deleteRef = self.recreatePlaceDataReference(from: stringCoordinate)
         deleteRef.removeValue()
-        
     }
     
     
     
     func addPlaceToFavorites(with place: Place) {
-        
         var placeName = "\(place.coordinates.latitude)"
         placeName = self.cutAllSymbols(in: placeName)
         let reference = userRef?.child(placeName)
         var tempPlace = place
         reference!.setValue(tempPlace.convertToJSON())
-        
     }
     
     
@@ -132,7 +128,5 @@ class DataBaseManager {
         let recreatedReference = self.userRef!.child(cutCoordinate)
         return recreatedReference
     }
-    
-    
     
 }

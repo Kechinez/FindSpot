@@ -21,6 +21,7 @@ enum TextFeildsErrorType: String {
     case passwordError =         "must be more than 8 letters"
 }
 
+
 class LoginViewController: UIViewController, UITextFieldDelegate {
     var passTextField: UITextField?
     var emailTextField: UITextField?
@@ -35,7 +36,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         let loginView = LoginView(withAssociated: self)
         self.loginView = loginView
-        //self.view.addSubview(self.loginView!)
         ref = Database.database().reference(withPath: "users")
         
         Auth.auth().addStateDidChangeListener { [weak self](auth, user) in
@@ -72,8 +72,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             }
             
             self?.setViewController()
-            
-            
         }
     }
     
@@ -92,6 +90,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 return
             }
         }
+        
         Auth.auth().createUser(withEmail: self.emailTextField!.text!, password: self.passTextField!.text!) { [weak self] (user, error) in
             
             let userName = self?.nameTextField?.text
@@ -101,12 +100,10 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             }
             guard let userRef = self?.ref.child((user?.uid)!) else { return }
             userRef.setValue(["name": userName])
-            
-            
             self?.setViewController()
-            
         }
     }
+    
     
     
     
@@ -126,6 +123,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @objc func keyboardDidHide() {
         self.loginView!.decreaseContentSizeToDefaultValues()
     }
+    
     
     
     
@@ -211,7 +209,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
         
         self.registrationIsAllowed[textField.tag] = true
-        
     }
     
     
@@ -229,18 +226,15 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         tabBarController.viewControllers = tabBarArray.map { UINavigationController(rootViewController: $0)}
         
         self.present(tabBarController, animated: true, completion: nil)
-        
-        
     }
-   
-    
-    
+  
     
 }
 
 
 
 
+//MARK: - email checking extention
 extension String {
     func isEmail() -> Bool {
         let firstPart = "[A-Z0-9a-z]([A-Z0-9a-z._%+-]{0,30}[A-Z0-9a-z])?"

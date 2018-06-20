@@ -13,6 +13,8 @@ class UserImagesCell: UICollectionViewCell {
     let imageView: UIImageView
     var gestureRecognizer: UILongPressGestureRecognizer?
     
+    
+    
     override init(frame: CGRect) {
         self.imageView = UIImageView()
         super.init(frame: frame)
@@ -22,7 +24,6 @@ class UserImagesCell: UICollectionViewCell {
         self.imageView.alpha = 0.5
         self.addSubview(imageView)
         self.bringSubview(toFront: imageView)
-
     }
     
     
@@ -40,12 +41,10 @@ class UserImagesCell: UICollectionViewCell {
         guard let gestureRecognizer = self.gestureRecognizer else { return }
         self.removeGestureRecognizer(gestureRecognizer)
         self.gestureRecognizer = nil
-        
-        
     }
     
     
-
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

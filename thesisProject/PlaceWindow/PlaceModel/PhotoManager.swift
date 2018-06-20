@@ -22,7 +22,6 @@ class PhotoManager {
     static let shared = PhotoManager()
     
     
-    
     private init() {}
     
     
@@ -35,16 +34,12 @@ class PhotoManager {
                 self.dispatchGroup.enter()
                 let gsReference = self.storage.reference(forURL: url.absoluteString)
                 gsReference.getData(maxSize: 6 * 1024 * 1024) { (data, error) in
-                    
                     if let problem = error {
                         print(problem.localizedDescription)
                         return
                     }
-                    
                     self.images.append(data: data!, with: self.dispatchGroup)
-                    
                 }
-                
             }
             
             self.dispatchGroup.notify(queue: DispatchQueue.main, execute: {
@@ -52,7 +47,8 @@ class PhotoManager {
             })
         }
     }
-
+    
+    
     
     func uploadPhotos(with photos: [UIImage], and location: CLLocationCoordinate2D, comletionHandler: @escaping ([URL]?) -> ()) {
         
@@ -61,7 +57,6 @@ class PhotoManager {
             func createStorageReferenceFromCoordinate(coordinate: String, with photoIndex: Int) -> StorageReference {
                 if self.fileFolderName == nil {
                     self.fileFolderName = coordinate.trimmingCharacters(in: ["+", "-", ",", "/"]).replacingOccurrences(of: ".", with: "")
-                    
                 }
                 let fileName = "\(self.fileFolderName!)\(photoIndex)"
                 return StorageReference().child("placesImages").child("\(self.fileFolderName!)/\(fileName)")
@@ -71,11 +66,10 @@ class PhotoManager {
             metaData.contentType = "image/jpeg"
             
             for (index, photo) in photos.enumerated() {
-               
                 self.dispatchGroup.enter()
                 guard let data = UIImagePNGRepresentation(photo) else { break }
-                let storageRef = createStorageReferenceFromCoordinate(coordinate: "\(location.latitude)", with: index)
                 
+                let storageRef = createStorageReferenceFromCoordinate(coordinate: "\(location.latitude)", with: index)
                 storageRef.putData(data, metadata: metaData) { (metaData, error) in
                     guard let metaData = metaData else { return }
                     if let downloadURL = metaData.downloadURL() {
@@ -87,11 +81,8 @@ class PhotoManager {
                 comletionHandler(self.downloadURLs.threadSafeURLs)
             })
         }
-        
     }
     
-    
-
     
 }
 

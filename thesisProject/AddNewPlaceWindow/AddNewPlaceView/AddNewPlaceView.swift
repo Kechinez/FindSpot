@@ -107,7 +107,6 @@ class AddNewPlaceView: UIScrollView {
         self.contentView.addSubview(placeInfoTextView)
         self.placeDescr = placeInfoTextView
         
-        
         let placeHolderLabel = UILabel()
         placeHolderLabel.backgroundColor = .clear
         atributedPlaceholder.mutableString.setString("Describe spot here")
@@ -135,8 +134,9 @@ class AddNewPlaceView: UIScrollView {
         viewController.navigationItem.rightBarButtonItem = savePlaceBarButton
         
         self.setUpConstraints()
-    
+        
     }
+    
     
     
     private func setUpConstraints() {
@@ -211,7 +211,7 @@ class AddNewPlaceView: UIScrollView {
         self.imagesCollectionViewBottomConstraint = self.imagesCollectionView!.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -20)
         self.imagesCollectionView!.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 20).isActive = true
         self.imagesCollectionView!.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -20).isActive = true
-    
+        
     }
     
     
@@ -220,12 +220,15 @@ class AddNewPlaceView: UIScrollView {
         if bool {
             self.placeholderLabel!.alpha = 0.0
         } else {
-           self.placeholderLabel!.alpha = 1.0
+            self.placeholderLabel!.alpha = 1.0
         }
     }
     
     
     
+    
+    
+    //MARK: - Map interaction methods
     
     
     func setMarkerOnTheMap(with coordinates: CLLocationCoordinate2D) {
@@ -243,8 +246,87 @@ class AddNewPlaceView: UIScrollView {
     }
     
     
+    
+    
+    
+    
+    //MARK: - Keyboard methods updating autolayout
+    
+    
+    func increaseContentHeightWhileShowingKeyboard(with keyboardRect: CGRect, currentImageTag: Int) {
+        var frameOfCurrentFirstResponder = CGRect.zero
+        if self.placeName!.isFirstResponder {
+            frameOfCurrentFirstResponder = self.placeName!.frame
+        } else {
+            frameOfCurrentFirstResponder = self.placeDescr!.frame
+        }
+        var constraintHeight: CGFloat = 0.0
+        
+        switch currentImageTag {
+        case 0:
+            let deltaHeight = self.placeDescr!.frame.maxY - keyboardRect.height
+            constraintHeight = frameOfCurrentFirstResponder.maxY - deltaHeight  + 6
+            self.descrLabelBottomConstraint!.isActive = false
+            self.descrLabelBottomConstraint = self.placeDescr!.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -constraintHeight)
+            self.descrLabelBottomConstraint!.isActive = true
+        case 1...2:
+            let deltaHeight = self.imagesCollectionView!.frame.maxY - keyboardRect.height
+            constraintHeight = frameOfCurrentFirstResponder.maxY - deltaHeight + 6
+            self.imagesCollectionViewBottomConstraint!.isActive = false
+            self.imagesCollectionViewBottomConstraint = self.imagesCollectionView!.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -constraintHeight)
+            self.imagesCollectionViewBottomConstraint!.isActive = true
+        case 3...4:
+            let deltaHeight = self.imagesCollectionView!.frame.maxY - keyboardRect.height
+            constraintHeight = deltaHeight - frameOfCurrentFirstResponder.maxY - 6
+            self.imagesCollectionViewBottomConstraint!.isActive = false
+            self.imagesCollectionViewBottomConstraint = self.imagesCollectionView!.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: constraintHeight)
+            self.imagesCollectionViewBottomConstraint!.isActive = true
+        default: break
+        }
+        
+        UIView.animate(withDuration: 0.3, animations: {
+            self.layoutIfNeeded()
+        })
+        
+        let keyboardOriginY = self.bounds.height - keyboardRect.height
+        let deltaHeight = frameOfCurrentFirstResponder.maxY + 6 - keyboardOriginY
+        let pointOffSet = CGPoint(x: 0, y: deltaHeight)
+        self.setContentOffset(pointOffSet, animated: true)
+        
+    }
+    
+    
+    
+    func decreaseContentHeightWhileShowingKeyboard(with currentImageTag: Int) {
+        
+        switch currentImageTag {
+        case 0:
+            self.descrLabelBottomConstraint!.isActive = false
+            self.descrLabelBottomConstraint = self.placeDescr!.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -20)
+            self.descrLabelBottomConstraint!.isActive = true
+        case 1...4:
+            self.imagesCollectionViewBottomConstraint!.isActive = false
+            self.imagesCollectionViewBottomConstraint = self.imagesCollectionView!.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -20)
+            self.imagesCollectionViewBottomConstraint!.isActive = true
+        default: break
+        }
+        
+        UIView.animate(withDuration: 0.3, animations: {
+            self.layoutIfNeeded()
+        })
+    }
+    
+    
+    
+    
+    
+    
+    //MARK: - Methods updating image collectionView height while adding new user photos
+    
+    
     func increaseHeightOfImageCollectionXTimesBigger(x: Int) {
         let imageSide = (self.bounds.width - 40) / 2 - 10
+        
         switch x {
         case 1:
             self.descrLabelBottomConstraint!.isActive = false
@@ -261,6 +343,7 @@ class AddNewPlaceView: UIScrollView {
             self.imagesCollectionViewBottomConstraint!.isActive = true
         default: break
         }
+        
         UIView.animate(withDuration: 0.3){
             self.layoutIfNeeded()
         }
@@ -270,6 +353,7 @@ class AddNewPlaceView: UIScrollView {
     
     func decreaseHeightOfImageCollectionXTimesFewer(x: Int) {
         let imageSide = (self.bounds.width - 40) / 2 - 10
+        
         switch x {
         case 1:
             self.descrLabelBottomConstraint = self.placeDescr!.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -20)
@@ -287,85 +371,19 @@ class AddNewPlaceView: UIScrollView {
             self.imagesCollectionViewBottomConstraint!.isActive = true
         default: break
         }
+        
         UIView.animate(withDuration: 0.3){
             self.layoutIfNeeded()
         }
     }
     
-
-    func increaseContentHeightWhileShowingKeyboard(with keyboardRect: CGRect, currentImageTag: Int) {
-        var frameOfCurrentFirstResponder = CGRect.zero
-        if self.placeName!.isFirstResponder {
-            frameOfCurrentFirstResponder = self.placeName!.frame
-        } else {
-            frameOfCurrentFirstResponder = self.placeDescr!.frame
-        }
-        var constraintHeight: CGFloat = 0.0
-        
-        switch currentImageTag {
-        case 0:
-            let deltaHeight = self.placeDescr!.frame.maxY - keyboardRect.height
-            constraintHeight = frameOfCurrentFirstResponder.maxY - deltaHeight  + 6
-            self.descrLabelBottomConstraint!.isActive = false
-            self.descrLabelBottomConstraint = self.placeDescr!.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -constraintHeight)
-            self.descrLabelBottomConstraint!.isActive = true
-        
-        case 1...2:
-            let deltaHeight = self.imagesCollectionView!.frame.maxY - keyboardRect.height
-            constraintHeight = frameOfCurrentFirstResponder.maxY - deltaHeight + 6
-            self.imagesCollectionViewBottomConstraint!.isActive = false
-            self.imagesCollectionViewBottomConstraint = self.imagesCollectionView!.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -constraintHeight)
-            self.imagesCollectionViewBottomConstraint!.isActive = true
-            
-        case 3...4:
-            let deltaHeight = self.imagesCollectionView!.frame.maxY - keyboardRect.height
-            constraintHeight = deltaHeight - frameOfCurrentFirstResponder.maxY - 6
-            self.imagesCollectionViewBottomConstraint!.isActive = false
-            self.imagesCollectionViewBottomConstraint = self.imagesCollectionView!.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: constraintHeight)
-            self.imagesCollectionViewBottomConstraint!.isActive = true
-            
-        default: break
-        }
-        
-        UIView.animate(withDuration: 0.3, animations: {
-            self.layoutIfNeeded()
-        })
-        let keyboardOriginY = self.bounds.height - keyboardRect.height
-        let deltaHeight = frameOfCurrentFirstResponder.maxY + 6 - keyboardOriginY
-        let pointOffSet = CGPoint(x: 0, y: deltaHeight)
-        self.setContentOffset(pointOffSet, animated: true)
-        
-    }
     
     
-    
-    func decreaseContentHeightWhileShowingKeyboard(with currentImageTag: Int) {
-        
-        switch currentImageTag {
-        case 0:
-           self.descrLabelBottomConstraint!.isActive = false
-           self.descrLabelBottomConstraint = self.placeDescr!.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -20)
-           self.descrLabelBottomConstraint!.isActive = true
-        
-        case 1...4:
-            self.imagesCollectionViewBottomConstraint!.isActive = false
-            self.imagesCollectionViewBottomConstraint = self.imagesCollectionView!.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -20)
-            self.imagesCollectionViewBottomConstraint!.isActive = true
-    
-        default: break
-        }
-        
-        UIView.animate(withDuration: 0.3, animations: {
-            self.layoutIfNeeded()
-        })
-    
-    }
-        
-        
-
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+   
+    
     
 }
 

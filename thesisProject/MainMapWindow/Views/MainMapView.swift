@@ -19,22 +19,10 @@ class MainMapView: UIView {
         self.viewController = viewController
         super.init(frame: CGRect.zero)
         viewController.view.addSubview(self)
-        //viewController.view.translatesAutoresizingMaskIntoConstraints = false
-//        self.translatesAutoresizingMaskIntoConstraints = false
-//        self.topAnchor.constraint(equalTo: viewController.view.safeAreaLayoutGuide.topAnchor).isActive = true
-//        self.leadingAnchor.constraint(equalTo: viewController.view.leadingAnchor).isActive = true
-//        self.trailingAnchor.constraint(equalTo: viewController.view.trailingAnchor).isActive = true
-//        self.bottomAnchor.constraint(equalTo: viewController.view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         
         let map = GMSMapView(frame: CGRect.zero)
         self.addSubview(map)
         self.mapView = map
-        
- //       map.translatesAutoresizingMaskIntoConstraints = false
-//        map.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-//        map.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
-//        map.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
-//        map.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
         
         self.setMapCameraPosition(using: viewController.userCurrentLocation!, with: 15.0)
         map.delegate = viewController
@@ -79,31 +67,29 @@ class MainMapView: UIView {
         viewController.navigationItem.rightBarButtonItem = addNewPlaceBarButton
         
         self.setUpConstraints()
-        
     }
     
     
     
-     private func setUpConstraints() {
+    private func setUpConstraints() {
         
-            self.translatesAutoresizingMaskIntoConstraints = false
-            self.topAnchor.constraint(equalTo: viewController.view.safeAreaLayoutGuide.topAnchor).isActive = true
-            self.leadingAnchor.constraint(equalTo: viewController.view.leadingAnchor).isActive = true
-            self.trailingAnchor.constraint(equalTo: viewController.view.trailingAnchor).isActive = true
-            self.bottomAnchor.constraint(equalTo: viewController.view.safeAreaLayoutGuide.bottomAnchor).isActive = true
-            
-            self.mapView!.translatesAutoresizingMaskIntoConstraints = false
-            self.mapView!.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-            self.mapView!.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
-            self.mapView!.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
-            self.mapView!.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
-            
-            self.searchTextField!.translatesAutoresizingMaskIntoConstraints = false
-            self.searchTextField!.topAnchor.constraint(equalTo: self.topAnchor, constant: 12).isActive = true
-            self.searchTextField!.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-            self.searchTextField!.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.7).isActive = true
-            self.searchTextField!.heightAnchor.constraint(equalToConstant: 45).isActive = true
+        self.translatesAutoresizingMaskIntoConstraints = false
+        self.topAnchor.constraint(equalTo: viewController.view.safeAreaLayoutGuide.topAnchor).isActive = true
+        self.leadingAnchor.constraint(equalTo: viewController.view.leadingAnchor).isActive = true
+        self.trailingAnchor.constraint(equalTo: viewController.view.trailingAnchor).isActive = true
+        self.bottomAnchor.constraint(equalTo: viewController.view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         
+        self.mapView!.translatesAutoresizingMaskIntoConstraints = false
+        self.mapView!.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+        self.mapView!.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
+        self.mapView!.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
+        self.mapView!.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
+        
+        self.searchTextField!.translatesAutoresizingMaskIntoConstraints = false
+        self.searchTextField!.topAnchor.constraint(equalTo: self.topAnchor, constant: 12).isActive = true
+        self.searchTextField!.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        self.searchTextField!.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.7).isActive = true
+        self.searchTextField!.heightAnchor.constraint(equalToConstant: 45).isActive = true
     }
     
     

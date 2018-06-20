@@ -22,18 +22,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         GMSServices.provideAPIKey(googleApiKey)
         FirebaseApp.configure()
         
-        
         window = UIWindow(frame: UIScreen.main.bounds)
-    
-     
-        
-        
         window?.rootViewController = LoginViewController()
         window?.makeKeyAndVisible()
         
-      
-        
-
         UITabBar.appearance().backgroundColor = #colorLiteral(red: 0.3647058824, green: 0.6549019608, blue: 0.04705882353, alpha: 1)
         UITabBar.appearance().barTintColor = #colorLiteral(red: 0.3647058824, green: 0.6549019608, blue: 0.04705882353, alpha: 1)
         UITabBar.appearance().tintColor = .white
@@ -44,7 +36,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let navBarAttributesDictionary: [NSAttributedStringKey: Any] = [
                 NSAttributedStringKey(rawValue: NSAttributedStringKey.foregroundColor.rawValue): UIColor.white,
                 NSAttributedStringKey(rawValue: NSAttributedStringKey.font.rawValue): navFont]
-            
             UINavigationBar.appearance().titleTextAttributes = navBarAttributesDictionary
         }
         
@@ -52,11 +43,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let barItemAttributesDictionary: [NSAttributedStringKey: Any] = [
                 NSAttributedStringKey(rawValue: NSAttributedStringKey.foregroundColor.rawValue): UIColor.white,
                 NSAttributedStringKey(rawValue: NSAttributedStringKey.font.rawValue): barItemFont]
-        
             UIBarButtonItem.appearance().setTitleTextAttributes(barItemAttributesDictionary, for: .normal)
         }
-        
-        
         
         return true
     }

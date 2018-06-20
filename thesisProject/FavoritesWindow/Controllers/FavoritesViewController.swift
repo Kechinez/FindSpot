@@ -10,7 +10,7 @@ import UIKit
 import Firebase
 import CoreLocation
 class FavoritesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITabBarControllerDelegate {
-
+    
     var favorites: [Place]?
     private var tableView: UITableView?
     var userCurrentLocation: CLLocationCoordinate2D?
@@ -24,6 +24,7 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
         if let navogationcontroller = self.tabBarController {
             navogationcontroller.delegate = self
         }
+        
         DataBaseManager.shared.getUserFavorites() { (tempFavorites) in
             switch tempFavorites {
             case  .Success(let favorites):
@@ -32,21 +33,16 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
             case .Failure(let error):
                 ErrorManager.shared.showErrorMessage(with: error, shownAt: self)
             }
-            
         }
         
-        let topBarHeight = UIApplication.shared.statusBarFrame.size.height +
-            (self.navigationController?.navigationBar.frame.height ?? 0.0)
-        let favoriteView = FavoritesView(viewController: self)//(frame: CGRect(x: 0, y: topBarHeight, width: self.view.bounds.width, height: self.view.bounds.height - topBarHeight))
-        
+        let favoriteView = FavoritesView(viewController: self)
         self.tableView = favoriteView.tableView!
         self.tableView!.delegate = self
         self.tableView!.dataSource = self
         self.tableView!.register(UITableViewCell.self, forCellReuseIdentifier: "myCell")
-        //self.view.addSubview(favoriteView)
-        
         
     }
+    
     
     
     override func viewWillAppear(_ animated: Bool) {
@@ -56,23 +52,31 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
         }
     }
     
-
-    // MARK: - Table view data source
-
+    
+    
+    
+    
+    // MARK: - TableView data source methods
+    
     func numberOfSections(in tableView: UITableView) -> Int {
-
         return 1
     }
-
+    
+    
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let favorites = self.favorites {
             return favorites.count
         } else {
             return 0
         }
-        
     }
-
+    
+    
+    
+    
+    
+    //MARK: - TableView delegate methods
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let navigationController = self.navigationController {
@@ -81,7 +85,6 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
             placeVC.place = self.favorites![indexPath.row]
             navigationController.pushViewController(placeVC, animated: true)
         }
-    
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
@@ -89,19 +92,16 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "myCell", for: indexPath)
-
+        
         cell.textLabel?.text = self.favorites![indexPath.row].placeName
         cell.textLabel?.textColor = .white
         cell.textLabel?.font = UIFont(name: "OpenSans", size: 18)
         cell.backgroundColor = .clear
         cell.selectionStyle = .blue
-        
         return cell
     }
     
-
     
-
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
@@ -110,7 +110,5 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
         }
     }
     
-
     
-
 }

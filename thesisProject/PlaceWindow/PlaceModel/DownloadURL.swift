@@ -12,15 +12,14 @@ class DownloadURL {
     var threadSafeURLs: [URL]? = []
     private let queue = DispatchQueue(label: "DispatchBarrier", attributes: .concurrent)
     
+    
     func append(downloadURL: URL?, with currentDispatchGroup: DispatchGroup) {
         queue.async(flags: .barrier) {
-            
             if let tempURL = downloadURL {
                 self.threadSafeURLs!.append(tempURL)
                 currentDispatchGroup.leave()
             }
         }
     }
-    
     
 }
