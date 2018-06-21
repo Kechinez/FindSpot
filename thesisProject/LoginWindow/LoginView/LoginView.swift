@@ -13,107 +13,88 @@ enum AnimationType {
     case DisappearingOfView
 }
 
+public enum ButtonType {
+    case LoginButton
+    case RegisterButton
+    case AlreadyHaveAnAccountButton
+    case RegisterNewUser
+}
+
+
 class LoginView: UIScrollView {
-    private var viewController: LoginViewController
-    private var emailTextField: UITextField?
-    private var passwordTextField: UITextField?
-    private var registerView: RegisterView?
-    private var findSpotLabel: UILabel?
-    private var loginButton: UIButton?
-    private var registerButton: UIButton?
-    private var backgroundView: UIView?
+
+    var registerView: RegisterView?
     
-    
-    
-    init(usedViewController: LoginViewController) {
-        let rect = CGRect.zero
-        self.viewController = usedViewController
-        super.init(frame: rect)
-        viewController.view.addSubview(self)
-    }
-    
-    
-    
-    convenience init(withAssociated viewController: LoginViewController) {
-        self.init(usedViewController: viewController)
-        
+    public let backgroundView: UIImageView = {
         let backgroundView = UIImageView(image: UIImage(named: "Leaves.png"))
         backgroundView.alpha = 0.45
-        self.addSubview(backgroundView)
-        self.bringSubview(toFront: backgroundView)
-        self.backgroundColor = #colorLiteral(red: 0.4078431373, green: 0.6941176471, blue: 0.09411764706, alpha: 1)
-        self.backgroundView = backgroundView
-        
-        let placeholderFont = UIFont(name: "OpenSans", size: 14.0)
-        let textFieldFont = UIFont(name: "OpenSans", size: 18.0)
-        let buttonFont = UIFont(name: "OpenSans", size: 22.0)
-        let attributesDictionary: [NSAttributedStringKey: Any] = [
-            NSAttributedStringKey(rawValue: NSAttributedStringKey.foregroundColor.rawValue): #colorLiteral(red: 0.6257788431, green: 0.6374320992, blue: 0.6723918676, alpha: 1),
-            NSAttributedStringKey(rawValue: NSAttributedStringKey.font.rawValue): placeholderFont!]
-        
+        return backgroundView
+    }()
+    public let findSpotLabel: UILabel = {
         let findSpotLabel = UILabel()
         findSpotLabel.text = "FindSpot"
         if let font = UIFont(name: "Comfortaa", size: 38) {
             findSpotLabel.font = font
         }
         findSpotLabel.textColor = UIColor.white
-        self.addSubview(findSpotLabel)
-        self.findSpotLabel = findSpotLabel
-        
-        let atributedPlaceholder = NSMutableAttributedString(string: "write your password")
-        atributedPlaceholder.addAttributes(attributesDictionary, range: NSRange (location:0, length: atributedPlaceholder.length))
-        
+        return findSpotLabel
+    }()
+    public let passwordTextField: UITextField = {
         let passwordTextField = UITextField()
-        passwordTextField.attributedPlaceholder = atributedPlaceholder
-        passwordTextField.font = textFieldFont!
         passwordTextField.borderStyle = .roundedRect
-        passwordTextField.autocorrectionType = .no
-        passwordTextField.keyboardType = .emailAddress
-        passwordTextField.tag = TextFields.passwordTextField.rawValue
-        self.addSubview(passwordTextField)
-        self.passwordTextField = passwordTextField
-        
+        passwordTextField.tag = TextFields.PasswordTextField.rawValue
+        passwordTextField.setTextAndFont(.PasswordTextField)
+        passwordTextField.setKeyboardSettings(.PasswordTextField)
+        return passwordTextField
+    }()
+    public let emailTextField: UITextField = {
         let emailTextField = UITextField()
-        self.addSubview(emailTextField)
-        emailTextField.translatesAutoresizingMaskIntoConstraints = false
-        emailTextField.topAnchor.constraintEqualToSystemSpacingBelow(findSpotLabel.bottomAnchor, multiplier: 8).isActive = true
-        emailTextField.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        emailTextField.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.75).isActive = true
-        emailTextField.heightAnchor.constraint(equalToConstant: 45).isActive = true
-        passwordTextField.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: 20).isActive = true
-        
-        atributedPlaceholder.mutableString.setString("write your email")
-        emailTextField.attributedPlaceholder = atributedPlaceholder
-        emailTextField.font = textFieldFont!
         emailTextField.borderStyle = .roundedRect
-        emailTextField.autocorrectionType = .no
-        emailTextField.keyboardType = .emailAddress
-        emailTextField.tag = TextFields.emailTextField.rawValue
-        self.addSubview(emailTextField)
-        self.emailTextField = emailTextField
-        
+        emailTextField.tag = TextFields.EmailTextField.rawValue
+        emailTextField.setTextAndFont(.EmailTextField)
+        emailTextField.setKeyboardSettings(.EmailTextField)
+        return emailTextField
+    }()
+    public let loginButton: UIButton = {
         let loginButton = UIButton()
-        loginButton.setTitle("Login", for: .normal)
-        loginButton.titleLabel?.font = buttonFont!
-        loginButton.setTitleColor(UIColor.white, for: .normal)
-        loginButton.layer.cornerRadius = 8.0
-        loginButton.backgroundColor = #colorLiteral(red: 0.2549019608, green: 0.5137254902, blue: 0.7568627451, alpha: 1)
-        loginButton.addTarget(viewController, action: #selector(LoginViewController.loginActionMethod), for: .touchUpInside)
-        self.addSubview(loginButton)
-        self.loginButton = loginButton
-        
+        loginButton.setButtonAppearance(.LoginButton)
+        return loginButton
+    }()
+    public let registerButton: UIButton = {
         let registerButton = UIButton()
-        registerButton.setTitle("Register", for: .normal)
-        registerButton.setTitleColor(UIColor.white, for: .normal)
-        registerButton.titleLabel?.font = buttonFont!.withSize(19.0)
-        registerButton.addTarget(viewController, action: #selector(LoginViewController.registerActionMethod), for: .touchUpInside)
-        self.addSubview(registerButton)
-        self.registerButton = registerButton
+        registerButton.setButtonAppearance(.RegisterButton)
+        return registerButton
+    }()
+    
+    
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.backgroundColor = #colorLiteral(red: 0.4078431373, green: 0.6941176471, blue: 0.09411764706, alpha: 1)
         
-        self.setTextFieldDelegate()
-        self.setTextFieldsForLoginUsage()
+        self.addSubview(backgroundView)
+        self.addSubview(findSpotLabel)
+        self.addSubview(passwordTextField)
+        self.addSubview(emailTextField)
+        self.addSubview(loginButton)
+        self.addSubview(registerButton)
+        
+        for subview in self.subviews {
+            subview.translatesAutoresizingMaskIntoConstraints = false
+        }
+        
         self.setUpConstraints()
     }
+    
+    
+
+    
+    
+ 
+//        self.setTextFieldDelegate()
+//        self.setTextFieldsForLoginUsage()
+//        self.setUpConstraints()
+  //  }
     
     
     
@@ -125,61 +106,67 @@ class LoginView: UIScrollView {
     
     private func setUpConstraints() {
         
-        self.translatesAutoresizingMaskIntoConstraints = false
-        self.topAnchor.constraint(equalTo: viewController.view.topAnchor).isActive = true
-        self.widthAnchor.constraint(equalTo: viewController.view.widthAnchor).isActive = true
-        self.heightAnchor.constraint(equalTo: viewController.view.heightAnchor).isActive = true
-        self.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
-        self.leadingAnchor.constraint(equalTo: viewController.view.leadingAnchor).isActive = true
-        self.trailingAnchor.constraint(equalTo: viewController.view.trailingAnchor).isActive = true
+//        self.translatesAutoresizingMaskIntoConstraints = false
+//        self.topAnchor.constraint(equalTo: viewController.view.topAnchor).isActive = true
+//        self.widthAnchor.constraint(equalTo: viewController.view.widthAnchor).isActive = true
+//        self.heightAnchor.constraint(equalTo: viewController.view.heightAnchor).isActive = true
+//        self.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
+//        self.leadingAnchor.constraint(equalTo: viewController.view.leadingAnchor).isActive = true
+//        self.trailingAnchor.constraint(equalTo: viewController.view.trailingAnchor).isActive = true
         
-        self.backgroundView!.translatesAutoresizingMaskIntoConstraints = false
-        self.backgroundView!.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        self.backgroundView!.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.5).isActive = true
-        self.backgroundView!.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
         
-        self.findSpotLabel!.translatesAutoresizingMaskIntoConstraints = false
-        self.findSpotLabel!.topAnchor.constraintEqualToSystemSpacingBelow(self.topAnchor, multiplier: 10).isActive = true
-        self.findSpotLabel!.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        self.backgroundView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+        self.backgroundView.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.5).isActive = true
+        self.backgroundView.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
         
-        self.passwordTextField!.translatesAutoresizingMaskIntoConstraints = false
-        self.passwordTextField!.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        self.passwordTextField!.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.75).isActive = true
-        self.passwordTextField!.heightAnchor.constraint(equalToConstant: 45).isActive = true
         
-        self.loginButton!.translatesAutoresizingMaskIntoConstraints = false
-        self.loginButton!.topAnchor.constraint(equalTo: self.passwordTextField!.bottomAnchor, constant: 35).isActive = true
-        self.loginButton!.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        self.loginButton!.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.6).isActive = true
-        self.loginButton!.heightAnchor.constraint(equalToConstant: 55).isActive = true
-        self.loginButton!.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        self.findSpotLabel.topAnchor.constraintEqualToSystemSpacingBelow(self.topAnchor, multiplier: 10).isActive = true
+        self.findSpotLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         
-        self.registerButton!.translatesAutoresizingMaskIntoConstraints = false
-        self.registerButton!.topAnchor.constraint(equalTo: self.loginButton!.bottomAnchor, constant: 10).isActive = true
-        self.registerButton!.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        self.registerButton!.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        self.emailTextField.translatesAutoresizingMaskIntoConstraints = false
+        self.emailTextField.topAnchor.constraintEqualToSystemSpacingBelow(findSpotLabel.bottomAnchor, multiplier: 8).isActive = true
+        self.emailTextField.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        self.emailTextField.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.75).isActive = true
+        self.emailTextField.heightAnchor.constraint(equalToConstant: 45).isActive = true
+        
+        self.passwordTextField.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: 20).isActive = true
+        self.passwordTextField.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        self.passwordTextField.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.75).isActive = true
+        self.passwordTextField.heightAnchor.constraint(equalToConstant: 45).isActive = true
+        
+        
+        self.loginButton.topAnchor.constraint(equalTo: self.passwordTextField.bottomAnchor, constant: 35).isActive = true
+        self.loginButton.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        self.loginButton.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.6).isActive = true
+        self.loginButton.heightAnchor.constraint(equalToConstant: 55).isActive = true
+        self.loginButton.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        
+        
+        self.registerButton.topAnchor.constraint(equalTo: self.loginButton.bottomAnchor, constant: 10).isActive = true
+        self.registerButton.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        self.registerButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
     }
     
     
     
     
     
-    
+    func setActionsForButton(using viewController: LoginViewController) {
+        self.loginButton.addTarget(viewController, action: #selector(LoginViewController.loginActionMethod), for: .touchUpInside)
+        self.registerButton.addTarget(viewController, action: #selector(LoginViewController.registerActionMethod), for: .touchUpInside)
+    }
     
     
     
     //MARK: - setting UITextField delegate methods
     
-    func setTextFieldsForLoginUsage() {
-        self.viewController.emailTextField = self.emailTextField
-        self.viewController.passTextField = self.passwordTextField
-    }
     
     
     
-    func setTextFieldDelegate() {
-        self.emailTextField?.delegate = self.viewController
-        self.passwordTextField?.delegate = self.viewController
+    
+    func setDelegateOfLoginViewTextFields(using viewController: LoginViewController) {
+       self.emailTextField.delegate = viewController
+       self.passwordTextField.delegate = viewController
     }
     
     
@@ -202,8 +189,6 @@ class LoginView: UIScrollView {
                 self.layoutSubviews()
             }, completion: { (true) in
                 self.registerView!.removeFromSuperview()
-                self.setTextFieldDelegate()
-                self.setTextFieldsForLoginUsage()
             })
         }
     }
@@ -211,7 +196,7 @@ class LoginView: UIScrollView {
     
     
     func createRegisterView() {
-        let registerView = RegisterView(with: self, loginViewController: self.viewController)
+        let registerView = RegisterView(with: self)
         self.registerView = registerView
     }
     
@@ -236,4 +221,87 @@ class LoginView: UIScrollView {
     }
     
 }
+
+
+public extension UITextField {
+    
+    func setTextAndFont(_ textFieldType: TextFields) {
+        let placeholderFont = UIFont(name: "OpenSans", size: 14.0)
+        let textFieldFont = UIFont(name: "OpenSans", size: 18.0)
+        let attributesDictionary: [NSAttributedStringKey: Any] = [
+            NSAttributedStringKey(rawValue: NSAttributedStringKey.foregroundColor.rawValue): #colorLiteral(red: 0.6257788431, green: 0.6374320992, blue: 0.6723918676, alpha: 1),
+            NSAttributedStringKey(rawValue: NSAttributedStringKey.font.rawValue): placeholderFont!]
+        
+        switch textFieldType {
+        case .NameTextField:
+            let atributedPlaceholder = NSMutableAttributedString(string: "write your nickname")
+            atributedPlaceholder.addAttributes(attributesDictionary, range: NSRange (location:0, length: atributedPlaceholder.length))
+            self.attributedPlaceholder = atributedPlaceholder
+            self.font = textFieldFont!
+        case .EmailTextField:
+            let atributedPlaceholder = NSMutableAttributedString(string: "write your email")
+            atributedPlaceholder.addAttributes(attributesDictionary, range: NSRange (location:0, length: atributedPlaceholder.length))
+            self.attributedPlaceholder = atributedPlaceholder
+            self.font = textFieldFont!
+        case .PasswordTextField:
+            let atributedPlaceholder = NSMutableAttributedString(string: "write your password")
+            atributedPlaceholder.addAttributes(attributesDictionary, range: NSRange (location:0, length: atributedPlaceholder.length))
+            self.attributedPlaceholder = atributedPlaceholder
+            self.font = textFieldFont!
+        }
+    }
+
+
+    func setKeyboardSettings(_ textFieldType: TextFields) {
+        switch textFieldType {
+        case .NameTextField:
+            self.autocorrectionType = .no
+            self.keyboardType = .alphabet
+            self.autocapitalizationType = .words
+        case .EmailTextField:
+            self.autocorrectionType = .no
+            self.keyboardType = .emailAddress
+            self.autocapitalizationType = .none
+        case .PasswordTextField:
+            self.autocorrectionType = .no
+            self.keyboardType = .emailAddress
+            self.isSecureTextEntry = true
+            self.autocapitalizationType = .none
+        }
+    }
+    
+
+}
+
+
+public extension UIButton {
+    func setButtonAppearance(_ buttonType: ButtonType) {
+        let buttonFont = UIFont(name: "OpenSans", size: 22.0)
+        switch buttonType {
+        case .LoginButton:
+            self.setTitle("Login", for: .normal)
+            self.titleLabel?.font = buttonFont!
+            self.setTitleColor(UIColor.white, for: .normal)
+            self.layer.cornerRadius = 8.0
+            self.backgroundColor = #colorLiteral(red: 0.2549019608, green: 0.5137254902, blue: 0.7568627451, alpha: 1)
+        case .RegisterButton:
+            self.setTitle("Register", for: .normal)
+            self.setTitleColor(UIColor.white, for: .normal)
+            self.titleLabel?.font = buttonFont!.withSize(19.0)
+        case .AlreadyHaveAnAccountButton:
+            self.setTitle("I already have account", for: .normal)
+            self.setTitleColor(UIColor.white, for: .normal)
+            self.titleLabel?.font = buttonFont!.withSize(19.0)
+        case .RegisterNewUser:
+            self.setTitle("Register", for: .normal)
+            self.titleLabel?.font = buttonFont!
+            self.setTitleColor(UIColor.white, for: .normal)
+            self.layer.cornerRadius = 8.0
+            self.backgroundColor = #colorLiteral(red: 0.2549019608, green: 0.5137254902, blue: 0.7568627451, alpha: 1)
+        }
+        
+    }
+}
+
+
 

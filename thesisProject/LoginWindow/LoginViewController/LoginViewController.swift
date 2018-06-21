@@ -10,9 +10,9 @@ import UIKit
 import Firebase
 
 public enum TextFields: Int {
-    case nameTextField           = 0
-    case emailTextField          = 1
-    case passwordTextField       = 2
+    case NameTextField           = 0
+    case EmailTextField          = 1
+    case PasswordTextField       = 2
 }
 
 enum TextFeildsErrorType: String {
@@ -23,22 +23,37 @@ enum TextFeildsErrorType: String {
 
 
 class LoginViewController: UIViewController, UITextFieldDelegate {
-    var passTextField: UITextField?
-    var emailTextField: UITextField?
-    var nameTextField: UITextField?
-    var loginView: LoginView?
+    unowned var loginView: LoginView {
+        return (self.isRegisterViewDisplayed ? (self.view as! LoginView) : self.view as! LoginView)
+    }
+    unowned var emailTextField: UITextField {
+        return (self.isRegisterViewDisplayed ? self.loginView.registerView!.emailField : self.loginView.emailTextField)
+    }
+    unowned var passwordTextField: UITextField {
+        return (self.isRegisterViewDisplayed ? self.loginView.registerView!.passField : self.loginView.passwordTextField)
+    }
+    lazy var nameTextField: UITextField = {
+        return loginView.registerView!.nameField
+    }()
     var registrationIsAllowed = [false, false, false]
     var ref: DatabaseReference!
+    var isRegisterViewDisplayed = false
     
+    
+    
+    override func loadView() {
+        self.view = LoginView()
+    }
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let loginView = LoginView(withAssociated: self)
-        self.loginView = loginView
-        ref = Database.database().reference(withPath: "users")
+
+        self.loginView.setActionsForButton(using: self)
+        self.loginView.setDelegateOfLoginViewTextFields(using: self)
         
-        Auth.auth().addStateDidChangeListener { [weak self](auth, user) in
+        ref = Database.database().reference(withPath: "users")
+        Auth.auth().addStateDidChangeListener { [weak self] (auth, user) in
             if user != nil {
                 self?.setViewController()
             }
@@ -65,12 +80,11 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     // MARK: - register and login methods
     
     @objc func loginActionMethod() {
-        Auth.auth().signIn(withEmail: self.emailTextField!.text!, password: passTextField!.text!) { [weak self] (user, error) in
+        Auth.auth().signIn(withEmail: self.emailTextField.text!, password: self.passwordTextField.text!) { [weak self] (user, error) in
             guard error == nil, user != nil else {
                 ErrorManager.shared.showErrorMessage(with: error!, shownAt: self!)
                 return
             }
-            
             self?.setViewController()
         }
     }
@@ -78,8 +92,11 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     
     @objc func registerActionMethod() {
-        self.loginView!.createRegisterView()
-        self.loginView!.setAnimationOf(type: .AppearingOfView)
+        self.loginView.createRegisterView()
+        self.loginView.registerView!.setDelegateOfRegisterViewTextFields(using: self)
+        self.loginView.registerView!.setActionsForButton(using: self)
+        self.loginView.setAnimationOf(type: .AppearingOfView)
+        self.isRegisterViewDisplayed = true
     }
     
     
@@ -91,9 +108,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             }
         }
         
-        Auth.auth().createUser(withEmail: self.emailTextField!.text!, password: self.passTextField!.text!) { [weak self] (user, error) in
+        Auth.auth().createUser(withEmail: self.emailTextField.text!, password: self.passwordTextField.text!) { [weak self] (user, error) in
             
-            let userName = self?.nameTextField?.text
+            let userName = self?.nameTextField.text
             guard error == nil, user != nil else {
                 ErrorManager.shared.showErrorMessage(with: error!, shownAt: self!)
                 return
@@ -114,14 +131,14 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @objc func keyboardDidShow(notification: Notification) {
         guard let userInfo = notification.userInfo else { return }
         let keyboardFrameSize = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
-        self.loginView!.increaseContentSizeOn(value: keyboardFrameSize.height)
+        self.loginView.increaseContentSizeOn(value: keyboardFrameSize.height)
         
     }
     
     
     
     @objc func keyboardDidHide() {
-        self.loginView!.decreaseContentSizeToDefaultValues()
+        self.loginView.decreaseContentSizeToDefaultValues()
     }
     
     
@@ -159,7 +176,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     // MARK: - Additional methods
     
     @objc func removeRegisterView() {
-        self.loginView!.setAnimationOf(type: .DisappearingOfView)
+        self.loginView.setAnimationOf(type: .DisappearingOfView)
+        self.isRegisterViewDisplayed = false
+        self.loginView.setDelegateOfLoginViewTextFields(using: self)
     }
     
     
@@ -185,23 +204,23 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             return
         }
         switch textField.tag {
-        case TextFields.nameTextField.rawValue:
+        case TextFields.NameTextField.rawValue:
             let allowedChars = CharacterSet.alphanumerics
             if (resultText.trimmingCharacters(in: allowedChars) != "") {
                 self.showError(with: .invalidName, within: textField)
-                self.registrationIsAllowed[TextFields.nameTextField.rawValue] = false
+                self.registrationIsAllowed[TextFields.NameTextField.rawValue] = false
                 return
             }
-        case TextFields.emailTextField.rawValue:
+        case TextFields.EmailTextField.rawValue:
             if !resultText.isEmail() {
                 self.showError(with: .invalidEmailFormat, within: textField)
-                self.registrationIsAllowed[TextFields.emailTextField.rawValue] = false
+                self.registrationIsAllowed[TextFields.EmailTextField.rawValue] = false
                 return
             }
-        case TextFields.passwordTextField.rawValue:
+        case TextFields.PasswordTextField.rawValue:
             if resultText.count < 8 {
                 self.showError(with: .passwordError, within: textField)
-                self.registrationIsAllowed[TextFields.passwordTextField.rawValue] = false
+                self.registrationIsAllowed[TextFields.PasswordTextField.rawValue] = false
                 return
             }
         default:
@@ -235,6 +254,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
 
 
 //MARK: - email checking extention
+
 extension String {
     func isEmail() -> Bool {
         let firstPart = "[A-Z0-9a-z]([A-Z0-9a-z._%+-]{0,30}[A-Z0-9a-z])?"
