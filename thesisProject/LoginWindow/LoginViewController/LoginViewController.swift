@@ -22,6 +22,7 @@ enum TextFeildsErrorType: String {
 }
 
 
+
 class LoginViewController: UIViewController, UITextFieldDelegate {
     unowned var loginView: LoginView {
         return (self.isRegisterViewDisplayed ? (self.view as! LoginView) : self.view as! LoginView)

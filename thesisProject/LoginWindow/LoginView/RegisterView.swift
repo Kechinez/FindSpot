@@ -9,7 +9,7 @@
 import UIKit
 
 class RegisterView: UIView {
-
+    
     public let nameField: UITextField = {
         let nameField = UITextField()
         nameField.borderStyle = .roundedRect
@@ -72,11 +72,8 @@ class RegisterView: UIView {
         self.setUpConstraints()
     }
     
-
     
-    
-    
-     private func setUpConstraints() {
+    private func setUpConstraints() {
         
         self.translatesAutoresizingMaskIntoConstraints = false
         self.topAnchor.constraintEqualToSystemSpacingBelow(self.superView.topAnchor, multiplier: 20).isActive = true
@@ -96,13 +93,13 @@ class RegisterView: UIView {
         self.emailField.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         self.emailField.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.9375).isActive = true
         self.emailField.heightAnchor.constraint(equalToConstant: 45).isActive = true
-    
+        
         self.passField.translatesAutoresizingMaskIntoConstraints = false
         self.passField.topAnchor.constraint(equalTo: self.emailField.bottomAnchor, constant: 20).isActive = true
         self.passField.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         self.passField.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.9375).isActive = true
         self.passField.heightAnchor.constraint(equalToConstant: 45).isActive = true
-    
+        
         self.registerButton.translatesAutoresizingMaskIntoConstraints = false
         self.registerButton.topAnchor.constraint(equalTo: self.passField.bottomAnchor, constant: 35).isActive = true
         self.registerButton.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
@@ -123,12 +120,20 @@ class RegisterView: UIView {
     
     
     
+    
+    
+    // MARK: - set delegate for textfields
+    
     func setDelegateOfRegisterViewTextFields(using viewController: LoginViewController) {
         self.emailField.delegate = viewController
         self.nameField.delegate = viewController
         self.passField.delegate = viewController
     }
     
+    
+    
+    
+    // MARK: - set action methods for buttons
     
     func setActionsForButton(using viewController: LoginViewController) {
         self.alreadyHaveAccountButton.addTarget(viewController, action: #selector(LoginViewController.removeRegisterView), for: .touchUpInside)

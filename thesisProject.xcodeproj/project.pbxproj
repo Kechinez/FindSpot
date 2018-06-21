@@ -17,6 +17,7 @@
 		3D9A7945207F5F4200AA3536 /* RequestedRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9A7944207F5F4200AA3536 /* RequestedRoute.swift */; };
 		3DA863E020D520C9004060D4 /* ImagesCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA863DF20D520C9004060D4 /* ImagesCollectionCell.swift */; };
 		3DA863E420D562D8004060D4 /* ImagesCollectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA863E320D562D8004060D4 /* ImagesCollectionController.swift */; };
+		3DAB550720DBFA9400EFCE23 /* LoginViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DAB550620DBFA9400EFCE23 /* LoginViewExtension.swift */; };
 		3DBA48CC2072865D0067C6D7 /* AddNewPlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DBA48CB2072865D0067C6D7 /* AddNewPlaceViewController.swift */; };
 		3DBA48CE20728D150067C6D7 /* AddNewPlaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DBA48CD20728D150067C6D7 /* AddNewPlaceView.swift */; };
 		3DC224202087623B006B70CF /* ErrorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DC2241F2087623B006B70CF /* ErrorManager.swift */; };
@@ -53,6 +54,7 @@
 		3D9A7944207F5F4200AA3536 /* RequestedRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestedRoute.swift; sourceTree = "<group>"; };
 		3DA863DF20D520C9004060D4 /* ImagesCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesCollectionCell.swift; sourceTree = "<group>"; };
 		3DA863E320D562D8004060D4 /* ImagesCollectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesCollectionController.swift; sourceTree = "<group>"; };
+		3DAB550620DBFA9400EFCE23 /* LoginViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewExtension.swift; sourceTree = "<group>"; };
 		3DBA48CB2072865D0067C6D7 /* AddNewPlaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewPlaceViewController.swift; sourceTree = "<group>"; };
 		3DBA48CD20728D150067C6D7 /* AddNewPlaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewPlaceView.swift; sourceTree = "<group>"; };
 		3DC2241F2087623B006B70CF /* ErrorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorManager.swift; sourceTree = "<group>"; };
@@ -236,6 +238,7 @@
 			children = (
 				3DDD9B1820651FC40040777E /* LoginView.swift */,
 				3DDD9B1A206951F90040777E /* RegisterView.swift */,
+				3DAB550620DBFA9400EFCE23 /* LoginViewExtension.swift */,
 			);
 			path = LoginView;
 			sourceTree = "<group>";
@@ -491,6 +494,7 @@
 				3DCAEE28207929FE0088E790 /* PhotoManager.swift in Sources */,
 				3DDF5AFC2061798F001BD7BE /* MapViewController.swift in Sources */,
 				3D9A7943207E7A5600AA3536 /* InfoWindowView.swift in Sources */,
+				3DAB550720DBFA9400EFCE23 /* LoginViewExtension.swift in Sources */,
 				3DD4E761208235C300C71092 /* FavoritesView.swift in Sources */,
 				3DCAEE22207910920088E790 /* PlaceViewController.swift in Sources */,
 				3D5C8EDA20C9672C000B7D86 /* MainMapView.swift in Sources */,
