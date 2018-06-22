@@ -36,7 +36,7 @@ class RegisterView: UIView {
     }()
     public let registerButton: UIButton = {
         let registerButton = UIButton()
-        registerButton.setButtonAppearance(.RegisterNewUser)
+        registerButton.setButtonAppearance(.RegisterNewUserButton)
         return registerButton
     }()
     public let alreadyHaveAccountButton: UIButton = {
@@ -45,8 +45,8 @@ class RegisterView: UIView {
         return alreadyHaveAccountButton
     }()
     
-    
     private let superView: UIView
+    
     
     
     init(with superView: UIView) {
@@ -117,7 +117,6 @@ class RegisterView: UIView {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
     
     
     

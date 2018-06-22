@@ -9,7 +9,12 @@
 import UIKit
 
 class ImagesCollectionCell: UICollectionViewCell, UIGestureRecognizerDelegate {
-    let image: UIImageView
+    public let image: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        imageView.isUserInteractionEnabled = true
+        return imageView
+    }()
     var delegate: ImagesCollectionController?
     var activityIndicator: UIActivityIndicatorView?
     private var isZooming = false
@@ -18,14 +23,10 @@ class ImagesCollectionCell: UICollectionViewCell, UIGestureRecognizerDelegate {
     
     
     override init(frame: CGRect) {
-        self.image = UIImageView(frame: frame)
         super.init(frame: frame)
         self.backgroundColor = UIColor.clear
         self.clipsToBounds = false
-        
-        self.image.contentMode = .scaleAspectFit
         self.contentView.addSubview(image)
-        self.image.isUserInteractionEnabled = true
         self.setUpConstraints()
         
         let pinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(self.zoomImage(sender:)))
@@ -37,7 +38,6 @@ class ImagesCollectionCell: UICollectionViewCell, UIGestureRecognizerDelegate {
         panGestureRecognizer.delegate = self
         
     }
-    
     
     
     @objc func moveZoomedImage(sender: UIPanGestureRecognizer) {
@@ -52,7 +52,6 @@ class ImagesCollectionCell: UICollectionViewCell, UIGestureRecognizerDelegate {
             sender.setTranslation(CGPoint.zero, in: self.image.superview)
         }
     }
-    
     
     
     @objc func zoomImage(sender: UIPinchGestureRecognizer) {
@@ -103,11 +102,9 @@ class ImagesCollectionCell: UICollectionViewCell, UIGestureRecognizerDelegate {
     }
     
     
-    
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
-    
     
     
     func setUpAndRunActivityIndicator() {
@@ -124,7 +121,6 @@ class ImagesCollectionCell: UICollectionViewCell, UIGestureRecognizerDelegate {
     }
     
     
-    
     private func setUpConstraints() {
         self.image.translatesAutoresizingMaskIntoConstraints = false
         self.image.topAnchor.constraint(equalTo: self.contentView.topAnchor).isActive = true
@@ -133,7 +129,6 @@ class ImagesCollectionCell: UICollectionViewCell, UIGestureRecognizerDelegate {
         self.image.heightAnchor.constraint(equalTo: self.contentView.heightAnchor).isActive = true
 
     }
-    
     
     
     required init?(coder aDecoder: NSCoder) {

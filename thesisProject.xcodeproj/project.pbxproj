@@ -17,7 +17,7 @@
 		3D9A7945207F5F4200AA3536 /* RequestedRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9A7944207F5F4200AA3536 /* RequestedRoute.swift */; };
 		3DA863E020D520C9004060D4 /* ImagesCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA863DF20D520C9004060D4 /* ImagesCollectionCell.swift */; };
 		3DA863E420D562D8004060D4 /* ImagesCollectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA863E320D562D8004060D4 /* ImagesCollectionController.swift */; };
-		3DAB550720DBFA9400EFCE23 /* LoginViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DAB550620DBFA9400EFCE23 /* LoginViewExtension.swift */; };
+		3DAB550720DBFA9400EFCE23 /* UIElementsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DAB550620DBFA9400EFCE23 /* UIElementsExtension.swift */; };
 		3DAB550B20DCF24C00EFCE23 /* FavoritesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DAB550A20DCF24C00EFCE23 /* FavoritesTableViewController.swift */; };
 		3DBA48CC2072865D0067C6D7 /* AddNewPlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DBA48CB2072865D0067C6D7 /* AddNewPlaceViewController.swift */; };
 		3DBA48CE20728D150067C6D7 /* AddNewPlaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DBA48CD20728D150067C6D7 /* AddNewPlaceView.swift */; };
@@ -39,7 +39,6 @@
 		3DDF5AE8206162B1001BD7BE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3DDF5AE6206162B1001BD7BE /* LaunchScreen.storyboard */; };
 		3DDF5AF0206163A6001BD7BE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3DDF5AEF206163A6001BD7BE /* GoogleService-Info.plist */; };
 		3DDF5AFC2061798F001BD7BE /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDF5AFB2061798F001BD7BE /* MapViewController.swift */; };
-		3DDF5B0320617BF9001BD7BE /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDF5B0220617BF9001BD7BE /* FavoritesViewController.swift */; };
 		3DEA1AEC2073714C00B09215 /* UserImagesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DEA1AEB2073714C00B09215 /* UserImagesCell.swift */; };
 		FE46FD33CC414F62320E41D3 /* Pods_thesisProject.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58FF50E8D3FC3E9C6C8EDB05 /* Pods_thesisProject.framework */; };
 /* End PBXBuildFile section */
@@ -55,7 +54,7 @@
 		3D9A7944207F5F4200AA3536 /* RequestedRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestedRoute.swift; sourceTree = "<group>"; };
 		3DA863DF20D520C9004060D4 /* ImagesCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesCollectionCell.swift; sourceTree = "<group>"; };
 		3DA863E320D562D8004060D4 /* ImagesCollectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesCollectionController.swift; sourceTree = "<group>"; };
-		3DAB550620DBFA9400EFCE23 /* LoginViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewExtension.swift; sourceTree = "<group>"; };
+		3DAB550620DBFA9400EFCE23 /* UIElementsExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIElementsExtension.swift; sourceTree = "<group>"; };
 		3DAB550A20DCF24C00EFCE23 /* FavoritesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesTableViewController.swift; sourceTree = "<group>"; };
 		3DBA48CB2072865D0067C6D7 /* AddNewPlaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewPlaceViewController.swift; sourceTree = "<group>"; };
 		3DBA48CD20728D150067C6D7 /* AddNewPlaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewPlaceView.swift; sourceTree = "<group>"; };
@@ -79,7 +78,6 @@
 		3DDF5AE9206162B1001BD7BE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3DDF5AEF206163A6001BD7BE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3DDF5AFB2061798F001BD7BE /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
-		3DDF5B0220617BF9001BD7BE /* FavoritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
 		3DEA1AEB2073714C00B09215 /* UserImagesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserImagesCell.swift; sourceTree = "<group>"; };
 		58FF50E8D3FC3E9C6C8EDB05 /* Pods_thesisProject.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_thesisProject.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		90A5CD2FD7842732F24A2D4A /* Pods-thesisProject.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-thesisProject.release.xcconfig"; path = "Pods/Target Support Files/Pods-thesisProject/Pods-thesisProject.release.xcconfig"; sourceTree = "<group>"; };
@@ -240,7 +238,6 @@
 			children = (
 				3DDD9B1820651FC40040777E /* LoginView.swift */,
 				3DDD9B1A206951F90040777E /* RegisterView.swift */,
-				3DAB550620DBFA9400EFCE23 /* LoginViewExtension.swift */,
 			);
 			path = LoginView;
 			sourceTree = "<group>";
@@ -290,6 +287,7 @@
 		3DDF5AF82061789A001BD7BE /* SupportingFiles */ = {
 			isa = PBXGroup;
 			children = (
+				3DAB550620DBFA9400EFCE23 /* UIElementsExtension.swift */,
 				3D10B0E420BEEAE400AF11B6 /* Fonts */,
 				3DDF5AE6206162B1001BD7BE /* LaunchScreen.storyboard */,
 				3DDF5AEF206163A6001BD7BE /* GoogleService-Info.plist */,
@@ -320,7 +318,6 @@
 		3DDF5AFF20617A87001BD7BE /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				3DDF5B0220617BF9001BD7BE /* FavoritesViewController.swift */,
 				3DAB550A20DCF24C00EFCE23 /* FavoritesTableViewController.swift */,
 			);
 			path = Controllers;
@@ -492,12 +489,11 @@
 				3DDD9B1B206951F90040777E /* RegisterView.swift in Sources */,
 				3D9A7941207E5CA100AA3536 /* RequestedCity.swift in Sources */,
 				3DD98A1520752D9E00EDEAD2 /* GoogleApiRequests.swift in Sources */,
-				3DDF5B0320617BF9001BD7BE /* FavoritesViewController.swift in Sources */,
 				3DD98A18207629F200EDEAD2 /* User.swift in Sources */,
 				3DCAEE28207929FE0088E790 /* PhotoManager.swift in Sources */,
 				3DDF5AFC2061798F001BD7BE /* MapViewController.swift in Sources */,
 				3D9A7943207E7A5600AA3536 /* InfoWindowView.swift in Sources */,
-				3DAB550720DBFA9400EFCE23 /* LoginViewExtension.swift in Sources */,
+				3DAB550720DBFA9400EFCE23 /* UIElementsExtension.swift in Sources */,
 				3DD4E761208235C300C71092 /* FavoritesView.swift in Sources */,
 				3DCAEE22207910920088E790 /* PlaceViewController.swift in Sources */,
 				3D5C8EDA20C9672C000B7D86 /* MainMapView.swift in Sources */,

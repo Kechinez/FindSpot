@@ -21,7 +21,6 @@ class PhotoManager {
     private var fileFolderName: String?
     static let shared = PhotoManager()
     
-    
     private init() {}
     
     
@@ -47,7 +46,6 @@ class PhotoManager {
             })
         }
     }
-    
     
     
     func uploadPhotos(with photos: [UIImage], and location: CLLocationCoordinate2D, comletionHandler: @escaping ([URL]?) -> ()) {
@@ -85,7 +83,4 @@ class PhotoManager {
     
     
 }
-
-
-
 

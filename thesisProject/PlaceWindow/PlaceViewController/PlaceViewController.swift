@@ -9,8 +9,11 @@
 import UIKit
 import GoogleMaps
 class PlaceViewController: UIViewController, UINavigationControllerDelegate, GMSMapViewDelegate {
+    
+    unowned var placeView: PlaceView {
+        return self.view as! PlaceView
+    }
     private var images: [UIImage] = []
-    private var placeView: PlaceView?
     var place: Place?
     private var imagesCollectionView: ImagesCollectionController?
     var userLocation: CLLocationCoordinate2D?
@@ -20,8 +23,21 @@ class PlaceViewController: UIViewController, UINavigationControllerDelegate, GMS
     
     
     
+    
+    //MARK: - ViewController's life cycle methods
+    
+    override func loadView() {
+        self.view = PlaceView()
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.placeView.setActionMethodForButtons(using: self)
+        self.placeView.setUpBarButtonItems(linkedWith: self)
+        self.placeView.setUpLabelsText(accordingToThe: self.place!)
+        self.placeView.map.delegate = self
+        self.placeView.setCameraAndMarkerOnTheMap(using: self.userLocation!)
         
         GoogleApiRequests.shared.getRouteRequest(with: self.userLocation!, and: self.place!.coordinates) { (route) in
             switch route {
@@ -35,11 +51,6 @@ class PlaceViewController: UIViewController, UINavigationControllerDelegate, GMS
             }
         }
         
-        let topBarHeight = UIApplication.shared.statusBarFrame.size.height +
-            (self.navigationController?.navigationBar.frame.height ?? 0.0)
-        let placeView = PlaceView(with: CGRect(x: 0, y: topBarHeight, width: self.view.frame.size.width, height: self.view.frame.size.height - topBarHeight) , place: self.place!, and: self)
-        self.placeView = placeView
-        
         PhotoManager.shared.getPhotoFromStorage(using: place!.photosDownloadURLs) { (images) in
             guard let tempImages = images.threadSafeImages else { return }
             self.images = tempImages
@@ -47,7 +58,6 @@ class PlaceViewController: UIViewController, UINavigationControllerDelegate, GMS
         }
         
     }
-    
     
     
     override func viewWillAppear(_ animated: Bool) {
@@ -61,9 +71,7 @@ class PlaceViewController: UIViewController, UINavigationControllerDelegate, GMS
     
     
     
-    
     // MARK: - Methods showing map's elements:
-    
     
     func showPath(polyline: String) {
         let path = GMSPath(fromEncodedPath: polyline)
@@ -71,20 +79,17 @@ class PlaceViewController: UIViewController, UINavigationControllerDelegate, GMS
             let polylineDraw = GMSPolyline(path: path)
             polylineDraw.strokeWidth = 3.0
             polylineDraw.strokeColor = UIColor.red
-            polylineDraw.map = self.placeView!.mapView!
+            polylineDraw.map = self.placeView.map
         }
     }
-    
     
     
     func setUpRouteDetails() {
         if self.distanceForInfoWin != nil && self.timeForInfoWin != nil {
-            self.infoWindow!.distanceLable!.text = "route distance: \(self.distanceForInfoWin!)"
-            self.infoWindow!.timeLable!.text = "route time: \(self.timeForInfoWin!)"
+            self.infoWindow!.distanceLabel.text = "route distance: \(self.distanceForInfoWin!)"
+            self.infoWindow!.timeLabel.text = "route time: \(self.timeForInfoWin!)"
         }
     }
-    
-    
     
     
     
@@ -93,8 +98,7 @@ class PlaceViewController: UIViewController, UINavigationControllerDelegate, GMS
     
     func mapView(_ mapView: GMSMapView, markerInfoWindow marker: GMSMarker) -> UIView? {
         if self.infoWindow == nil {
-            let infoWindow = InfoWindowView(frame: CGRect(x: 0, y: 0, width: 200, height: 50), with: self)
-            self.placeView!.addSubview(infoWindow)
+            let infoWindow = InfoWindowView(frame: CGRect(x: 0, y: 0, width: 200, height: 50))
             self.infoWindow = infoWindow
             self.setUpRouteDetails()
             return infoWindow
@@ -106,19 +110,14 @@ class PlaceViewController: UIViewController, UINavigationControllerDelegate, GMS
     
     
     
-    
-    
-    
-    
+
     // MARK: - Additional methods
-    
     
     @objc func addToFavorites() {
         self.navigationItem.rightBarButtonItem!.isEnabled = false
         self.navigationItem.rightBarButtonItem!.tintColor = #colorLiteral(red: 0.8497060029, green: 0.8497060029, blue: 0.8497060029, alpha: 1)
         DataBaseManager.shared.addPlaceToFavorites(with: self.place!)
     }
-    
     
     
     @objc func showSpotsImagesMethod() {
@@ -134,7 +133,6 @@ class PlaceViewController: UIViewController, UINavigationControllerDelegate, GMS
         guard let navigationVC = self.navigationController else { return }
         navigationVC.pushViewController(imagesCollection, animated: true)
     }
-    
     
     
     func setUpImages() {

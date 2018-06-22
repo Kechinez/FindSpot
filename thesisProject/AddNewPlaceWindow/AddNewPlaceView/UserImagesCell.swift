@@ -27,7 +27,6 @@ class UserImagesCell: UICollectionViewCell {
     }
     
     
-    
     func addGestureRecognizer(to viewController: AddNewPlaceViewController) {
         let longPressGestureRecognizer = UILongPressGestureRecognizer(target: viewController, action: #selector(AddNewPlaceViewController.removeImage(sender:)))
         longPressGestureRecognizer.minimumPressDuration = 1.0
@@ -36,13 +35,11 @@ class UserImagesCell: UICollectionViewCell {
     }
     
     
-    
     func deleteGestureRecognizer() {
         guard let gestureRecognizer = self.gestureRecognizer else { return }
         self.removeGestureRecognizer(gestureRecognizer)
         self.gestureRecognizer = nil
     }
-    
     
     
     required init?(coder aDecoder: NSCoder) {

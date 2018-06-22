@@ -38,38 +38,43 @@ class MainMapView: UIView {
         super.init(frame: frame)
         
         self.addSubview(self.mapView)
-        self.addSubview(searchTextField)
+        self.addSubview(self.searchTextField)
         
         for subview in self.subviews {
             subview.translatesAutoresizingMaskIntoConstraints = false
         }
+       
         self.setUpConstraints()
     }
     
     
+    func setBarButtonItems(linkedWith viewController: MapViewController) {
+        let signoutBarButton = UIBarButtonItem(title: "Sign out", style: .plain, target: viewController, action: #selector(MapViewController.signoutMethod))
+        viewController.navigationItem.leftBarButtonItem = signoutBarButton
+        
+        let addNewPlaceBarButton = UIBarButtonItem(title: "New spot", style: .plain, target: viewController, action: #selector(MapViewController.addNewPlace))
+        viewController.navigationItem.rightBarButtonItem = addNewPlaceBarButton
+    }
+    
     
     private func setUpConstraints() {
  
-        self.mapView.translatesAutoresizingMaskIntoConstraints = false
         self.mapView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
         self.mapView.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
         self.mapView.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
         self.mapView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
         
-        self.searchTextField.translatesAutoresizingMaskIntoConstraints = false
-        self.searchTextField.topAnchor.constraint(equalTo: self.topAnchor, constant: 12).isActive = true
+        self.searchTextField.topAnchor.constraint(equalTo: self.topAnchor, constant: 70).isActive = true
         self.searchTextField.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         self.searchTextField.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.7).isActive = true
         self.searchTextField.heightAnchor.constraint(equalToConstant: 45).isActive = true
     }
     
     
-    
     func setMapCameraPosition(using coordinates: CLLocationCoordinate2D, with zoom: Float) {
         let camera = GMSCameraPosition.camera(withTarget: coordinates, zoom: zoom)
         self.mapView.animate(to: camera)
     }
-    
     
     
     required init?(coder aDecoder: NSCoder) {

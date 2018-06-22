@@ -43,6 +43,7 @@ private enum GoogleAPIRequests {
 
 
 
+
 class GoogleApiRequests {
     static let shared = GoogleApiRequests()
     private init() {}
@@ -81,7 +82,6 @@ class GoogleApiRequests {
     }
     
     
-    
     func getRouteRequest(with startCoordinate: CLLocationCoordinate2D, and finishCoordinate: CLLocationCoordinate2D, completionHandler: @escaping (APIResult<RequestedRoute>) -> ()) {
         
         let session = URLSession.shared
@@ -110,7 +110,6 @@ class GoogleApiRequests {
         }
         task.resume()
     }
-    
     
     
     private func coordinatesToString(with coordinates: CLLocationCoordinate2D) -> String {

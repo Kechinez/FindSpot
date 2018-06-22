@@ -9,13 +9,6 @@
 import UIKit
 import Firebase
 
-public enum TextFields: Int {
-    case NameTextField           = 0
-    case EmailTextField          = 1
-    case PasswordTextField       = 2
-    case FindPlaceTextFeild
-}
-
 enum TextFeildsErrorType: String {
     case invalidEmailFormat =    "wrong email address format"
     case invalidName =           "name contains invalid symbols"
@@ -43,6 +36,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     
     
+    
+    //MARK: - ViewController's life cycle methods
+    
     override func loadView() {
         self.view = LoginView()
     }
@@ -65,7 +61,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidHide), name: NSNotification.Name.UIKeyboardDidHide, object: nil)
         
     }
-    
     
     
     override func viewWillAppear(_ animated: Bool) {
@@ -92,7 +87,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
     
     
-    
     @objc func registerActionMethod() {
         self.loginView.createRegisterView()
         self.loginView.registerView!.setDelegateOfRegisterViewTextFields(using: self)
@@ -100,7 +94,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         self.loginView.setAnimationOf(type: .AppearingOfView)
         self.isRegisterViewDisplayed = true
     }
-    
     
     
     @objc func registerNewUser() {
@@ -126,8 +119,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     
     
-    
-    
     // MARK: - keyboard notification methods
     
     @objc func keyboardDidShow(notification: Notification) {
@@ -138,12 +129,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
     
     
-    
     @objc func keyboardDidHide() {
         self.loginView.decreaseContentSizeToDefaultValues()
     }
-    
-    
     
     
     
@@ -172,9 +160,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     
     
-    
-    
-    
     // MARK: - Additional methods
     
     @objc func removeRegisterView() {
@@ -182,7 +167,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         self.isRegisterViewDisplayed = false
         self.loginView.setDelegateOfLoginViewTextFields(using: self)
     }
-    
     
     
     func showError(with error: TextFeildsErrorType, within textField: UITextField) {
@@ -196,7 +180,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
         textField.textColor = UIColor.red
     }
-    
     
     
     func textFieldTextChecking(within textField: UITextField) {
@@ -233,7 +216,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
     
     
-    
     func setViewController() {
         let tabBarController = UITabBarController()
         
@@ -249,7 +231,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         self.present(tabBarController, animated: true, completion: nil)
     }
   
-    
 }
 
 
@@ -266,6 +247,4 @@ extension String {
         return emailPredicate.evaluate(with: self)
     }
 }
-
-
 

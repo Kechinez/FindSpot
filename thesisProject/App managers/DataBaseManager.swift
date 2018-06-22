@@ -50,7 +50,6 @@ class DataBaseManager {
     }
     
     
-    
     func getUserFavorites(completionHandler: @escaping (APIResult<[Place]>) -> ()) {
         
         self.userRef!.observe(.value) { (snapshot) in
@@ -80,7 +79,6 @@ class DataBaseManager {
     }
     
     
-    
     func saveNewPlace(with place: Place, completionHandler: @escaping () -> ()) {
         var tempPlace = place
         var placeName = tempPlace.stringLatitude
@@ -91,25 +89,10 @@ class DataBaseManager {
     }
     
     
-    
-    private func cutAllSymbols(in string: String) -> String {
-        let result = string.trimmingCharacters(in: ["+", "-"]).replacingOccurrences(of: ".", with: "")
-        return result
-    }
-    
-    
-    
-    private func prepareString(string: String) -> String {
-        let result = string.trimmingCharacters(in: [" "]).replacingOccurrences(of: "-", with: " ").capitalized(with: nil)
-        return result
-    }
-    
-    
     func deleteDatabaseValue(with stringCoordinate: String) {
         let deleteRef = self.recreatePlaceDataReference(from: stringCoordinate)
         deleteRef.removeValue()
     }
-    
     
     
     func addPlaceToFavorites(with place: Place) {
@@ -121,6 +104,20 @@ class DataBaseManager {
     }
     
     
+    
+    
+    // MARK: - helping methods
+    
+    private func cutAllSymbols(in string: String) -> String {
+        let result = string.trimmingCharacters(in: ["+", "-"]).replacingOccurrences(of: ".", with: "")
+        return result
+    }
+    
+    
+    private func prepareString(string: String) -> String {
+        let result = string.trimmingCharacters(in: [" "]).replacingOccurrences(of: "-", with: " ").capitalized(with: nil)
+        return result
+    }
     
     
     private func recreatePlaceDataReference(from stringCoordinate: String) -> DatabaseReference {

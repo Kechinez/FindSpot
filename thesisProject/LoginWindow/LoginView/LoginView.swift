@@ -13,12 +13,7 @@ enum AnimationType {
     case DisappearingOfView
 }
 
-public enum ButtonType {
-    case LoginButton
-    case RegisterButton
-    case AlreadyHaveAnAccountButton
-    case RegisterNewUser
-}
+
 
 
 class LoginView: UIScrollView {
@@ -67,7 +62,6 @@ class LoginView: UIScrollView {
     }()
     
     
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = #colorLiteral(red: 0.4078431373, green: 0.6941176471, blue: 0.09411764706, alpha: 1)
@@ -87,11 +81,9 @@ class LoginView: UIScrollView {
     }
     
     
-    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
     
     
     private func setUpConstraints() {
@@ -137,6 +129,7 @@ class LoginView: UIScrollView {
     
     
     
+    
     //MARK: - setting UITextField delegate method
     
     func setDelegateOfLoginViewTextFields(using viewController: LoginViewController) {
@@ -147,9 +140,7 @@ class LoginView: UIScrollView {
     
     
     
-    
     //MARK: - animating appearing/disappearing of RegisterView methods
-    
     
     func setAnimationOf(type: AnimationType) {
         
@@ -169,14 +160,10 @@ class LoginView: UIScrollView {
     }
     
     
-    
     func createRegisterView() {
         let registerView = RegisterView(with: self)
         self.registerView = registerView
     }
-    
-    
-    
     
     
     
@@ -189,7 +176,6 @@ class LoginView: UIScrollView {
     }
     
     
-    
     func decreaseContentSizeToDefaultValues() {
         UIView.transition(with: self, duration: 0.4 , options: .curveEaseOut, animations: {
             self.contentSize = CGSize(width: self.bounds.width, height: self.bounds.height)
@@ -197,8 +183,3 @@ class LoginView: UIScrollView {
     }
     
 }
-
-
-
-
-

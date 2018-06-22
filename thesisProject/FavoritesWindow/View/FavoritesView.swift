@@ -22,13 +22,13 @@ class FavoritesView: UIView {
     }()
 
     
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.addSubview(self.backgroundView)
         self.backgroundView.addSubview(self.leavesImageView)
         self.setUpConstraints()
     }
-    
     
     
     private func setUpConstraints() {
@@ -45,7 +45,6 @@ class FavoritesView: UIView {
         self.leavesImageView.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.7).isActive = true
         
     }
-    
     
     
     required init?(coder aDecoder: NSCoder) {

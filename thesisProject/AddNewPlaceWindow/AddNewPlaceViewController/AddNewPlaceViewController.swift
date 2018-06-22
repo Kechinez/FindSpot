@@ -11,11 +11,14 @@ import Photos
 import GoogleMaps
 
 
-class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UITextViewDelegate, GMSMapViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource {
+class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UITextViewDelegate, GMSMapViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
+    unowned var addNewPlaceView: AddNewPlaceView {
+        return self.view as! AddNewPlaceView
+    }
     var currentUserLocation: CLLocationCoordinate2D?
     var uploadedPhotos: [UIImage] = []
-    var newPlaceView: AddNewPlaceView?
+    //var newPlaceView: AddNewPlaceView?
     private var imageTag = 0
     private var cityOfMadePhoto: String?
     private var autoChosenLocation: CLLocationCoordinate2D?
@@ -24,17 +27,28 @@ class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelega
     
     
     
+    override func loadView() {
+        self.view = AddNewPlaceView()
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.addNewPlaceView.mapView.delegate = self
+        self.addNewPlaceView.imagesCollectionView.dataSource = self
+        self.addNewPlaceView.imagesCollectionView.delegate = self
+        
+        self.addNewPlaceView.setBarButtonItems(linkedWith: self)
+        self.addNewPlaceView.setDelegateOfTextFields(using: self)
+        self.addNewPlaceView.setActionMethods(linkedWith: self)
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow(notification: )), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidHide), name: NSNotification.Name.UIKeyboardDidHide, object: nil)
         
-        let topBarHeight = UIApplication.shared.statusBarFrame.size.height +
-            (self.navigationController?.navigationBar.frame.height ?? 0.0)
-        let newPlaceView = AddNewPlaceView(frame: CGRect(x: 0, y: topBarHeight, width: self.view.frame.size.width, height: self.view.frame.size.height - topBarHeight), with: self)
-        self.newPlaceView = newPlaceView
+        //let topBarHeight = UIApplication.shared.statusBarFrame.size.height +
+          //  (self.navigationController?.navigationBar.frame.height ?? 0.0)
+        //let newPlaceView = AddNewPlaceView(frame: CGRect(x: 0, y: topBarHeight, width: self.view.frame.size.width, height: self.view.frame.size.height - topBarHeight), with: self)
+        //self.newPlaceView = newPlaceView
     }
     
     
@@ -58,7 +72,7 @@ class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelega
         self.imageTag += 1
         
         if self.imageTag == 1 || self.imageTag == 3 {
-            self.newPlaceView!.increaseHeightOfImageCollectionXTimesBigger(x: self.imageTag)
+            self.addNewPlaceView.increaseHeightOfImageCollectionXTimesBigger(x: self.imageTag)
         }
         
         let selectedImage = info[UIImagePickerControllerEditedImage] as? UIImage
@@ -78,8 +92,8 @@ class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelega
                         switch city {
                         case  .Success(let foundCity):
                             self.cityOfMadePhoto = foundCity.cityName
-                            self.newPlaceView!.setCameraOnTheMap(with: self.autoChosenLocation!)
-                            self.newPlaceView!.setMarkerOnTheMap(with: self.autoChosenLocation!)
+                            self.addNewPlaceView.setCameraOnTheMap(with: self.autoChosenLocation!)
+                            self.addNewPlaceView.setMarkerOnTheMap(with: self.autoChosenLocation!)
                         case .Failure(_):
                             let userInfo = [NSLocalizedDescriptionKey: NSLocalizedString("Couldn't define the city where photo was taken! Probably, this place is far from the nearest city.", comment: "")]
                             let updatedError = NSError(domain: "errorDomain", code: 100, userInfo: userInfo)
@@ -91,7 +105,7 @@ class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelega
         }
         self.uploadedPhotos.append(selectedImage!)
         let cellIndexPathOfImage = IndexPath(row: self.imageTag - 1, section: 0)
-        self.newPlaceView!.imagesCollectionView!.reloadItems(at: [cellIndexPathOfImage])
+        self.addNewPlaceView.imagesCollectionView.reloadItems(at: [cellIndexPathOfImage])
         picker.dismiss(animated: true, completion: nil)
     }
     
@@ -104,7 +118,7 @@ class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelega
     
     func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
         if self.manualChoosingLocation {
-            self.newPlaceView!.setMarkerOnTheMap(with: coordinate)
+            self.addNewPlaceView.setMarkerOnTheMap(with: coordinate)
             self.manualChosenLocation = coordinate
             GoogleApiRequests.shared.coordinatesToAddressRequest(with: coordinate) { (city) in
                 switch city {
@@ -123,7 +137,7 @@ class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelega
     
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
         if self.manualChoosingLocation {
-            self.newPlaceView!.mapView!.clear()
+            self.addNewPlaceView.mapView.clear()
             self.manualChosenLocation = nil
         }
         return true
@@ -156,6 +170,12 @@ class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelega
     
     
     
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let imageSide = (self.view.bounds.width - 40) / 2 - 10
+        return CGSize(width: imageSide, height: imageSide)
+    }
     
     
     
@@ -175,12 +195,12 @@ class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelega
         if(text == "\n")
         {
             if textView.text == "" {
-                self.newPlaceView!.isPlaceholderLabelHidden(bool: false)
+                self.addNewPlaceView.isPlaceholderLabelHidden(bool: false)
             }
             view.endEditing(true)
             return false
         } else {
-            self.newPlaceView!.isPlaceholderLabelHidden(bool: true)
+            self.addNewPlaceView.isPlaceholderLabelHidden(bool: true)
             return true
         }
     }
@@ -194,12 +214,12 @@ class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelega
     @objc func switchSourceOfLocation(_ sender: UISwitch) {
         if sender.isOn {
             self.manualChoosingLocation = true
-            self.newPlaceView!.setCameraOnTheMap(with: self.currentUserLocation!)
+            self.addNewPlaceView.setCameraOnTheMap(with: self.currentUserLocation!)
         } else {
             self.manualChoosingLocation = false
             guard let placeLocation = self.autoChosenLocation else { return }
-            self.newPlaceView!.setCameraOnTheMap(with: placeLocation)
-            self.newPlaceView!.setMarkerOnTheMap(with: placeLocation)
+            self.addNewPlaceView.setCameraOnTheMap(with: placeLocation)
+            self.addNewPlaceView.setMarkerOnTheMap(with: placeLocation)
         }
     }
     
@@ -207,23 +227,23 @@ class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelega
     
     @objc func removeImage(sender: UILongPressGestureRecognizer) {
         if sender.state == UIGestureRecognizerState.ended {
-            let touchedPoint = sender.location(in: self.newPlaceView!.imagesCollectionView!)
-            guard let indexPathOfTouchedCell = self.newPlaceView!.imagesCollectionView!.indexPathForItem(at: touchedPoint) else { return }
+            let touchedPoint = sender.location(in: self.addNewPlaceView.imagesCollectionView)
+            guard let indexPathOfTouchedCell = self.addNewPlaceView.imagesCollectionView.indexPathForItem(at: touchedPoint) else { return }
             self.uploadedPhotos.remove(at: indexPathOfTouchedCell.row)
             
             if self.imageTag == 3 || self.imageTag == 1 {
-                self.newPlaceView!.decreaseHeightOfImageCollectionXTimesFewer(x: self.imageTag)
+                self.addNewPlaceView.decreaseHeightOfImageCollectionXTimesFewer(x: self.imageTag)
             }
             
             self.imageTag -= 1
-            self.newPlaceView!.imagesCollectionView!.reloadData()
+            self.addNewPlaceView.imagesCollectionView.reloadData()
         }
     }
     
     
     
     func isEverythingFilled() -> Bool {
-        if self.newPlaceView!.placeName!.text == "" || self.newPlaceView!.placeDescr!.text == "" || self.uploadedPhotos.count == 0 || self.manualChosenLocation == nil  || self.cityOfMadePhoto == nil {
+        if self.addNewPlaceView.placeNameTextField.text == "" || self.addNewPlaceView.placeInfoTextView.text == "" || self.uploadedPhotos.count == 0 || self.manualChosenLocation == nil  || self.cityOfMadePhoto == nil {
             return false
         } else {
             return true
@@ -266,7 +286,7 @@ class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelega
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         PhotoManager.shared.uploadPhotos(with: self.uploadedPhotos, and: finalLocation!) { (downloadURLs) in
             guard let downloadURLs = downloadURLs else { return }
-            let newPlace = Place(placeName: self.newPlaceView!.placeName!.text!, placeDescription: self.newPlaceView!.placeDescr!.text!, photosDownloadURLs: downloadURLs, cityName: self.cityOfMadePhoto!, coordinates: finalLocation!)
+            let newPlace = Place(placeName: self.addNewPlaceView.placeNameTextField.text!, placeDescription: self.addNewPlaceView.placeInfoTextView.text!, photosDownloadURLs: downloadURLs, cityName: self.cityOfMadePhoto!, coordinates: finalLocation!)
             
             DataBaseManager.shared.saveNewPlace(with: newPlace, completionHandler: {
                 DispatchQueue.main.async {
@@ -289,13 +309,13 @@ class AddNewPlaceViewController: UIViewController, UIImagePickerControllerDelega
     @objc func keyboardDidShow(notification: Notification) {
         guard let userInfo = notification.userInfo else { return }
         let keyboardHeight = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue//.height
-        self.newPlaceView!.increaseContentHeightWhileShowingKeyboard(with: keyboardHeight, currentImageTag: self.imageTag)
+        self.addNewPlaceView.increaseContentHeightWhileShowingKeyboard(with: keyboardHeight, currentImageTag: self.imageTag)
     }
     
     
     
     @objc func keyboardDidHide() {
-        self.newPlaceView!.decreaseContentHeightWhileShowingKeyboard(with: self.imageTag)
+        self.addNewPlaceView.decreaseContentHeightWhileShowingKeyboard(with: self.imageTag)
     }
     
     

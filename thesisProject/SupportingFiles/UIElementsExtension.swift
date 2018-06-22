@@ -9,31 +9,49 @@
 import Foundation
 import UIKit
 
+public enum TextFields: Int {
+    case NameTextField           = 0
+    case EmailTextField          = 1
+    case PasswordTextField       = 2
+    case FindPlaceTextFeild      = 3
+    case PlaceNameTextField      = 4
+}
+
+public enum ButtonType {
+    case LoginButton
+    case RegisterButton
+    case AlreadyHaveAnAccountButton
+    case RegisterNewUserButton
+    case ShowSpotImagesButton
+}
+
 
 extension UIButton {
     func setButtonAppearance(_ buttonType: ButtonType) {
-        let buttonFont = UIFont(name: "OpenSans", size: 22.0)
+        let buttonFont = UIFont(name: "OpenSans", size: 20.0)
         switch buttonType {
-        case .LoginButton:
-            self.setTitle("Login", for: .normal)
+        case .LoginButton, .RegisterNewUserButton:
             self.titleLabel?.font = buttonFont!
             self.setTitleColor(UIColor.white, for: .normal)
             self.layer.cornerRadius = 8.0
             self.backgroundColor = #colorLiteral(red: 0.2549019608, green: 0.5137254902, blue: 0.7568627451, alpha: 1)
-        case .RegisterButton:
-            self.setTitle("Register", for: .normal)
+            if buttonType == .LoginButton {
+                self.setTitle("Login", for: .normal)
+            } else {
+                self.setTitle("Register", for: .normal)
+            }
+        case .RegisterButton, .AlreadyHaveAnAccountButton, .ShowSpotImagesButton:
             self.setTitleColor(UIColor.white, for: .normal)
-            self.titleLabel?.font = buttonFont!.withSize(19.0)
-        case .AlreadyHaveAnAccountButton:
-            self.setTitle("I already have account", for: .normal)
-            self.setTitleColor(UIColor.white, for: .normal)
-            self.titleLabel?.font = buttonFont!.withSize(19.0)
-        case .RegisterNewUser:
-            self.setTitle("Register", for: .normal)
-            self.titleLabel?.font = buttonFont!
-            self.setTitleColor(UIColor.white, for: .normal)
-            self.layer.cornerRadius = 8.0
-            self.backgroundColor = #colorLiteral(red: 0.2549019608, green: 0.5137254902, blue: 0.7568627451, alpha: 1)
+            self.titleLabel?.font = buttonFont!.withSize(18.0)
+            if buttonType == .RegisterButton {
+                self.setTitle("Register", for: .normal)
+            } else if buttonType == .AlreadyHaveAnAccountButton {
+                self.setTitle("I already have account", for: .normal)
+            } else {
+                self.backgroundColor = #colorLiteral(red: 0.2549019608, green: 0.5137254902, blue: 0.7568627451, alpha: 1)
+                self.layer.cornerRadius = 8.0
+                self.setTitle("Show spot's images", for: .normal)
+            }
         }
         
     }
@@ -66,15 +84,22 @@ extension UITextField {
             self.font = textFieldFont!
         case .FindPlaceTextFeild:
             let atributedPlaceholder = NSMutableAttributedString(string: "Find place")
+            atributedPlaceholder.addAttributes(attributesDictionary, range: NSRange (location:0, length: atributedPlaceholder.length))
             self.attributedPlaceholder = atributedPlaceholder
             self.font = UIFont(name: "OpenSans", size: 15.0)
+        case .PlaceNameTextField:
+            let atributedPlaceholder = NSMutableAttributedString(string: "Name of spot")
+            atributedPlaceholder.addAttributes(attributesDictionary, range: NSRange (location:0, length: atributedPlaceholder.length))
+            self.attributedPlaceholder = atributedPlaceholder
+            self.font = textFieldFont!
         }
+        
     }
     
     
     func setKeyboardSettings(_ textFieldType: TextFields) {
         switch textFieldType {
-        case .NameTextField:
+        case .NameTextField, .PlaceNameTextField:
             self.autocorrectionType = .no
             self.keyboardType = .alphabet
             self.autocapitalizationType = .words

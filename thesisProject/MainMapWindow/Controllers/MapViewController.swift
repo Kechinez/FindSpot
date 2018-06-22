@@ -15,14 +15,16 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
         return self.view as! MainMapView
     }
     
-    
-    //private var locationManager: CLLocationManager?
     var userCurrentLocation: CLLocationCoordinate2D?
     private var userCurrentCity: String?
     private var allPlaces: [Place]? = []
     var favorites: [Place]?
     private var userDatabaseRef: DatabaseReference?
     
+    
+    
+    
+    //MARK: - ViewController's lifecycle methods
     
     override func loadView() {
         self.view = MainMapView()
@@ -32,17 +34,20 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.navigationItem.title = "FindSpot"
+        self.mainView.setBarButtonItems(linkedWith: self)
+        self.mainView.mapView.delegate = self
+        self.mainView.searchTextField.delegate = self
         if let tabBarController = self.tabBarController {
             tabBarController.delegate = self
         }
-        self.navigationItem.title = "FindSpot"
+        
         guard let currentUser = Auth.auth().currentUser else { return }
         self.userDatabaseRef = Database.database().reference(withPath: "users").child(String(currentUser.uid)).child("favorites")
         DataBaseManager.shared.userRef = self.userDatabaseRef
         
         let locationManager = CLLocationManager()
         locationManager.delegate = self
-        
         
         let tempCoordinate = CLLocationCoordinate2D(latitude: 59.882023, longitude: 30.339113) //  temp coordinates should be used to emulate Saint-P current location
         self.userCurrentLocation = tempCoordinate
@@ -74,13 +79,14 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
     
     
     
+    
+    // MARK: - TabBarControllerDelegate methods
+    
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         guard let favoritesVC = viewController as? UINavigationController else { return }
         guard let vc = favoritesVC.childViewControllers.first as? FavoritesTableViewController else { return }
         vc.userCurrentLocation = self.userCurrentLocation!
     }
-    
-    
     
     
     
@@ -110,7 +116,6 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
     
     
     
-    
     // MARK: - Methods showing map's elements:
     
     func showFoundPlace(with coordinates: CLLocationCoordinate2D, info: String) {
@@ -119,7 +124,6 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
         marker.title = info
         marker.map = self.mainView.mapView
     }
-    
     
     
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
@@ -138,7 +142,6 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
     }
     
     
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -146,9 +149,6 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
             tabBarController.tabBar.isHidden = false
         }
     }
-    
-    
-    
     
     
     
@@ -164,7 +164,6 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
     }
     
     
-    
     @objc func signoutMethod() {
         do {
             try Auth.auth().signOut()
@@ -173,7 +172,5 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
         }
         dismiss(animated: true, completion: nil)
     }
-    
-    
     
 }

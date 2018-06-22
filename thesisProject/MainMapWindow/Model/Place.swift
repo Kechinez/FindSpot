@@ -54,7 +54,6 @@ struct Place {
     }
     
     
-    
     init(placeName: String, placeDescription: String, photosDownloadURLs: [URL], cityName: String, coordinates: CLLocationCoordinate2D) {
         self.placeName = placeName
         self.placeDescription = placeDescription
