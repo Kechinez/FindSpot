@@ -13,6 +13,7 @@ public enum TextFields: Int {
     case NameTextField           = 0
     case EmailTextField          = 1
     case PasswordTextField       = 2
+    case FindPlaceTextFeild
 }
 
 enum TextFeildsErrorType: String {
@@ -25,7 +26,7 @@ enum TextFeildsErrorType: String {
 
 class LoginViewController: UIViewController, UITextFieldDelegate {
     unowned var loginView: LoginView {
-        return (self.isRegisterViewDisplayed ? (self.view as! LoginView) : self.view as! LoginView)
+        return self.view as! LoginView
     }
     unowned var emailTextField: UITextField {
         return (self.isRegisterViewDisplayed ? self.loginView.registerView!.emailField : self.loginView.emailTextField)
@@ -239,7 +240,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         let mainMapWindowNavVC = MapViewController()
         mainMapWindowNavVC.tabBarItem = UITabBarItem(title: "Spots", image: UIImage(named: "map.png"), tag: 0)
         
-        let favouriteNavVC = FavoritesViewController()
+        let favouriteNavVC = FavoritesTableViewController()
         favouriteNavVC.tabBarItem = UITabBarItem(title: "Favorites", image: UIImage(named: "favorites.png"), tag: 1)
         
         let tabBarArray = [mainMapWindowNavVC, favouriteNavVC]

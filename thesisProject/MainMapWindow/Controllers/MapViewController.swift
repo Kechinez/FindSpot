@@ -11,14 +11,22 @@ import GoogleMaps
 import Firebase
 class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManagerDelegate, UITextFieldDelegate, UITabBarControllerDelegate {
     
-    private var locationManager: CLLocationManager?
+    unowned var mainView: MainMapView {
+        return self.view as! MainMapView
+    }
+    
+    
+    //private var locationManager: CLLocationManager?
     var userCurrentLocation: CLLocationCoordinate2D?
     private var userCurrentCity: String?
-    private var mainView: MainMapView?
     private var allPlaces: [Place]? = []
     var favorites: [Place]?
     private var userDatabaseRef: DatabaseReference?
     
+    
+    override func loadView() {
+        self.view = MainMapView()
+    }
     
     
     override func viewDidLoad() {
@@ -32,13 +40,14 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
         self.userDatabaseRef = Database.database().reference(withPath: "users").child(String(currentUser.uid)).child("favorites")
         DataBaseManager.shared.userRef = self.userDatabaseRef
         
-        locationManager = CLLocationManager()
-        locationManager!.delegate = self
+        let locationManager = CLLocationManager()
+        locationManager.delegate = self
         
         
         let tempCoordinate = CLLocationCoordinate2D(latitude: 59.882023, longitude: 30.339113) //  temp coordinates should be used to emulate Saint-P current location
         self.userCurrentLocation = tempCoordinate
-        mainView = MainMapView(viewController: self)
+        
+        self.mainView.setMapCameraPosition(using: tempCoordinate, with: 15.0)
         
         GoogleApiRequests.shared.coordinatesToAddressRequest(with: tempCoordinate) { (city) in
             switch city {
@@ -67,7 +76,7 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
     
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         guard let favoritesVC = viewController as? UINavigationController else { return }
-        guard let vc = favoritesVC.childViewControllers.first as? FavoritesViewController else { return }
+        guard let vc = favoritesVC.childViewControllers.first as? FavoritesTableViewController else { return }
         vc.userCurrentLocation = self.userCurrentLocation!
     }
     
@@ -85,7 +94,7 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
                 case  .Success(let places):
                     self.allPlaces = places
                     let examplePlaceLocation = places[0].coordinates
-                    self.mainView!.setMapCameraPosition(using: examplePlaceLocation, with: 11.0)
+                    self.mainView.setMapCameraPosition(using: examplePlaceLocation, with: 11.0)
                     for place in self.allPlaces! {
                         self.showFoundPlace(with: place.coordinates, info: place.placeName)
                     }
@@ -108,7 +117,7 @@ class MapViewController: UIViewController, GMSMapViewDelegate, CLLocationManager
         let marker = GMSMarker()
         marker.position = coordinates
         marker.title = info
-        marker.map = self.mainView!.mapView
+        marker.map = self.mainView.mapView
     }
     
     

@@ -64,6 +64,10 @@ extension UITextField {
             atributedPlaceholder.addAttributes(attributesDictionary, range: NSRange (location:0, length: atributedPlaceholder.length))
             self.attributedPlaceholder = atributedPlaceholder
             self.font = textFieldFont!
+        case .FindPlaceTextFeild:
+            let atributedPlaceholder = NSMutableAttributedString(string: "Find place")
+            self.attributedPlaceholder = atributedPlaceholder
+            self.font = UIFont(name: "OpenSans", size: 15.0)
         }
     }
     
@@ -83,6 +87,10 @@ extension UITextField {
             self.keyboardType = .emailAddress
             self.isSecureTextEntry = true
             self.autocapitalizationType = .none
+        case .FindPlaceTextFeild:
+            self.clearButtonMode = .whileEditing
+            self.autocorrectionType = .no
+            self.autocapitalizationType = .words
         }
     }
 }
