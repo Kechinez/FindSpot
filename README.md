@@ -14,3 +14,4 @@ This application is my bachelor thesis project. FindSpot is a geolocation-based 
 * practice with implementing MVC pattern 
 * practice with network asyncronous callbacks
 * practice with external APIs
+* practice with Auto layout constraints
