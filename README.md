@@ -12,6 +12,6 @@ This application is my bachelor thesis project. FindSpot is a geolocation-based 
 * practice with UITableView and its delegate/data source methods
 * practice with UICollectionView and UICollectionView layout
 * practice with implementing MVC pattern 
-* practice with network asyncronous callbacks
+* practice with network asynchronous callbacks
 * practice with external APIs
 * practice with Auto layout constraints
