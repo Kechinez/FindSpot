@@ -56,7 +56,6 @@ class PlaceView: UIScrollView {
         super.init(frame: frame)
         self.addSubview(self.contentView)
         self.backgroundColor = #colorLiteral(red: 0.4078431373, green: 0.6941176471, blue: 0.09411764706, alpha: 1)
-        //self.contentView.backgroundColor = #colorLiteral(red: 0.4078431373, green: 0.6941176471, blue: 0.09411764706, alpha: 1)
         self.contentView.addSubview(self.leavesImage)
         self.contentView.addSubview(self.nameLabel)
         self.contentView.addSubview(self.cityLabel)

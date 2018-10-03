@@ -15,6 +15,7 @@ enum APIResult<T> {
 }
 
 
+
 private enum GoogleAPIRequests {
     case GeocodingAPI(coordinate: String)
     case DirectionAPI(sourceCoordinate: String, destCoordinate: String)
@@ -56,11 +57,19 @@ class GoogleApiRequests {
         
         let task = session.dataTask(with: request) { (data, response, error) in
             
-            if let error = error {
+            guard error == nil else {
                 DispatchQueue.main.async {
-                    completionHandler(APIResult<RequestedCity>.Failure(error))
+                    completionHandler(APIResult<RequestedCity>.Failure(error!))
                 }
+                return
             }
+            guard data != nil else {
+                DispatchQueue.main.async {
+                    completionHandler(APIResult<RequestedCity>.Failure(error!))
+                }
+                return
+            }
+            
             do {
                 let json = try JSONSerialization.jsonObject(with: data!, options: []) as! JSON
                 guard let city = RequestedCity(data: json) else {
