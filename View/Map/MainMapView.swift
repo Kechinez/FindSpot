@@ -32,22 +32,22 @@ class MainMapView: UIView {
         return searchTextField
     }()
     
-    
-    
+    //MARK: - init
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         self.addSubview(self.mapView)
         self.addSubview(self.searchTextField)
-        
         for subview in self.subviews {
             subview.translatesAutoresizingMaskIntoConstraints = false
         }
-       
         self.setUpConstraints()
     }
     
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
+    //MARK: - setup button targets
     func setBarButtonItems(linkedWith viewController: MapViewController) {
         let signoutBarButton = UIBarButtonItem(title: "Sign out", style: .plain, target: viewController, action: #selector(MapViewController.signoutMethod))
         viewController.navigationItem.leftBarButtonItem = signoutBarButton
@@ -56,9 +56,8 @@ class MainMapView: UIView {
         viewController.navigationItem.rightBarButtonItem = addNewPlaceBarButton
     }
     
-    
+    //MARK: = updating constraints
     private func setUpConstraints() {
- 
         self.mapView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
         self.mapView.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
         self.mapView.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
@@ -70,16 +69,9 @@ class MainMapView: UIView {
         self.searchTextField.heightAnchor.constraint(equalToConstant: 45).isActive = true
     }
     
-    
+    //MARK: - Updating map
     func setMapCameraPosition(using coordinates: CLLocationCoordinate2D, with zoom: Float) {
         let camera = GMSCameraPosition.camera(withTarget: coordinates, zoom: zoom)
         self.mapView.animate(to: camera)
     }
-    
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    
 }

@@ -51,7 +51,7 @@ class PlaceView: UIScrollView {
         return UIView(frame: CGRect.zero)
     }()
     
-    
+    //MARK: - init
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.addSubview(self.contentView)
@@ -69,26 +69,28 @@ class PlaceView: UIScrollView {
         self.setUpConstraints()
     }
     
-
-    
+    //MARK: - updating UI
     func setUpLabelsText(accordingToThe place: Place) {
         self.nameLabel.text = place.placeName
         self.cityLabel.text = place.city
         self.descriptionLabel.text = place.placeDescription
     }
     
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
+    //MARK: - setup button targets
     func setUpBarButtonItems(linkedWith viewController: PlaceViewController) {
         let addToFavoritesButton = UIBarButtonItem(title: "Add spot", style: .plain, target: viewController, action: #selector(PlaceViewController.addToFavorites))
             viewController.navigationItem.rightBarButtonItem = addToFavoritesButton
     }
     
-    
     func setActionMethodForButtons(using viewController: PlaceViewController) {
         self.showImagesButton.addTarget(viewController, action: #selector(PlaceViewController.showSpotsImagesMethod), for: .touchUpInside)
     }
     
-    
+    //MARK: - Updating Map
     func setCameraAndMarkerOnTheMap(using coordinates: CLLocationCoordinate2D) {
         let placeMarker = GMSMarker(position: coordinates)
         placeMarker.map = self.map
@@ -96,7 +98,7 @@ class PlaceView: UIScrollView {
         self.map.camera = camera
     }
     
-    
+    //MARK: - Updating constraints
     private func setUpConstraints() {
         
         self.contentView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
@@ -132,12 +134,6 @@ class PlaceView: UIScrollView {
         self.showImagesButton.widthAnchor.constraint(equalTo: self.contentView.widthAnchor, multiplier: 0.6).isActive = true
         self.showImagesButton.heightAnchor.constraint(equalToConstant: 55).isActive = true
         self.showImagesButton.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -20).isActive = true
-        
-    }
-    
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
 }

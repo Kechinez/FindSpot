@@ -13,8 +13,7 @@ class UserImagesCell: UICollectionViewCell {
     let imageView: UIImageView
     var gestureRecognizer: UILongPressGestureRecognizer?
     
-    
-    
+    //MARK: - init
     override init(frame: CGRect) {
         self.imageView = UIImageView()
         super.init(frame: frame)
@@ -26,7 +25,11 @@ class UserImagesCell: UICollectionViewCell {
         self.bringSubview(toFront: imageView)
     }
     
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
+    //MARK: - managing GestureRecognizers
     func addGestureRecognizer(to viewController: AddNewPlaceViewController) {
         let longPressGestureRecognizer = UILongPressGestureRecognizer(target: viewController, action: #selector(AddNewPlaceViewController.removeImage(sender:)))
         longPressGestureRecognizer.minimumPressDuration = 1.0
@@ -34,15 +37,9 @@ class UserImagesCell: UICollectionViewCell {
         self.gestureRecognizer = longPressGestureRecognizer
     }
     
-    
     func deleteGestureRecognizer() {
         guard let gestureRecognizer = self.gestureRecognizer else { return }
         self.removeGestureRecognizer(gestureRecognizer)
         self.gestureRecognizer = nil
-    }
-    
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }

@@ -9,11 +9,9 @@
 import Foundation
 import UIKit
 
-class ErrorManager {
-    
+final class ErrorManager {
     private init() { }
     static let shared = ErrorManager()
-    
     
     func showErrorMessage(with error: Error, shownAt viewController: UIViewController) {
         let alertViewController = UIAlertController(title: "Problem occured!", message: error.localizedDescription, preferredStyle: .alert)
@@ -21,5 +19,4 @@ class ErrorManager {
         alertViewController.addAction(okAction)
         viewController.present(alertViewController, animated: true, completion: nil)
     }
-    
 }

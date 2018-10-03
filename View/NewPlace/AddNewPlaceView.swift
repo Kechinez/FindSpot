@@ -30,8 +30,9 @@ class AddNewPlaceView: UIScrollView {
     }()
     public let switchLabel: UILabel = {
         let switchLabel = UILabel()
-        let font = UIFont(name: "OpenSans", size: 18.0)
-        switchLabel.font = font!
+        if let font = UIFont(name: "OpenSans", size: 18.0) {
+            switchLabel.font = font
+        }
         switchLabel.textColor = .white
         switchLabel.text = "find a location manually "
         return switchLabel
@@ -56,8 +57,9 @@ class AddNewPlaceView: UIScrollView {
     }()
     public let placeInfoTextView: UITextView = {
         let placeInfoTextView = UITextView()
-        let font = UIFont(name: "OpenSans", size: 18.0)
-        placeInfoTextView.font = font!
+        if let font = UIFont(name: "OpenSans", size: 18.0) {
+            placeInfoTextView.font = font
+        }
         placeInfoTextView.isEditable = true
         placeInfoTextView.layer.cornerRadius = 4
         return placeInfoTextView
@@ -65,13 +67,14 @@ class AddNewPlaceView: UIScrollView {
     public let placeHolderLabel: UILabel = {
         let placeHolderLabel = UILabel()
         placeHolderLabel.backgroundColor = .clear
-        let placeholderFont = UIFont(name: "OpenSans", size: 14.0)
-        let attributesDictionary: [NSAttributedStringKey: Any] = [
-            NSAttributedStringKey(rawValue: NSAttributedStringKey.foregroundColor.rawValue): #colorLiteral(red: 0.6257788431, green: 0.6374320992, blue: 0.6723918676, alpha: 1),
-            NSAttributedStringKey(rawValue: NSAttributedStringKey.font.rawValue): placeholderFont!]
-        let atributedPlaceholder = NSMutableAttributedString(string: "Describe spot here")
-        atributedPlaceholder.addAttributes(attributesDictionary, range: NSRange (location:0, length: atributedPlaceholder.length))
-        placeHolderLabel.attributedText = atributedPlaceholder
+        if let placeholderFont = UIFont(name: "OpenSans", size: 14.0) {
+            let attributesDictionary: [NSAttributedStringKey: Any] = [
+                NSAttributedStringKey(rawValue: NSAttributedStringKey.foregroundColor.rawValue): #colorLiteral(red: 0.6257788431, green: 0.6374320992, blue: 0.6723918676, alpha: 1),
+                NSAttributedStringKey(rawValue: NSAttributedStringKey.font.rawValue): placeholderFont]
+            let atributedPlaceholder = NSMutableAttributedString(string: "Describe spot here")
+            atributedPlaceholder.addAttributes(attributesDictionary, range: NSRange (location:0, length: atributedPlaceholder.length))
+            placeHolderLabel.attributedText = atributedPlaceholder
+        }
         return placeHolderLabel
     }()
     public let imagesCollectionView: UICollectionView = {
@@ -85,7 +88,6 @@ class AddNewPlaceView: UIScrollView {
     public let contentView: UIView = {
         return UIView(frame: CGRect.zero)
     }()
-
     private var isCollectionViewConstraintsActivated = false
     private var descrLabelBottomConstraint: NSLayoutConstraint?
     private var imagesCollectionViewTopConstraint: NSLayoutConstraint?
@@ -93,8 +95,7 @@ class AddNewPlaceView: UIScrollView {
     private var imagesCollectionViewBottomConstraint: NSLayoutConstraint?
     private var contentViewBottomConstraint: NSLayoutConstraint?
     
-    
-    
+    //MARK: - init
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = #colorLiteral(red: 0.4078431373, green: 0.6941176471, blue: 0.09411764706, alpha: 1)
@@ -127,27 +128,29 @@ class AddNewPlaceView: UIScrollView {
         self.setUpConstraints()
     }
     
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
+    //MARK: - Setting delegates
     func setDelegateOfTextFields(using viewController: AddNewPlaceViewController) {
         self.placeNameTextField.delegate = viewController
         self.placeInfoTextView.delegate = viewController
     }
     
-    
+    //MARK: - setting button targets
     func setActionMethods(linkedWith viewController: AddNewPlaceViewController) {
         self.locationSwitch.addTarget(viewController, action: #selector(AddNewPlaceViewController.switchSourceOfLocation), for: .allEvents)
         self.addPhotoButton.addTarget(viewController, action: #selector(AddNewPlaceViewController.addImage), for: .touchUpInside)
     }
-    
     
     func setBarButtonItems(linkedWith viewController: AddNewPlaceViewController) {
         let savePlaceBarButton = UIBarButtonItem(title: "Save spot", style: .plain, target: viewController, action: #selector(AddNewPlaceViewController.savePlace))
             viewController.navigationItem.rightBarButtonItem = savePlaceBarButton
     }
     
-    
+    //MARK: - updating constraints
     private func setUpConstraints() {
-
         self.contentView.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
         self.contentViewBottomConstraint = self.contentView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
@@ -193,7 +196,7 @@ class AddNewPlaceView: UIScrollView {
         self.placeInfoTextView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -20).isActive = true
         self.placeInfoTextView.heightAnchor.constraint(equalToConstant: 80).isActive = true
         self.descrLabelBottomConstraint = self.placeInfoTextView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -20)
-        self.descrLabelBottomConstraint!.isActive = true
+        self.descrLabelBottomConstraint?.isActive = true
         
         self.placeHolderLabel.translatesAutoresizingMaskIntoConstraints = false
         self.placeHolderLabel.topAnchor.constraint(equalTo: self.placeInfoTextView.topAnchor, constant: 3).isActive = true
@@ -205,9 +208,7 @@ class AddNewPlaceView: UIScrollView {
         self.imagesCollectionViewBottomConstraint = self.imagesCollectionView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -20)
         self.imagesCollectionView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 20).isActive = true
         self.imagesCollectionView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -20).isActive = true
-        
     }
-    
     
     
     func isPlaceholderLabelHidden(bool: Bool) {
@@ -218,18 +219,12 @@ class AddNewPlaceView: UIScrollView {
         }
     }
     
-    
-    
-    
     //MARK: - Map interaction methods
-    
-    
     func setMarkerOnTheMap(with coordinates: CLLocationCoordinate2D) {
         self.mapView.alpha = 1.0
         let placeMarker = GMSMarker(position: coordinates)
         placeMarker.map = self.mapView
     }
-    
     
     func setCameraOnTheMap(with coordinates: CLLocationCoordinate2D) {
         self.mapView.alpha = 1.0
@@ -237,11 +232,7 @@ class AddNewPlaceView: UIScrollView {
         self.mapView.animate(to: camera)
     }
     
-    
-    
-    
     //MARK: - Keyboard methods updating autolayout
-    
     func increaseContentHeightWhileShowingKeyboard(with keyboardRect: CGRect, currentImageTag: Int) {
         var frameOfCurrentFirstResponder = CGRect.zero
         if self.placeNameTextField.isFirstResponder {
@@ -255,77 +246,75 @@ class AddNewPlaceView: UIScrollView {
         case 0:
             let deltaHeight = self.placeInfoTextView.frame.maxY - keyboardRect.height
             constraintHeight = frameOfCurrentFirstResponder.maxY - deltaHeight  + 6
-            self.descrLabelBottomConstraint!.isActive = false
+            self.descrLabelBottomConstraint?.isActive = false
             self.descrLabelBottomConstraint = self.placeInfoTextView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -constraintHeight)
-            self.descrLabelBottomConstraint!.isActive = true
+            self.descrLabelBottomConstraint?.isActive = true
+        
         case 1...2:
             let deltaHeight = imagesCollectionView.frame.maxY - keyboardRect.height
             constraintHeight = frameOfCurrentFirstResponder.maxY - deltaHeight + 6
-            self.imagesCollectionViewBottomConstraint!.isActive = false
+            self.imagesCollectionViewBottomConstraint?.isActive = false
             self.imagesCollectionViewBottomConstraint = self.imagesCollectionView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -constraintHeight)
-            self.imagesCollectionViewBottomConstraint!.isActive = true
+            self.imagesCollectionViewBottomConstraint?.isActive = true
+        
         case 3...4:
             let deltaHeight = self.imagesCollectionView.frame.maxY - keyboardRect.height
             constraintHeight = deltaHeight - frameOfCurrentFirstResponder.maxY - 6
-            self.imagesCollectionViewBottomConstraint!.isActive = false
+            self.imagesCollectionViewBottomConstraint?.isActive = false
             self.imagesCollectionViewBottomConstraint = self.imagesCollectionView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: constraintHeight)
-            self.imagesCollectionViewBottomConstraint!.isActive = true
+            self.imagesCollectionViewBottomConstraint?.isActive = true
         default: break
         }
         
         UIView.animate(withDuration: 0.3, animations: {
             self.layoutIfNeeded()
         })
-        
         let keyboardOriginY = self.bounds.height - keyboardRect.height
         let deltaHeight = frameOfCurrentFirstResponder.maxY + 6 - keyboardOriginY
         let pointOffSet = CGPoint(x: 0, y: deltaHeight)
         self.setContentOffset(pointOffSet, animated: true)
     }
     
-    
     func decreaseContentHeightWhileShowingKeyboard(with currentImageTag: Int) {
-        
         switch currentImageTag {
         case 0:
-            self.descrLabelBottomConstraint!.isActive = false
+            self.descrLabelBottomConstraint?.isActive = false
             self.descrLabelBottomConstraint = self.placeInfoTextView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -20)
-            self.descrLabelBottomConstraint!.isActive = true
+            self.descrLabelBottomConstraint?.isActive = true
+        
         case 1...4:
-            self.imagesCollectionViewBottomConstraint!.isActive = false
+            self.imagesCollectionViewBottomConstraint?.isActive = false
             self.imagesCollectionViewBottomConstraint = self.imagesCollectionView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -20)
-            self.imagesCollectionViewBottomConstraint!.isActive = true
+            self.imagesCollectionViewBottomConstraint?.isActive = true
+        
         default: break
         }
-        
         UIView.animate(withDuration: 0.3, animations: {
             self.layoutIfNeeded()
         })
     }
     
-    
-    
-    
     //MARK: - Methods updating image collectionView height while adding new user photos
-    
     func increaseHeightOfImageCollectionXTimesBigger(x: Int) {
         let imageSide = (self.bounds.width - 40) / 2 - 10
         
         switch x {
         case 1:
-            self.descrLabelBottomConstraint!.isActive = false
-            self.imagesCollectionViewTopConstraint!.isActive = true
-            self.imagesCollectionViewBottomConstraint!.isActive = true
+            self.descrLabelBottomConstraint?.isActive = false
+            self.imagesCollectionViewTopConstraint?.isActive = true
+            self.imagesCollectionViewBottomConstraint?.isActive = true
             self.imagesCollectionViewHeightConstraint = self.imagesCollectionView.heightAnchor.constraint(equalToConstant: imageSide)
-            self.imagesCollectionViewHeightConstraint!.isActive = true
+            self.imagesCollectionViewHeightConstraint?.isActive = true
             self.isCollectionViewConstraintsActivated = true
+        
         case 3:
-            self.imagesCollectionViewHeightConstraint!.isActive = false
+            self.imagesCollectionViewHeightConstraint?.isActive = false
             self.imagesCollectionViewHeightConstraint = self.imagesCollectionView.heightAnchor.constraint(equalToConstant: imageSide * 2)
-            self.imagesCollectionViewHeightConstraint!.isActive = true
-            self.imagesCollectionViewBottomConstraint!.isActive = false
+            self.imagesCollectionViewHeightConstraint?.isActive = true
+            self.imagesCollectionViewBottomConstraint?.isActive = false
             self.imagesCollectionViewBottomConstraint = self.imagesCollectionView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -20)
-            self.imagesCollectionViewBottomConstraint!.isActive = true
+            self.imagesCollectionViewBottomConstraint?.isActive = true
+        
         default: break
         }
         
@@ -333,42 +322,31 @@ class AddNewPlaceView: UIScrollView {
             self.layoutIfNeeded()
         }
     }
-    
     
     func decreaseHeightOfImageCollectionXTimesFewer(x: Int) {
         let imageSide = (self.bounds.width - 40) / 2 - 10
-        
         switch x {
         case 1:
             self.descrLabelBottomConstraint = self.placeInfoTextView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -20)
-            self.descrLabelBottomConstraint!.isActive = true
-            self.imagesCollectionViewTopConstraint!.isActive = false
-            self.imagesCollectionViewBottomConstraint!.isActive = false
-            self.imagesCollectionViewHeightConstraint!.isActive = false
+            self.descrLabelBottomConstraint?.isActive = true
+            self.imagesCollectionViewTopConstraint?.isActive = false
+            self.imagesCollectionViewBottomConstraint?.isActive = false
+            self.imagesCollectionViewHeightConstraint?.isActive = false
             self.isCollectionViewConstraintsActivated = false
+        
         case 3:
-            self.imagesCollectionViewHeightConstraint!.isActive = false
+            self.imagesCollectionViewHeightConstraint?.isActive = false
             self.imagesCollectionViewHeightConstraint = self.imagesCollectionView.heightAnchor.constraint(equalToConstant: imageSide)
-            self.imagesCollectionViewHeightConstraint!.isActive = true
-            self.imagesCollectionViewBottomConstraint!.isActive = false
+            self.imagesCollectionViewHeightConstraint?.isActive = true
+            self.imagesCollectionViewBottomConstraint?.isActive = false
             self.imagesCollectionViewBottomConstraint = self.imagesCollectionView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -20)
-            self.imagesCollectionViewBottomConstraint!.isActive = true
+            self.imagesCollectionViewBottomConstraint?.isActive = true
+        
         default: break
         }
-        
         UIView.animate(withDuration: 0.3){
             self.layoutIfNeeded()
         }
     }
     
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-   
-    
-    
 }
-
-
-

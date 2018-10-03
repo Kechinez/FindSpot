@@ -22,7 +22,7 @@ class FavoritesView: UIView {
     }()
 
     
-    
+    //MARK: - init
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.addSubview(self.backgroundView)
@@ -30,7 +30,11 @@ class FavoritesView: UIView {
         self.setUpConstraints()
     }
     
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
+    //MARK: - updating constraints
     private func setUpConstraints() {
         
         self.backgroundView.translatesAutoresizingMaskIntoConstraints = false
@@ -44,11 +48,6 @@ class FavoritesView: UIView {
         self.leavesImageView.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
         self.leavesImageView.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.7).isActive = true
         
-    }
-    
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
 }

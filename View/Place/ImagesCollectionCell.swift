@@ -19,9 +19,8 @@ class ImagesCollectionCell: UICollectionViewCell, UIGestureRecognizerDelegate {
     var activityIndicator: UIActivityIndicatorView?
     private var isZooming = false
     private var originalImageCenter: CGPoint?
-    
-    
-    
+
+    //MARK: - init
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = UIColor.clear
@@ -39,7 +38,11 @@ class ImagesCollectionCell: UICollectionViewCell, UIGestureRecognizerDelegate {
         
     }
     
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
+    //MARK: - Image zooming
     @objc func moveZoomedImage(sender: UIPanGestureRecognizer) {
         if self.isZooming && sender.state == .began {
             self.originalImageCenter = sender.view?.center
@@ -53,13 +56,10 @@ class ImagesCollectionCell: UICollectionViewCell, UIGestureRecognizerDelegate {
         }
     }
     
-    
     @objc func zoomImage(sender: UIPinchGestureRecognizer) {
-        
         if sender.state == .began {
             let currentScale = self.image.frame.size.width / self.image.bounds.size.width
             let newScale = currentScale*sender.scale
-            
             if newScale > 1 {
                 self.isZooming = true
                 self.delegate!.collectionView!.isPagingEnabled = false
@@ -67,7 +67,6 @@ class ImagesCollectionCell: UICollectionViewCell, UIGestureRecognizerDelegate {
             }
         } else if sender.state == .changed {
             guard let view = sender.view else { return }
-            
             let pinchCenter = CGPoint(x: sender.location(in: view).x - view.bounds.midX,
                                       y: sender.location(in: view).y - view.bounds.midY)
             let transform = view.transform.translatedBy(x: pinchCenter.x, y: pinchCenter.y)
@@ -85,17 +84,14 @@ class ImagesCollectionCell: UICollectionViewCell, UIGestureRecognizerDelegate {
                 view.transform = transform
                 sender.scale = 1
             }
-            
         } else if sender.state == .ended || sender.state == .failed || sender.state == .cancelled {
-            
             guard let center = self.originalImageCenter else { return }
-            
             UIView.animate(withDuration: 0.35, animations: {
                 self.image.transform = CGAffineTransform.identity
                 self.image.center = center
             }, completion: { _ in
-                self.delegate!.collectionView!.isPagingEnabled = true
-                self.delegate!.collectionView!.isScrollEnabled = true
+                self.delegate?.collectionView?.isPagingEnabled = true
+                self.delegate?.collectionView?.isScrollEnabled = true
                 self.isZooming = false
             })
         }
@@ -120,7 +116,7 @@ class ImagesCollectionCell: UICollectionViewCell, UIGestureRecognizerDelegate {
         self.activityIndicator!.startAnimating()
     }
     
-    
+    //MARK: - Updating constraints
     private func setUpConstraints() {
         self.image.translatesAutoresizingMaskIntoConstraints = false
         self.image.topAnchor.constraint(equalTo: self.contentView.topAnchor).isActive = true
@@ -129,10 +125,4 @@ class ImagesCollectionCell: UICollectionViewCell, UIGestureRecognizerDelegate {
         self.image.heightAnchor.constraint(equalTo: self.contentView.heightAnchor).isActive = true
 
     }
-    
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
 }

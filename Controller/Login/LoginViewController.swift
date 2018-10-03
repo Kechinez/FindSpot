@@ -17,7 +17,7 @@ enum TextFeildsErrorType: String {
 
 
 
-class LoginViewController: UIViewController, UITextFieldDelegate {
+class LoginViewController: UIViewController {
     unowned var loginView: LoginView {
         return self.view as! LoginView
     }
@@ -34,15 +34,11 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     var ref: DatabaseReference!
     var isRegisterViewDisplayed = false
     
-    
-    
-    
+
     //MARK: - ViewController's life cycle methods
-    
     override func loadView() {
         self.view = LoginView()
     }
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,12 +52,10 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 self?.setViewController()
             }
         }
-        
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow(notification: )), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidHide), name: NSNotification.Name.UIKeyboardDidHide, object: nil)
         
     }
-    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -70,31 +64,27 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    
-    
-    
-    
     // MARK: - register and login methods
     
     @objc func loginActionMethod() {
-        Auth.auth().signIn(withEmail: self.emailTextField.text!, password: self.passwordTextField.text!) { [weak self] (user, error) in
+        guard let emailText = emailTextField.text, let passwordText = passwordTextField.text else { return }
+        Auth.auth().signIn(withEmail: emailText, password: passwordText) { [weak self] (user, error) in
             guard error == nil, user != nil else {
-                ErrorManager.shared.showErrorMessage(with: error!, shownAt: self!)
+                guard let vc = self else { return }
+                ErrorManager.shared.showErrorMessage(with: error!, shownAt: vc)
                 return
             }
             self?.setViewController()
         }
     }
     
-    
     @objc func registerActionMethod() {
         self.loginView.createRegisterView()
-        self.loginView.registerView!.setDelegateOfRegisterViewTextFields(using: self)
-        self.loginView.registerView!.setActionsForButton(using: self)
+        self.loginView.registerView?.setDelegateOfRegisterViewTextFields(using: self)
+        self.loginView.registerView?.setActionsForButton(using: self)
         self.loginView.setAnimationOf(type: .AppearingOfView)
         self.isRegisterViewDisplayed = true
     }
-    
     
     @objc func registerNewUser() {
         for bool in self.registrationIsAllowed {
@@ -102,12 +92,12 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 return
             }
         }
-        
-        Auth.auth().createUser(withEmail: self.emailTextField.text!, password: self.passwordTextField.text!) { [weak self] (user, error) in
-            
+        guard let emailText = emailTextField.text, let passwordText = passwordTextField.text else { return }
+        Auth.auth().createUser(withEmail: emailText, password: passwordText) { [weak self] (user, error) in
             let userName = self?.nameTextField.text
             guard error == nil, user != nil else {
-                ErrorManager.shared.showErrorMessage(with: error!, shownAt: self!)
+                guard let vc = self else { return }
+                ErrorManager.shared.showErrorMessage(with: error!, shownAt: vc)
                 return
             }
             guard let userRef = self?.ref.child((user?.uid)!) else { return }
@@ -116,58 +106,23 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    
-    
-    
     // MARK: - keyboard notification methods
-    
     @objc func keyboardDidShow(notification: Notification) {
         guard let userInfo = notification.userInfo else { return }
         let keyboardFrameSize = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         self.loginView.increaseContentSizeOn(value: keyboardFrameSize.height)
-        
     }
-    
     
     @objc func keyboardDidHide() {
         self.loginView.decreaseContentSizeToDefaultValues()
     }
     
-    
-    
-    
-    // MARK: - TextField delegate methods
-    
-    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        if textField.textColor == .red {
-            textField.textColor = .black
-            textField.text = ""
-        }
-        return true
-    }
-    
-    
-    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-        self.textFieldTextChecking(within: textField)
-        return true
-    }
-    
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
-    
-    
-    
-    // MARK: - Additional methods
-    
+    // MARK: - supporting methods
     @objc func removeRegisterView() {
         self.loginView.setAnimationOf(type: .DisappearingOfView)
         self.isRegisterViewDisplayed = false
         self.loginView.setDelegateOfLoginViewTextFields(using: self)
     }
-    
     
     func showError(with error: TextFeildsErrorType, within textField: UITextField) {
         switch error {
@@ -180,7 +135,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
         textField.textColor = UIColor.red
     }
-    
     
     func textFieldTextChecking(within textField: UITextField) {
         guard let resultText = textField.text else { return }
@@ -215,7 +169,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         self.registrationIsAllowed[textField.tag] = true
     }
     
-    
     func setViewController() {
         let tabBarController = UITabBarController()
         
@@ -230,21 +183,26 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         
         self.present(tabBarController, animated: true, completion: nil)
     }
-  
 }
 
 
-
-
-//MARK: - email checking extention
-
-extension String {
-    func isEmail() -> Bool {
-        let firstPart = "[A-Z0-9a-z]([A-Z0-9a-z._%+-]{0,30}[A-Z0-9a-z])?"
-        let serverPart = "([A-Z0-9a-z]([A-Z0-9a-z-]{0,30}[A-Z0-9a-z])?\\.){1,5}"
-        let emailRegex = firstPart + "@" + serverPart + "[A-Za-z]{2,6}"
-        let emailPredicate = NSPredicate(format: "SELF MATCHES %@", emailRegex)
-        return emailPredicate.evaluate(with: self)
+// MARK: - TextField delegate
+extension LoginViewController: UITextFieldDelegate {
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        if textField.textColor == .red {
+            textField.textColor = .black
+            textField.text = ""
+        }
+        return true
+    }
+    
+    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+        self.textFieldTextChecking(within: textField)
+        return true
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }
-

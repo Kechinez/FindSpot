@@ -13,8 +13,9 @@ struct RequestedRoute {
     let time: String
     let polylinePath: String
     
+    //MARK: - init
     init?(data: JSON) {
-        guard let routesArray = data["routes"] as? NSArray else { return nil }// norm. 3 key/values
+        guard let routesArray = data["routes"] as? NSArray else { return nil }
         guard let routes = routesArray[0] as? JSON else { return nil }
         
         if let polylineData = routes["overview_polyline"] as? JSON {

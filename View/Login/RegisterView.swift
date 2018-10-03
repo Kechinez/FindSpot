@@ -9,7 +9,6 @@
 import UIKit
 
 class RegisterView: UIView {
-    
     public let nameField: UITextField = {
         let nameField = UITextField()
         nameField.borderStyle = .roundedRect
@@ -47,8 +46,7 @@ class RegisterView: UIView {
     
     private let superView: UIView
     
-    
-    
+    //MARK: - init
     init(with superView: UIView) {
         self.superView = superView
         super.init(frame: CGRect.zero)
@@ -68,13 +66,15 @@ class RegisterView: UIView {
         for subview in self.subviews {
             subview.translatesAutoresizingMaskIntoConstraints = false
         }
-        
         self.setUpConstraints()
     }
     
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
+    //MARK: - updating constraints
     private func setUpConstraints() {
-        
         self.translatesAutoresizingMaskIntoConstraints = false
         self.topAnchor.constraintEqualToSystemSpacingBelow(self.superView.topAnchor, multiplier: 20).isActive = true
         self.centerXAnchor.constraint(equalTo: self.superView.centerXAnchor).isActive = true
@@ -113,27 +113,14 @@ class RegisterView: UIView {
         self.alreadyHaveAccountButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
     }
     
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    
-    
-    
     // MARK: - set delegate for textfields
-    
     func setDelegateOfRegisterViewTextFields(using viewController: LoginViewController) {
         self.emailField.delegate = viewController
         self.nameField.delegate = viewController
         self.passField.delegate = viewController
     }
     
-    
-    
-    
     // MARK: - set action methods for buttons
-    
     func setActionsForButton(using viewController: LoginViewController) {
         self.alreadyHaveAccountButton.addTarget(viewController, action: #selector(LoginViewController.removeRegisterView), for: .touchUpInside)
         self.registerButton.addTarget(viewController, action: #selector(LoginViewController.registerNewUser), for: .touchUpInside)

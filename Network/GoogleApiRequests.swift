@@ -9,25 +9,23 @@
 import Foundation
 import CoreLocation
 
+
 enum APIResult<T> {
     case Success(T)
     case Failure(Error)
 }
 
-
-
+//MARK: - API request builder
 private enum GoogleAPIRequests {
     case GeocodingAPI(coordinate: String)
     case DirectionAPI(sourceCoordinate: String, destCoordinate: String)
     
-    private var baseURL: URL {
-        return URL(string: "https://maps.googleapis.com/maps/api/")!
+    private var baseURL: URL? {
+        return URL(string: "https://maps.googleapis.com/maps/api/")
     }
-    
     private var apiKey: String {
         return "AIzaSyAmV1T_J6_noWuMYBJukYv3-eDBvhr3zmY"
     }
-    
     private var path: String {
         switch self {
         case GoogleAPIRequests.DirectionAPI(let sourceCoordinate, let destCoordinate):
@@ -36,27 +34,23 @@ private enum GoogleAPIRequests {
             return "geocode/json?latlng=\(coordinate)&result_type=locality&language=en&key=\(apiKey)"
         }
     }
-    var request: URLRequest {
-        let url = URL(string: path, relativeTo: baseURL)
-        return URLRequest(url: url!)
+    var request: URLRequest? {
+        guard let url = URL(string: path, relativeTo: baseURL) else { return nil }
+        return URLRequest(url: url)
     }
 }
 
-
-
-
-class GoogleApiRequests {
+//MARK: - Network GoogleApiRequests
+final class GoogleApiRequests {
     static let shared = GoogleApiRequests()
     private init() {}
     
-    
-    func coordinatesToAddressRequest(with coordiantes: CLLocationCoordinate2D, completionHandler: @escaping (APIResult<RequestedCity>) -> ()) {
+    func getAddressFromCoordinates(_ coordiantes: CLLocationCoordinate2D, completionHandler: @escaping (APIResult<RequestedCity>) -> ()) {
         let session = URLSession.shared
-        let stringCoordinates = self.coordinatesToString(with: coordiantes)
-        let request = GoogleAPIRequests.GeocodingAPI(coordinate: stringCoordinates).request
+        let stringCoordinates = self.createString(from: coordiantes)
+        guard let request = GoogleAPIRequests.GeocodingAPI(coordinate: stringCoordinates).request else { return }
         
         let task = session.dataTask(with: request) { (data, response, error) in
-            
             guard error == nil else {
                 DispatchQueue.main.async {
                     completionHandler(APIResult<RequestedCity>.Failure(error!))
@@ -69,7 +63,6 @@ class GoogleApiRequests {
                 }
                 return
             }
-            
             do {
                 let json = try JSONSerialization.jsonObject(with: data!, options: []) as! JSON
                 guard let city = RequestedCity(data: json) else {
@@ -90,16 +83,14 @@ class GoogleApiRequests {
         task.resume()
     }
     
-    
-    func getRouteRequest(with startCoordinate: CLLocationCoordinate2D, and finishCoordinate: CLLocationCoordinate2D, completionHandler: @escaping (APIResult<RequestedRoute>) -> ()) {
+    func getRoute(from startCoordinate: CLLocationCoordinate2D, to finishCoordinate: CLLocationCoordinate2D, completionHandler: @escaping (APIResult<RequestedRoute>) -> ()) {
         
         let session = URLSession.shared
-        let startStringCoordinate = self.coordinatesToString(with: startCoordinate)
-        let finishStringCoordinate = self.coordinatesToString(with: finishCoordinate)
-        let request = GoogleAPIRequests.DirectionAPI(sourceCoordinate: startStringCoordinate, destCoordinate: finishStringCoordinate).request
+        let startStringCoordinate = self.createString(from: startCoordinate)
+        let finishStringCoordinate = self.createString(from: finishCoordinate)
+        guard let request = GoogleAPIRequests.DirectionAPI(sourceCoordinate: startStringCoordinate, destCoordinate: finishStringCoordinate).request else { return }
         
         let task = session.dataTask(with: request) { (data, response, error) in
-            
             if let error = error {
                 DispatchQueue.main.async {
                     completionHandler(APIResult<RequestedRoute>.Failure(error))
@@ -120,14 +111,8 @@ class GoogleApiRequests {
         task.resume()
     }
     
-    
-    private func coordinatesToString(with coordinates: CLLocationCoordinate2D) -> String {
+    private func createString(from coordinates: CLLocationCoordinate2D) -> String {
         let stringCoordinates = "\(coordinates.latitude)," + "\(coordinates.longitude)"
         return stringCoordinates
     }
-    
-    
 }
-
-
-

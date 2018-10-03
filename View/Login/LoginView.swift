@@ -13,13 +13,8 @@ enum AnimationType {
     case DisappearingOfView
 }
 
-
-
-
 class LoginView: UIScrollView {
-
     var registerView: RegisterView?
-    
     public let backgroundView: UIImageView = {
         let backgroundView = UIImageView(image: UIImage(named: "Leaves.png"))
         backgroundView.alpha = 0.45
@@ -61,11 +56,10 @@ class LoginView: UIScrollView {
         return registerButton
     }()
     
-    
+    //MARK: - init
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = #colorLiteral(red: 0.4078431373, green: 0.6941176471, blue: 0.09411764706, alpha: 1)
-        
         self.addSubview(backgroundView)
         self.addSubview(findSpotLabel)
         self.addSubview(passwordTextField)
@@ -76,18 +70,15 @@ class LoginView: UIScrollView {
         for subview in self.subviews {
             subview.translatesAutoresizingMaskIntoConstraints = false
         }
-        
         self.setUpConstraints()
     }
-    
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
+    //MARK: - updating constraints
     private func setUpConstraints() {
-        
         self.backgroundView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
         self.backgroundView.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.5).isActive = true
         self.backgroundView.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
@@ -117,69 +108,50 @@ class LoginView: UIScrollView {
         self.registerButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
     }
     
-    
-    
-    
     // MARK: setting action methods for buttons
-    
     func setActionsForButton(using viewController: LoginViewController) {
         self.loginButton.addTarget(viewController, action: #selector(LoginViewController.loginActionMethod), for: .touchUpInside)
         self.registerButton.addTarget(viewController, action: #selector(LoginViewController.registerActionMethod), for: .touchUpInside)
     }
     
-    
-    
-    
     //MARK: - setting UITextField delegate method
-    
     func setDelegateOfLoginViewTextFields(using viewController: LoginViewController) {
        self.emailTextField.delegate = viewController
        self.passwordTextField.delegate = viewController
     }
     
-    
-    
-    
     //MARK: - animating appearing/disappearing of RegisterView methods
-    
     func setAnimationOf(type: AnimationType) {
-        
         switch type {
         case .AppearingOfView:
             UIView.animate(withDuration: 1.0, animations: {
-                self.registerView!.alpha = 1.0
+                self.registerView?.alpha = 1.0
             }, completion: nil)
+        
         case .DisappearingOfView:
             UIView.animate(withDuration: 1.0, animations: {
                 self.registerView!.alpha = 0.0
                 self.layoutSubviews()
             }, completion: { (true) in
-                self.registerView!.removeFromSuperview()
+                self.registerView?.removeFromSuperview()
             })
         }
     }
-    
     
     func createRegisterView() {
         let registerView = RegisterView(with: self)
         self.registerView = registerView
     }
     
-    
-    
-    
     //MARK: - Adjasting content size methods
-    
     func increaseContentSizeOn(value: CGFloat) {
         self.contentSize = CGSize(width: self.bounds.width, height: self.bounds.height + value)
         self.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: value, right: 0)
     }
-    
     
     func decreaseContentSizeToDefaultValues() {
         UIView.transition(with: self, duration: 0.4 , options: .curveEaseOut, animations: {
             self.contentSize = CGSize(width: self.bounds.width, height: self.bounds.height)
         }, completion: nil)
     }
-    
 }

@@ -21,14 +21,14 @@ struct Place {
         return "\(self.coordinates.latitude)"
     }()
     
-    
+    //MARK: - init
     init?(with data: JSON?) {
         guard let tempData = data else { return nil }
         guard let tempPlaceName = tempData["name"] as? String,
             let tempPlaceDescr = tempData["description"] as? String,
             let tempPlaceCoord = tempData["coordinates"] as? String,
             let tempCity = tempData["city"] as? String,
-            let tempPlacePhotos = tempData["photos"] as? [String] else { return nil }//as? JSON else { return nil }
+            let tempPlacePhotos = tempData["photos"] as? [String] else { return nil }
         
         let photosInit = { () -> [URL] in
             var tempPhotos = [URL]()
@@ -38,14 +38,12 @@ struct Place {
             }
             return tempPhotos
         }
-        
         let coordinatesInit = { () -> CLLocationCoordinate2D in
             let stringCoordinates = tempPlaceCoord.components(separatedBy: ",")
             let latitude = Double(stringCoordinates[0])
             let longitude = Double(stringCoordinates[1])
             return CLLocationCoordinate2D(latitude: latitude!, longitude: longitude!)
         }
-        
         self.placeName = tempPlaceName
         self.placeDescription = tempPlaceDescr
         self.photosDownloadURLs = photosInit()
@@ -62,8 +60,8 @@ struct Place {
         self.coordinates = coordinates
     }
     
-    
-    mutating func convertToJSON() -> Any {
+    //MARK: supporting methods
+    mutating func convertingToJSON() -> Any {
         var placeJSON = [String: Any]()
         var photosJSON = [String: String]()
         

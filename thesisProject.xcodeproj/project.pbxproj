@@ -14,7 +14,7 @@
 		3D9A7945207F5F4200AA3536 /* RequestedRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9A7944207F5F4200AA3536 /* RequestedRoute.swift */; };
 		3DA863E020D520C9004060D4 /* ImagesCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA863DF20D520C9004060D4 /* ImagesCollectionCell.swift */; };
 		3DA863E420D562D8004060D4 /* ImagesCollectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA863E320D562D8004060D4 /* ImagesCollectionController.swift */; };
-		3DAB550720DBFA9400EFCE23 /* UIElementsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DAB550620DBFA9400EFCE23 /* UIElementsExtension.swift */; };
+		3DAB550720DBFA9400EFCE23 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DAB550620DBFA9400EFCE23 /* Extensions.swift */; };
 		3DAB550B20DCF24C00EFCE23 /* FavoritesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DAB550A20DCF24C00EFCE23 /* FavoritesTableViewController.swift */; };
 		3DBA48CC2072865D0067C6D7 /* AddNewPlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DBA48CB2072865D0067C6D7 /* AddNewPlaceViewController.swift */; };
 		3DBA48CE20728D150067C6D7 /* AddNewPlaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DBA48CD20728D150067C6D7 /* AddNewPlaceView.swift */; };
@@ -24,7 +24,6 @@
 		3DCAEE28207929FE0088E790 /* PhotoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DCAEE27207929FE0088E790 /* PhotoManager.swift */; };
 		3DCAEE2A20792B660088E790 /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DCAEE2920792B660088E790 /* Photo.swift */; };
 		3DD2ED492164ED8600F466D5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3DDF5AE4206162B1001BD7BE /* Assets.xcassets */; };
-		3DD2ED4A2164ED8A00F466D5 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3DDF5AE9206162B1001BD7BE /* Info.plist */; };
 		3DD2ED4B2164ED8D00F466D5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3DDF5AEF206163A6001BD7BE /* GoogleService-Info.plist */; };
 		3DD2ED4C2164EE3800F466D5 /* comfortaa.regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3D10B0E520BEEAE400AF11B6 /* comfortaa.regular.ttf */; };
 		3DD2ED4D2164EE3A00F466D5 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3D10B0E620BEEAE400AF11B6 /* OpenSans-Bold.ttf */; };
@@ -54,7 +53,7 @@
 		3D9A7944207F5F4200AA3536 /* RequestedRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestedRoute.swift; sourceTree = "<group>"; };
 		3DA863DF20D520C9004060D4 /* ImagesCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesCollectionCell.swift; sourceTree = "<group>"; };
 		3DA863E320D562D8004060D4 /* ImagesCollectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesCollectionController.swift; sourceTree = "<group>"; };
-		3DAB550620DBFA9400EFCE23 /* UIElementsExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIElementsExtension.swift; sourceTree = "<group>"; };
+		3DAB550620DBFA9400EFCE23 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		3DAB550A20DCF24C00EFCE23 /* FavoritesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesTableViewController.swift; sourceTree = "<group>"; };
 		3DBA48CB2072865D0067C6D7 /* AddNewPlaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewPlaceViewController.swift; sourceTree = "<group>"; };
 		3DBA48CD20728D150067C6D7 /* AddNewPlaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewPlaceView.swift; sourceTree = "<group>"; };
@@ -274,7 +273,7 @@
 			children = (
 				3DC2241F2087623B006B70CF /* ErrorManager.swift */,
 				3DDF5ADD206162B1001BD7BE /* AppDelegate.swift */,
-				3DAB550620DBFA9400EFCE23 /* UIElementsExtension.swift */,
+				3DAB550620DBFA9400EFCE23 /* Extensions.swift */,
 				3D10B0E420BEEAE400AF11B6 /* Fonts */,
 				3DDF5AE6206162B1001BD7BE /* LaunchScreen.storyboard */,
 				3DDF5AEF206163A6001BD7BE /* GoogleService-Info.plist */,
@@ -403,7 +402,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3DD2ED4A2164ED8A00F466D5 /* Info.plist in Resources */,
 				3DD2ED4C2164EE3800F466D5 /* comfortaa.regular.ttf in Resources */,
 				3DD2ED492164ED8600F466D5 /* Assets.xcassets in Resources */,
 				3DD2ED4D2164EE3A00F466D5 /* OpenSans-Bold.ttf in Resources */,
@@ -494,7 +492,7 @@
 				3DCAEE28207929FE0088E790 /* PhotoManager.swift in Sources */,
 				3DDF5AFC2061798F001BD7BE /* MapViewController.swift in Sources */,
 				3D9A7943207E7A5600AA3536 /* InfoWindowView.swift in Sources */,
-				3DAB550720DBFA9400EFCE23 /* UIElementsExtension.swift in Sources */,
+				3DAB550720DBFA9400EFCE23 /* Extensions.swift in Sources */,
 				3DD4E761208235C300C71092 /* FavoritesView.swift in Sources */,
 				3DCAEE22207910920088E790 /* PlaceViewController.swift in Sources */,
 				3D5C8EDA20C9672C000B7D86 /* MainMapView.swift in Sources */,

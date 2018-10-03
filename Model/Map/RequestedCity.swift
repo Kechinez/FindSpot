@@ -11,6 +11,7 @@ import Foundation
 struct RequestedCity {
     let cityName: String
     
+    //MARK: - init
     init?(data: JSON) {
         guard let result = data["results"] as? [JSON] else { return nil }
         guard result.count != 0 else { return nil }
@@ -18,5 +19,4 @@ struct RequestedCity {
         guard let tempCityName = addressComponent[0]["long_name"] as? String else { return nil }
         self.cityName = tempCityName
     }
-
 }
